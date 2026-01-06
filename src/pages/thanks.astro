@@ -1,6 +1,7 @@
 ---
 const title = "Thank You - PT Authority Hub";
-const description = "Thank you for your submission. We'll be in touch soon.";
+const description = "Thank you for your submission. We'll be in touch soon with your personalized Performance Audit.";
+const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
 ---
 
 <!DOCTYPE html>
@@ -10,6 +11,13 @@ const description = "Thank you for your submission. We'll be in touch soon.";
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
 </head>
 <body class="bg-gray-50 text-gray-900">
   

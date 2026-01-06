@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://pt-authority-hub-landing.pages.dev/sitemap.xml
