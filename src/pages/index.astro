@@ -1,6 +1,11 @@
 ---
+import TallyEmbed from '../components/TallyEmbed.astro';
+
 const title = "PT Authority Hub - Free Performance Audit";
 const description = "Get your free 30-day Performance Audit within 24 hours. Premium personal training for serious results.";
+
+const quizFormId = import.meta.env.PUBLIC_TALLY_QUIZ_FORM_ID;
+const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
 ---
 
 <!DOCTYPE html>
@@ -98,15 +103,11 @@ const description = "Get your free 30-day Performance Audit within 24 hours. Pre
   <section id="quiz-embed" class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="max-w-2xl mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-8">Quick Qualification Quiz</h2>
-        <div class="bg-white rounded-lg shadow-lg p-8">
-          <div class="aspect-video bg-gray-100 rounded flex items-center justify-center">
-            <p class="text-gray-500 text-center">
-              [Tally Quiz Embed Placeholder]<br>
-              <span class="text-sm">TODO: Configure Tally form URL</span>
-            </p>
-          </div>
-        </div>
+        <TallyEmbed 
+          formId={quizFormId}
+          title="Quick Qualification Quiz"
+          height={650}
+        />
       </div>
     </div>
   </section>
@@ -115,33 +116,28 @@ const description = "Get your free 30-day Performance Audit within 24 hours. Pre
   <section id="sync-my-stats" class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <div class="max-w-2xl mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-4">Sync My Stats (Optional)</h2>
         <p class="text-center text-lg text-gray-600 mb-8">
           Upload your last 30 days of performance data (Apple Watch, Oura, etc.) and receive a 
           <strong>personalized Performance Audit within 24 hours</strong>.
         </p>
         
-        <div class="bg-white rounded-lg shadow-lg p-8">
-          <div class="aspect-video bg-gray-100 rounded flex items-center justify-center mb-6">
-            <p class="text-gray-500 text-center">
-              [Tally Upload Embed Placeholder]<br>
-              <span class="text-sm">TODO: Configure Tally upload form URL</span>
+        <TallyEmbed 
+          formId={statsFormId}
+          title="Sync My Stats (Optional)"
+          height={700}
+          description="Your data will be used only for the audit and deleted within 30 days."
+        />
+        
+        <!-- Consent and Disclaimer -->
+        <div class="mt-6 space-y-4">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm text-gray-700">
+              <strong>Consent:</strong> By submitting this form, you consent to sharing your health data for audit purposes. Data will be used only for the audit and deleted within 30 days.
             </p>
           </div>
           
-          <!-- Consent Checkbox -->
-          <div class="mb-6">
-            <label class="flex items-start space-x-3 cursor-pointer">
-              <input type="checkbox" class="mt-1 w-5 h-5 text-blue-600 rounded">
-              <span class="text-sm text-gray-700">
-                I consent to sharing my health data for audit purposes. Data will be used only for the audit and deleted within 30 days.
-              </span>
-            </label>
-          </div>
-          
-          <!-- Non-Medical Disclaimer -->
-          <div class="bg-yellow-50 border border-yellow-200 rounded p-4">
-            <p class="text-xs text-gray-600">
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <p class="text-sm text-gray-700">
               <strong>Disclaimer:</strong> This is not medical advice. Consult a healthcare professional before starting any fitness program.
             </p>
           </div>
