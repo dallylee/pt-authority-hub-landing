@@ -15,19 +15,19 @@ Granular, atomic tasks organized by milestone. Mark `[/]` for in-progress, `[x]`
 
 ---
 
-## M1b: Planning Artefacts (CURRENT)
-- [ ] Create ImplementationPlan.md at repo root
-- [ ] Create TaskList.md (this file) at repo root
-- [ ] Verify both files match SPEC.md (no scope drift)
-- [ ] Stage only ImplementationPlan.md and TaskList.md
-- [ ] Commit with message "M1b planning: add implementation plan and task list"
-- [ ] Tag as `restore/m1b-planning-artefacts`
-- [ ] Push branch and tags to origin
-- [ ] Run verification commands:
-  - [ ] `git status` → working tree clean
-  - [ ] `git log -1 --oneline` → correct message
-  - [ ] `git tag --list "restore/*"` → both M1 and M1b tags present
-- [ ] ⛔ **STOP: Await user approval before M2**
+## M1b: Planning Artefacts ✅ COMPLETED
+- [x] Create ImplementationPlan.md at repo root
+- [x] Create TaskList.md (this file) at repo root
+- [x] Verify both files match SPEC.md (no scope drift)
+- [x] Stage only ImplementationPlan.md and TaskList.md
+- [x] Commit with message "M1b planning: add implementation plan and task list"
+- [x] Tag as `restore/m1b-planning-artefacts`
+- [x] Push branch and tags to origin
+- [x] Run verification commands:
+  - [x] `git status` → working tree clean
+  - [x] `git log -1 --oneline` → correct message
+  - [x] `git tag --list "restore/*"` → both M1 and M1b tags present
+- [x] ⛔ **STOP: Await user approval before M2**
 
 ---
 
