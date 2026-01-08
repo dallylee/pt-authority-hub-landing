@@ -32,6 +32,12 @@ assert(indexContent.includes('id="stats"'), 'Missing id="stats"');
 assert(indexContent.includes('href="#quiz"'), 'Missing link to #quiz');
 assert(indexContent.includes('href="#stats"'), 'Missing link to #stats');
 
+console.log('Checking Tally iframe src URLs...');
+assert(indexContent.includes('https://tally.so/embed/OD4eKp'), 'Missing Quiz iframe src');
+assert(indexContent.includes('https://tally.so/embed/pbyXyJ'), 'Missing Stats iframe src');
+assert(!indexContent.includes('Synchronising'), 'Found Synchronising placeholder');
+assert(!indexContent.includes('Synchronizing'), 'Found Synchronizing placeholder');
+
 console.log('Checking Section Presence (Repair Pack B, C & D)...');
 assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
 assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');

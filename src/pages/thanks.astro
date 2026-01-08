@@ -92,6 +92,35 @@ const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
       </div>
     </Container>
   </section>
+  <script is:inline>
+    (function () {
+      var d = document;
+      var w = "https://tally.so/widgets/embed.js";
+
+      function v() {
+        if (typeof Tally !== "undefined") {
+          Tally.loadEmbeds();
+          return;
+        }
+        d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function (e) {
+          e.src = e.dataset.tallySrc;
+        });
+      }
+
+      if (typeof Tally !== "undefined") {
+        v();
+        return;
+      }
+
+      if (d.querySelector('script[src="' + w + '"]') == null) {
+        var s = d.createElement("script");
+        s.src = w;
+        s.onload = v;
+        s.onerror = v;
+        d.body.appendChild(s);
+      }
+    })();
+  </script>
 
 </body>
 </html>

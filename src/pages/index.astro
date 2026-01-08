@@ -1,5 +1,5 @@
 ---
-import TallyEmbed from '../components/TallyEmbed.astro';
+import TallyInline from '../components/TallyInline.astro';
 import Testimonials from '../components/Testimonials.astro';
 import BookingCTA from '../components/BookingCTA.astro';
 import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
@@ -286,11 +286,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
         </div>
 
         <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 shadow-2xl">
-          <TallyEmbed 
-            formId={quizFormId}
-            title="Intake protocol"
-            height={650}
-          />
+          <TallyInline formId={quizFormId} title="Free Performance Audit, 2-Minute Quiz" height={520} />
         </div>
       </div>
     </Container>
@@ -312,11 +308,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
         </div>
         
         <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12 shadow-2xl">
-          <TallyEmbed 
-            formId={statsFormId}
-            title="Data Sync (Optional)"
-            height={700}
-          />
+          <TallyInline formId={statsFormId} title="Upload Your Stats (30-Day Summary)" height={520} />
         </div>
         
         <!-- Consent and Disclaimer -->
@@ -564,6 +556,35 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     } else {
       loadSpotsRemaining();
     }
+  </script>
+  <script is:inline>
+    (function () {
+      var d = document;
+      var w = "https://tally.so/widgets/embed.js";
+
+      function v() {
+        if (typeof Tally !== "undefined") {
+          Tally.loadEmbeds();
+          return;
+        }
+        d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function (e) {
+          e.src = e.dataset.tallySrc;
+        });
+      }
+
+      if (typeof Tally !== "undefined") {
+        v();
+        return;
+      }
+
+      if (d.querySelector('script[src="' + w + '"]') == null) {
+        var s = d.createElement("script");
+        s.src = w;
+        s.onload = v;
+        s.onerror = v;
+        d.body.appendChild(s);
+      }
+    })();
   </script>
 
 </body>
