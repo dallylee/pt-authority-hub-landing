@@ -11,8 +11,8 @@ const { className = '', variant = 'secondary' } = Astro.props;
 
 const baseStyles = "inline-flex flex-col items-center gap-1";
 const buttonStyles = variant === 'primary' 
-  ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105"
-  : "bg-white hover:bg-gray-50 text-blue-600 font-bold py-4 px-8 rounded-lg border-2 border-blue-600 transition-all transform hover:scale-105";
+  ? "bg-accent hover:brightness-110 text-bg font-bold py-4 px-8 rounded-lg shadow-[0_0_15px_rgba(166,255,0,0.3)] transition-all transform hover:scale-105"
+  : "bg-transparent hover:bg-white/5 text-accent font-bold py-4 px-8 rounded-lg border-2 border-accent/20 transition-all transform hover:scale-105";
 ---
 
 <div class={baseStyles + " " + className}>
@@ -27,9 +27,9 @@ const buttonStyles = variant === 'primary'
       >
         {bookingLabel}
       </a>
-      <span class="text-xs text-gray-500 italic mt-1">Opens in a new tab</span>
+      <span class="text-[10px] text-muted2 uppercase tracking-[0.2em] font-mono mt-2">Remote + On-site Protocol</span>
     </>
   ) : (
-    <p class="text-gray-400 text-sm italic">Booking link not configured yet.</p>
+    <p class="text-muted2 text-xs uppercase tracking-widest font-mono italic">Booking Intake Offline</p>
   )}
 </div>

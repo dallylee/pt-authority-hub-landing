@@ -1,0 +1,15 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  note?: string;
+  className?: string;
+}
+
+const { label, value, note, className = "" } = Astro.props;
+---
+<div class={`bg-bg2/50 border border-white/5 p-4 rounded-lg flex flex-col gap-1 ${className}`}>
+  <span class="text-xs font-medium text-muted2 uppercase tracking-tight">{label}</span>
+  <span class="text-2xl font-bold text-text">{value}</span>
+  {note && <span class="text-[10px] text-accent/80 font-mono tracking-tighter uppercase">{note}</span>}
+</div>

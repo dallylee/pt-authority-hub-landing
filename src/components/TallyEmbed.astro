@@ -10,42 +10,41 @@ const { formId, title, height = 700, description } = Astro.props;
 ---
 
 <div class="tally-embed-container">
-  <h2 class="text-2xl font-bold mb-4">{title}</h2>
-  {description && <p class="text-gray-600 mb-6">{description}</p>}
+  {description && <p class="text-muted2 text-[10px] uppercase tracking-widest mb-6 font-mono italic">{description}</p>}
   
   {!formId ? (
     <!-- Placeholder state when form ID is not configured -->
-    <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+    <div class="bg-bg2/50 border border-white/5 rounded-lg p-12 text-center">
       <div class="max-w-md mx-auto">
-        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-12 h-12 mx-auto mb-6 text-muted2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">Form Not Configured Yet</h3>
-        <p class="text-sm text-gray-600 mb-4">
-          This form will appear once configured.
+        <h3 class="text-sm font-bold text-muted uppercase tracking-widest mb-4">Signal Interface Offline</h3>
+        <p class="text-xs text-muted2 mb-8 lowercase font-mono">
+          Waiting for configuration synchronization...
         </p>
-        <div class="bg-blue-50 border border-blue-200 rounded p-4 text-left">
-          <p class="text-xs text-gray-700 mb-2"><strong>To configure:</strong></p>
-          <ol class="text-xs text-gray-600 space-y-1 list-decimal list-inside">
-            <li>Create a <code class="bg-white px-1 rounded">.env</code> file in the project root</li>
-            <li>Copy settings from <code class="bg-white px-1 rounded">.env.example</code></li>
-            <li>Add your Tally form ID</li>
-          </ol>
+        <div class="bg-panel border border-white/5 rounded p-5 text-left">
+          <p class="text-[10px] text-accent uppercase tracking-widest mb-3 font-bold">Initialization Required:</p>
+          <ul class="text-[10px] text-muted2 space-y-2 uppercase tracking-tight font-mono">
+            <li>1. Sync .env with protocol template</li>
+            <li>2. Map Tally ID to integration layer</li>
+            <li>3. Deploy update</li>
+          </ul>
         </div>
       </div>
     </div>
   ) : (
     <!-- Tally embed when form ID is configured -->
     <div 
-      class="tally-embed-wrapper bg-white rounded-lg shadow-lg overflow-hidden"
+      class="tally-embed-wrapper bg-panel rounded-lg overflow-hidden border border-white/5"
       data-tally-form-id={formId}
       data-tally-height={height}
       style={`min-height: ${height}px;`}
     >
-      <div class="flex items-center justify-center bg-gray-50" style={`height: ${height}px;`}>
+      <div class="flex items-center justify-center bg-panel" style={`height: ${height}px;`}>
         <div class="text-center">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-          <p class="text-gray-600">Loading form...</p>
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent mb-4"></div>
+          <p class="text-muted2 text-xs uppercase tracking-widest font-mono">Synchronizing...</p>
         </div>
       </div>
     </div>

@@ -3,6 +3,11 @@ import TallyEmbed from '../components/TallyEmbed.astro';
 import Testimonials from '../components/Testimonials.astro';
 import BookingCTA from '../components/BookingCTA.astro';
 import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
+import Container from '../components/Container.astro';
+import Panel from '../components/Panel.astro';
+import Badge from '../components/Badge.astro';
+import MiniMetric from '../components/MiniMetric.astro';
+import '../styles/global.css';
 
 const title = "PT Authority Hub - Free Performance Audit";
 const description = "Get your free 30-day Performance Audit within 24 hours. Premium personal training for serious results.";
@@ -29,7 +34,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   
   <AnalyticsPlausible />
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="selection:bg-accent selection:text-bg">
   
   <!-- Skip to content link for accessibility -->
   <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded">
@@ -37,210 +42,291 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   </a>
   
   <!-- Hero Section -->
-  <section id="hero" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700 text-white">
-    <div class="container mx-auto px-4 md:px-6 max-w-6xl text-center">
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Transform Your Performance</h1>
-      <p class="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Get a free 30-day Performance Audit delivered within 24 hours</p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#quiz-embed" class="inline-block bg-white text-blue-600 px-8 py-4 min-w-[200px] min-h-[48px] rounded-lg text-lg font-semibold hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 plausible-event-name=Start+Quiz">
-          Get Your Free Audit
-        </a>
-        <BookingCTA variant="secondary" className="text-white" />
+  <section id="hero" class="min-h-screen flex items-center pt-24 pb-16 overflow-hidden relative">
+    <!-- Subtle Background Glow -->
+    <div class="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-accent/5 blur-[120px] rounded-full pointer-events-none"></div>
+    
+    <Container className="relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <!-- Left: Copy -->
+        <div class="text-left">
+          <Badge className="mb-6" variant="accent">24-hour turnaround</Badge>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[1.1] tracking-tight text-text">
+            Performance coaching built on <span class="text-accent">signals</span>, not guesswork.
+          </h1>
+          <p class="text-lg sm:text-xl text-muted mb-8 max-w-xl">
+            Complete a short audit. Optional stats upload. Get a clear 30-day plan within 24 hours.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row items-start lg:items-center gap-4 mb-10">
+            <a href="#quiz-embed" class="inline-block bg-accent text-bg px-8 py-4 rounded-lg text-lg font-bold hover:brightness-110 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg plausible-event-name=Start+Quiz">
+              Start the audit
+            </a>
+            <BookingCTA variant="secondary" />
+          </div>
+
+          <ul class="space-y-3">
+            <li class="flex items-center gap-2 text-sm text-muted2">
+              <span class="text-accent">/</span> 30-day Performance Audit
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted2">
+              <span class="text-accent">/</span> Evidence-led adjustments
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted2">
+              <span class="text-accent">/</span> London and remote
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Dashboard Preview -->
+        <div class="relative">
+          <Panel className="border-accent/10 bg-panel/80 backdrop-blur-sm">
+            <h3 class="text-xs font-bold text-muted2 uppercase tracking-[0.2em] mb-8">Performance Snapshot</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <MiniMetric label="Sleep" value="94%" note="CONSISTENT" />
+              <MiniMetric label="Load" value="1.2" note="OPTIMAL" />
+              <MiniMetric label="Recovery" value="88" note="READY" />
+              <MiniMetric label="Movement" value="12k" note="DAILY AVG" />
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-white/5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs text-muted2 uppercase">Current Signal Strength</span>
+                <span class="text-xs text-accent">High</span>
+              </div>
+              <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                <div class="w-3/4 h-full bg-accent shadow-[0_0_10px_rgba(166,255,0,0.5)]"></div>
+              </div>
+            </div>
+          </Panel>
+          
+          <!-- Decorative element -->
+          <div class="absolute -bottom-6 -left-6 w-24 h-24 border-b-2 border-l-2 border-accent/20 rounded-bl-3xl -z-10"></div>
+        </div>
       </div>
-    </div>
+    </Container>
   </section>
   
   <!-- Main Content -->
   <main id="content">
 
   <!-- Trust Logos Section -->
-  <section id="trust-logos" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">Trusted By Leading Athletes</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div class="flex items-center justify-center bg-gray-100 h-24 rounded">
-          <p class="text-gray-500">[Logo Placeholder]</p>
+  <section id="trust-logos" class="py-12 border-y border-white/5 bg-bg2/30">
+    <Container>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
+        <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Elite Performance</p>
         </div>
-        <div class="flex items-center justify-center bg-gray-100 h-24 rounded">
-          <p class="text-gray-500">[Logo Placeholder]</p>
+        <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Signal Analysis</p>
         </div>
-        <div class="flex items-center justify-center bg-gray-100 h-24 rounded">
-          <p class="text-gray-500">[Logo Placeholder]</p>
+        <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Clinical Protocol</p>
         </div>
-        <div class="flex items-center justify-center bg-gray-100 h-24 rounded">
-          <p class="text-gray-500">[Logo Placeholder]</p>
+        <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Metric Tracking</p>
         </div>
       </div>
-    </div>
+    </Container>
   </section>
 
-  <!-- Mechanism Icons Section -->
-  <section id="mechanism-icons" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">Our Proven Method</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-            <span class="text-2xl">📊</span>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Data Analysis</h3>
-          <p class="text-gray-600">[Mechanism placeholder]</p>
-        </div>
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-            <span class="text-2xl">🎯</span>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Personalized Plan</h3>
-          <p class="text-gray-600">[Mechanism placeholder]</p>
-        </div>
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-            <span class="text-2xl">🚀</span>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Continuous Optimization</h3>
-          <p class="text-gray-600">[Mechanism placeholder]</p>
-        </div>
+  <!-- Mechanism Section -->
+  <section id="mechanism" class="py-24">
+    <Container>
+      <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Protocol Architecture</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Panel title="Assess" className="text-left">
+          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">01</div>
+          <p class="text-muted leading-relaxed">Baseline your training load, recovery signals, and metabolic constraints.</p>
+        </Panel>
+        <Panel title="Diagnose" className="text-left">
+          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">02</div>
+          <p class="text-muted leading-relaxed">Identify the specific levers that move your metabolic and performance outcomes.</p>
+        </Panel>
+        <Panel title="Implement" className="text-left">
+          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">03</div>
+          <p class="text-muted leading-relaxed">A focused 14-day action set, evidence-led and measured for immediate iteration.</p>
+        </Panel>
       </div>
-    </div>
+    </Container>
   </section>
 
   <!-- Pain & Value Bridge Section -->
-  <section id="pain-value-bridge" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-8">Stop Guessing, Start Progressing</h2>
-        <div class="space-y-6">
-          <div class="bg-red-50 border-l-4 border-red-500 p-6">
-            <h3 class="font-semibold text-lg mb-2">The Problem</h3>
-            <p class="text-gray-700">[Pain point placeholder content will go here]</p>
+  <section id="pain-value-bridge" class="py-24 bg-bg2/50 relative">
+    <Container>
+      <Panel className="max-w-4xl mx-auto overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/5">
+          <div class="p-8 md:p-12">
+            <h3 class="text-xs font-bold text-muted uppercase tracking-widest mb-8">System Blockers</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3 text-muted2 text-sm italic">
+                <span>—</span> High training load without recovery signals
+              </li>
+              <li class="flex items-start gap-3 text-muted2 text-sm italic">
+                <span>—</span> Guesswork in nutritional periodisation
+              </li>
+              <li class="flex items-start gap-3 text-muted2 text-sm italic">
+                <span>—</span> Inconsistent metabolic response data
+              </li>
+            </ul>
           </div>
-          <div class="bg-green-50 border-l-4 border-green-500 p-6">
-            <h3 class="font-semibold text-lg mb-2">The Solution</h3>
-            <p class="text-gray-700">[Value proposition placeholder content will go here]</p>
+          <div class="p-8 md:p-12 bg-white/[0.02]">
+            <h3 class="text-xs font-bold text-accent uppercase tracking-widest mb-8">Clinical Resolution</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-2 text-text text-sm font-medium">
+                <span class="text-accent">✓</span> Evidence-led recovery protocols
+              </li>
+              <li class="flex items-start gap-2 text-text text-sm font-medium">
+                <span class="text-accent">✓</span> Signal-based load management
+              </li>
+              <li class="flex items-start gap-2 text-text text-sm font-medium">
+                <span class="text-accent">✓</span> Deterministic 30-day roadmap
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-    </div>
+      </Panel>
+    </Container>
   </section>
 
   <!-- Quiz Embed Section -->
-  <section id="quiz-embed" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
+  <section id="quiz-embed" class="py-24 bg-bg2/30">
+    <Container>
       <div class="max-w-2xl mx-auto">
         <!-- What happens next block -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-12">
-          <h2 class="text-2xl font-bold mb-4 text-center">What happens next?</h2>
-          <ul class="space-y-3 text-gray-700 mb-8">
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-1">✓</span>
-              <span>You will receive your Performance Audit by email within 24 hours.</span>
+        <Panel title="Next Phase Architecture" className="mb-12 border-accent/10">
+          <ul class="space-y-4 text-muted mb-8 text-sm">
+            <li class="flex items-start gap-3">
+              <span class="text-accent font-bold">/</span>
+              <span>Review Performance Audit via email <strong>within 24 hours</strong>.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-1">✓</span>
-              <span>If you uploaded stats, they are used only for the audit and deleted within 30 days.</span>
+            <li class="flex items-start gap-3">
+              <span class="text-accent font-bold">/</span>
+              <span>Signals and stats are used for audit generation and deleted after 30 days.</span>
             </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-1">✓</span>
-              <span>This is coaching guidance, not medical advice.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-1">✓</span>
-              <span>If you want to discuss your plan, book a free 15-minute call.</span>
+            <li class="flex items-start gap-3">
+              <span class="text-accent font-bold">/</span>
+              <span class="italic text-muted2">Protocol delivery is coaching guidance, not medical advice.</span>
             </li>
           </ul>
-          <div class="text-center">
+          <div class="pt-6 border-t border-white/5 flex flex-col items-center gap-4">
+            <p class="text-xs text-muted2 uppercase tracking-widest">Optional Consultation</p>
             <BookingCTA variant="primary" />
           </div>
-        </div>
+        </Panel>
 
-        <h2 class="text-3xl font-bold text-center mb-8">Quick Qualification Quiz</h2>
-          formId={quizFormId}
-          title="Quick Qualification Quiz"
-          height={650}
-        />
+        <h2 class="text-2xl font-bold text-center mb-8 text-text uppercase tracking-widest">Qualification Protocol</h2>
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1">
+          <TallyEmbed 
+            formId={quizFormId}
+            title="Qualification Protocol"
+            height={650}
+          />
+        </div>
       </div>
-    </div>
+    </Container>
   </section>
 
   <!-- Sync My Stats Section -->
-  <section id="sync-my-stats" class="py-16 bg-white plausible-event-name=View+Stats+Upload">
-    <div class="container mx-auto px-4">
+  <section id="sync-my-stats" class="py-24 plausible-event-name=View+Stats+Upload">
+    <Container>
       <div class="max-w-2xl mx-auto">
-        <p class="text-center text-lg text-gray-600 mb-8">
-          Upload your last 30 days of performance data (Apple Watch, Oura, etc.) and receive a 
-          <strong>personalized Performance Audit within 24 hours</strong>.
+        <div class="flex justify-center mb-6">
+          <Badge variant="muted">Optional but recommended</Badge>
+        </div>
+        <p class="text-center text-lg text-muted mb-12">
+          Sync your 30-day performance signals (Apple Watch, Oura, etc.) for a 
+          <strong class="text-text">deterministic Performance Audit within 24 hours</strong>.
         </p>
         
-        <TallyEmbed 
-          formId={statsFormId}
-          title="Sync My Stats (Optional)"
-          height={700}
-          description="Your data will be used only for the audit and deleted within 30 days."
-        />
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12">
+          <TallyEmbed 
+            formId={statsFormId}
+            title="Signal Integration (Optional)"
+            height={700}
+            description="Signal integration is used solely for audit analysis and deleted within 30 days."
+          />
+        </div>
         
         <!-- Consent and Disclaimer -->
-        <div class="mt-6 space-y-4">
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p class="text-sm text-gray-700">
-              <strong>Consent:</strong> By submitting this form, you consent to sharing your health data for audit purposes. Data will be used only for the audit and deleted within 30 days.
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Protocol Consent</h4>
+            <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
+              By submitting, you consent to sharing signals for analysis. Data is purged from all systems within 30 days of delivery.
             </p>
           </div>
           
-          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <p class="text-sm text-gray-700">
-              <strong>Disclaimer:</strong> This is not medical advice. Consult a healthcare professional before starting any fitness program.
+          <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Clinical Boundary</h4>
+            <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
+              Analysis provided is high-performance coaching protocol, not medical clinical advice. Consult your physician.
             </p>
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   </section>
 
   <!-- Reviews Section -->
   <Testimonials />
 
   <!-- Live Spots Remaining Section -->
-  <section id="spots-remaining" class="py-16 bg-blue-600 text-white">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4">Limited Availability</h2>
-      <div class="text-6xl font-bold mb-2" id="spots-count">
-        Loading...
+  <section id="spots-remaining" class="py-12 border-y border-white/5 bg-panel/30">
+    <Container>
+      <div class="flex flex-col items-center">
+        <div class="inline-flex items-center gap-4 px-6 py-3 rounded-full border border-accent/20 bg-accent/5 backdrop-blur-sm">
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+          </span>
+          <span class="text-sm font-bold text-text uppercase tracking-widest leading-none">
+            System Capacity: <span id="spots-count" class="text-accent">...</span> Spots Remaining
+          </span>
+        </div>
       </div>
-      <p class="text-xl">Spots Remaining This Month</p>
-    </div>
+    </Container>
   </section>
 
   <!-- FAQ Section -->
-  <section id="faq" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
+  <section id="faq" class="py-24">
+    <Container>
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Inquiry Protocol</h2>
         <div class="space-y-4">
-          <div class="border border-gray-200 rounded-lg p-6">
-            <h3 class="font-semibold text-lg mb-2">Question 1 placeholder?</h3>
-            <p class="text-gray-600">Answer placeholder content will go here.</p>
-          </div>
-          <div class="border border-gray-200 rounded-lg p-6">
-            <h3 class="font-semibold text-lg mb-2">Question 2 placeholder?</h3>
-            <p class="text-gray-600">Answer placeholder content will go here.</p>
-          </div>
-          <div class="border border-gray-200 rounded-lg p-6">
-            <h3 class="font-semibold text-lg mb-2">Question 3 placeholder?</h3>
-            <p class="text-gray-600">Answer placeholder content will go here.</p>
-          </div>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">What data signals do you require?</h3>
+            <p class="text-muted text-sm leading-relaxed">We focus on heart rate variability, sleep architecture, training volume, and metabolic markers. These provide the essential signals for protocol adjustment.</p>
+          </Panel>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">How is the 24-hour turnaround maintained?</h3>
+            <p class="text-muted text-sm leading-relaxed">Our clinical analysts use a deterministic framework to review your audit signals immediately upon submission.</p>
+          </Panel>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">Is this a remote-only service?</h3>
+            <p class="text-muted text-sm leading-relaxed">We support both London-based on-site tactical sessions and remote digital signal tracking globally.</p>
+          </Panel>
         </div>
       </div>
-    </div>
+    </Container>
   </section>
 
   </main>
 
   <!-- Footer -->
-  <footer id="footer" class="py-8 bg-gray-900 text-white">
-    <div class="container mx-auto px-4 text-center">
-      <p>&copy; 2026 PT Authority Hub. All rights reserved.</p>
-      <p class="text-sm text-gray-400 mt-2">[Footer links placeholder]</p>
-    </div>
+  <footer id="footer" class="py-12 border-t border-white/5 bg-bg">
+    <Container>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <p class="text-[11px] text-muted2 uppercase tracking-widest font-mono">
+          &copy; 2026 PT Authority Hub. Clinical Performance Protocol.
+        </p>
+        <div class="flex gap-6">
+          <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Privacy</a>
+          <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Terms</a>
+          <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Status</a>
+        </div>
+      </div>
+    </Container>
   </footer>
 
   <!-- Client-side script to fetch and display spots remaining -->
