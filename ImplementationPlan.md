@@ -423,12 +423,26 @@ git reset --hard restore/m4-deploy
 
 ---
 
-### Milestone 6: Production Configuration & Wiring ✅ COMPLETED
+| M6 | Production Configuration & Wiring | [OD4eKp, pbyXyJ] env config, build & deploy | ✅ |
+| M7A | Curated Testimonials Section | src/data/testimonials.json, Testimonials.astro | ✅ |
+
+---
+
+## Milestone 6: Production Configuration & Wiring ✅ COMPLETED
 
 This milestone involved transitioning from placeholder form IDs to production-ready Tally form IDs and updating the project documentation to accurately reflect the progress made (Milestones 2 through 5 are now complete).
 
 #### [NEW] [.env](file:///c:/PROJECTS/pt-authority-hub-landing/.env) [COMPLETED]
 #### [MODIFY] [TaskList.md](file:///c:/PROJECTS/pt-authority-hub-landing/TaskList.md) [COMPLETED]
+
+---
+
+## Milestone 7A: Curated Testimonials Section ✅ COMPLETED
+**Scope:** Add a static, performant testimonials section without third-party scripts.
+- [x] Create `src/data/testimonials.json` with initial placeholder data.
+- [x] Implement `src/components/Testimonials.astro` with mobile-first design.
+- [x] Add configurable Google Reviews link support in `.env.example`.
+- [x] Verify build, deploy, and live content on `https://pt-authority-hub-landing.pages.dev`.
 
 ---
 
@@ -443,6 +457,7 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | M4 | Deployed URL works on mobile | ✅ |
 | M5 | Lighthouse scores pass, lazy-load works | ✅ |
 | M6 | Tally forms load with correct IDs | ✅ |
+| M7A | Testimonials render statically on live site | ✅ |
 
 ---
 
@@ -456,7 +471,8 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | `restore/m3-forms` | Tally embeds + consent copy |
 | `restore/m4-deploy` | Cloudflare Pages deployment |
 | `restore/m5-polish` | Performance + accessibility + SEO |
-| `restore/m6-production` | Real form IDs and final config |
+| `restore/m6-live-forms` | Production Tally IDs and config |
+| `restore/m7-reviews` | Curated Testimonials completion |
 
 ---
 
