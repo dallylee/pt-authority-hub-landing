@@ -426,8 +426,7 @@ git reset --hard restore/m4-deploy
 | M6 | Production Configuration & Wiring | [OD4eKp, pbyXyJ] env config, build & deploy | ✅ |
 | M7A | Curated Testimonials Section | src/data/testimonials.json, Testimonials.astro | ✅ |
 | M8 | Conversion Plumbing | BookingCTA.astro, What happens next copy | ✅ |
-
----
+| M9 | Privacy Analytics (Plausible) | AnalyticsPlausible.astro, Event instrumentation | ✅ |
 
 ## Milestone 6: Production Configuration & Wiring ✅ COMPLETED
 
@@ -469,6 +468,7 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | M6 | Tally forms load with correct IDs | ✅ |
 | M7A | Testimonials render statically on live site | ✅ |
 | M8 | Booking CTA and clarity copy live | ✅ |
+| M9 | Plausible script and event classes live | ✅ |
 
 ---
 
@@ -485,6 +485,7 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | `restore/m6-live-forms` | Production Tally IDs and config |
 | `restore/m7-reviews` | Curated Testimonials completion |
 | `restore/m8-conversion` | Conversion Plumbing completion |
+| `restore/m9-analytics` | Privacy Analytics completion |
 
 ---
 
