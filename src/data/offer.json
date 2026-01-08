@@ -1,0 +1,47 @@
+{
+    "tiers": [
+        {
+            "name": "Free Audit",
+            "price": "£0",
+            "period": "once",
+            "description": "Perfect for seeing where you stand.",
+            "features": [
+                "30-day signal analysis",
+                "Performance gap identification",
+                "Initial protocol roadmap",
+                "24-hour delivery"
+            ],
+            "cta": "Start Free Audit",
+            "highlight": false
+        },
+        {
+            "name": "Monthly Coaching",
+            "price": "£199",
+            "period": "month",
+            "description": "Continuous optimization for dedicated athletes.",
+            "features": [
+                "Everything in Free Audit",
+                "Weekly protocol adjustments",
+                "Slack signal monitoring",
+                "Monthly 1-on-1 strategy call"
+            ],
+            "cta": "Start Free Audit",
+            "highlight": true
+        },
+        {
+            "name": "Premium 1-on-1",
+            "price": "£499",
+            "period": "month",
+            "description": "Elite-level support and tactical sessions.",
+            "features": [
+                "Everything in Monthly Coaching",
+                "Unlimited direct coach access",
+                "Bi-weekly in-person sessions (London)",
+                "Priority 12h signal review"
+            ],
+            "cta": "Start Free Audit",
+            "highlight": false
+        }
+    ],
+    "disclaimer": "Prices subject to clinical review. Limited capacity."
+}

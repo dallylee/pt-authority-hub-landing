@@ -7,14 +7,15 @@ import Container from '../components/Container.astro';
 import Panel from '../components/Panel.astro';
 import Badge from '../components/Badge.astro';
 import MiniMetric from '../components/MiniMetric.astro';
+import offer from '../data/offer.json';
 import '../styles/global.css';
 
-const title = "PT Authority Hub - Free Performance Audit";
-const description = "Get your free 30-day Performance Audit within 24 hours. Premium personal training for serious results.";
+const title = "PT Authority Hub - Your Personal Fitness Coach";
+const description = "Get a Custom Training Plan in 24 Hours. Professional coaching for serious results.";
 const canonicalURL = "https://pt-authority-hub-landing.pages.dev";
 
-const quizFormId = import.meta.env.PUBLIC_TALLY_QUIZ_FORM_ID;
-const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
+const quizFormId = import.meta.env.PUBLIC_TALLY_QUIZ_FORM_ID || "OD4eKp";
+const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
 ---
 
 <!DOCTYPE html>
@@ -49,31 +50,64 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
     <Container className="relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <!-- Left: Copy -->
-        <div class="text-left">
-          <Badge className="mb-6" variant="accent">24-hour turnaround</Badge>
+        <div class="text-left flex flex-col justify-center">
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-[1.1] tracking-tight text-text">
-            Performance coaching built on <span class="text-accent">signals</span>, not guesswork.
+            Stop Guessing. <br class="hidden sm:block" />
+            Start Progressing. <br class="hidden sm:block" />
+            Get Your <span class="text-accent">Data-Driven</span> Training Plan.
           </h1>
-          <p class="text-lg sm:text-xl text-muted mb-8 max-w-xl">
-            Complete a short audit. Optional stats upload. Get a clear 30-day plan within 24 hours.
+          <p class="text-xl sm:text-2xl text-muted mb-8 max-w-xl font-medium">
+            Get a Custom Training Plan in 24 Hours.
           </p>
           
-          <div class="flex flex-col sm:flex-row items-start lg:items-center gap-4 mb-10">
-            <a href="#quiz-embed" class="inline-block bg-accent text-bg px-8 py-4 rounded-lg text-lg font-bold hover:brightness-110 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg plausible-event-name=Start+Quiz">
-              Start the audit
+          <div class="flex flex-col items-start gap-4 mb-10">
+            <a href="#quiz" class="inline-flex items-center justify-center bg-accent text-bg px-10 py-5 rounded-lg text-xl font-bold hover:brightness-110 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg min-h-[60px] plausible-event-name=Start+Free+Audit">
+              Start Free Audit
             </a>
-            <BookingCTA variant="secondary" />
+            <p class="text-sm text-muted2 ml-2">No credit card required</p>
           </div>
 
-          <ul class="space-y-3">
-            <li class="flex items-center gap-2 text-sm text-muted2">
-              <span class="text-accent">/</span> 30-day Performance Audit
+          <div class="flex items-center gap-4 py-4 px-6 bg-panel/30 border border-white/5 rounded-2xl w-fit">
+            <div class="flex -space-x-2">
+              {[1,2,3].map(() => (
+                <div class="w-8 h-8 rounded-full border-2 border-bg bg-panel flex items-center justify-center overflow-hidden">
+                  <div class="w-full h-full bg-muted/20"></div>
+                </div>
+              ))}
+            </div>
+            <div class="text-sm">
+              <span class="text-accent font-bold">⭐⭐⭐⭐⭐</span>
+              <span class="text-muted block text-xs">Rated 4.9/5 by 200+ clients</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: PT Profile + Dashboard -->
+        <div class="relative space-y-6">
+          <!-- PT Profile Card -->
+          <Panel className="border-accent/10 bg-panel/80 backdrop-blur-sm p-6 flex items-center gap-6">
+            <div class="w-20 h-20 rounded-2xl bg-muted/20 overflow-hidden flex-shrink-0 border border-white/5">
+              <img src="/coach.jpg" alt="Coach" class="w-full h-full object-cover opacity-50" onerror="this.style.display='none'" />
+            </div>
+            <div>
+              <p class="text-xs font-bold text-accent uppercase tracking-widest mb-1">Lead Coach</p>
+              <h3 class="text-xl font-bold text-text">Coach Name (TODO)</h3>
+              <p class="text-xs text-muted2">Signal Analyst & Performance Specialist</p>
+            </div>
+          </Panel>
+
+          <ul class="hidden lg:grid grid-cols-2 gap-3 opacity-50">
+            <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
+              <span class="text-accent">/</span> 30-day Data Analysis
             </li>
-            <li class="flex items-center gap-2 text-sm text-muted2">
-              <span class="text-accent">/</span> Evidence-led adjustments
+            <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
+              <span class="text-accent">/</span> Personalized Roadmap
             </li>
-            <li class="flex items-center gap-2 text-sm text-muted2">
-              <span class="text-accent">/</span> London and remote
+            <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
+              <span class="text-accent">/</span> Professional Coaching
+            </li>
+            <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
+              <span class="text-accent">/</span> Remote Optimization
             </li>
           </ul>
         </div>
@@ -131,21 +165,18 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   </section>
 
   <!-- Mechanism Section -->
-  <section id="mechanism" class="py-24">
+  <section id="how-it-works" class="py-24">
     <Container>
-      <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Protocol Architecture</h2>
+      <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Process Architecture</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Panel title="Assess" className="text-left">
-          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">01</div>
-          <p class="text-muted leading-relaxed">Baseline your training load, recovery signals, and metabolic constraints.</p>
+        <Panel title="Step 01: Tell Us About You" className="text-left">
+          <p class="text-muted leading-relaxed">Share your goals and fitness level in our 5-minute intake protocol.</p>
         </Panel>
-        <Panel title="Diagnose" className="text-left">
-          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">02</div>
-          <p class="text-muted leading-relaxed">Identify the specific levers that move your metabolic and performance outcomes.</p>
+        <Panel title="Step 02: We Build Your Plan" className="text-left">
+          <p class="text-muted leading-relaxed">Our coaches analyze your data and create your personalized program within 24 hours.</p>
         </Panel>
-        <Panel title="Implement" className="text-left">
-          <div class="w-10 h-10 mb-6 bg-accent/10 border border-accent/20 rounded flex items-center justify-center text-accent">03</div>
-          <p class="text-muted leading-relaxed">A focused 14-day action set, evidence-led and measured for immediate iteration.</p>
+        <Panel title="Step 03: Start Training" className="text-left">
+          <p class="text-muted leading-relaxed">Follow your tailored workouts and start seeing measurable progress by Day 2.</p>
         </Panel>
       </div>
     </Container>
@@ -157,16 +188,16 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
       <Panel className="max-w-4xl mx-auto overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/5">
           <div class="p-8 md:p-12">
-            <h3 class="text-xs font-bold text-muted uppercase tracking-widest mb-8">System Blockers</h3>
+            <h3 class="text-xs font-bold text-muted uppercase tracking-widest mb-8">Common Performance Problems</h3>
             <ul class="space-y-4">
               <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> High training load without recovery signals
+                <span>—</span> Not seeing results despite working out regularly?
               </li>
               <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> Guesswork in nutritional periodisation
+                <span>—</span> Confused about what to eat and when?
               </li>
               <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> Inconsistent metabolic response data
+                <span>—</span> Tired all the time even though you're "healthy"?
               </li>
             </ul>
           </div>
@@ -189,37 +220,24 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
     </Container>
   </section>
 
-  <!-- Quiz Embed Section -->
-  <section id="quiz-embed" class="py-24 bg-bg2/30">
+  <!-- Quiz Section -->
+  <section id="quiz" class="py-24 bg-bg2/30">
     <Container>
       <div class="max-w-2xl mx-auto">
-        <!-- What happens next block -->
-        <Panel title="Next Phase Architecture" className="mb-12 border-accent/10">
-          <ul class="space-y-4 text-muted mb-8 text-sm">
-            <li class="flex items-start gap-3">
-              <span class="text-accent font-bold">/</span>
-              <span>Review Performance Audit via email <strong>within 24 hours</strong>.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-accent font-bold">/</span>
-              <span>Signals and stats are used for audit generation and deleted after 30 days.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-accent font-bold">/</span>
-              <span class="italic text-muted2">Protocol delivery is coaching guidance, not medical advice.</span>
-            </li>
-          </ul>
-          <div class="pt-6 border-t border-white/5 flex flex-col items-center gap-4">
-            <p class="text-xs text-muted2 uppercase tracking-widest">Optional Consultation</p>
-            <BookingCTA variant="primary" />
+        <!-- Next steps hint -->
+        <div class="mb-12 text-center">
+          <Badge variant="accent" className="mb-4">Step 1 of 2</Badge>
+          <h2 class="text-3xl font-bold text-text mb-4">Tell Us About You</h2>
+          <p class="text-muted">Complete the intake protocol (5 minutes) to secure your 24h turnaround.</p>
+          <div class="mt-6">
+            <a href="#stats" class="text-xs text-accent uppercase tracking-widest hover:underline">Optional: Upload your stats →</a>
           </div>
-        </Panel>
+        </div>
 
-        <h2 class="text-2xl font-bold text-center mb-8 text-text uppercase tracking-widest">Qualification Protocol</h2>
-        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1">
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 shadow-2xl">
           <TallyEmbed 
             formId={quizFormId}
-            title="Qualification Protocol"
+            title="Intake Protocol"
             height={650}
           />
         </div>
@@ -227,24 +245,26 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
     </Container>
   </section>
 
-  <!-- Sync My Stats Section -->
-  <section id="sync-my-stats" class="py-24 plausible-event-name=View+Stats+Upload">
+  <!-- Stats Section -->
+  <section id="stats" class="py-24 border-y border-white/5 bg-bg2/10 plausible-event-name=View+Stats+Upload">
     <Container>
       <div class="max-w-2xl mx-auto">
         <div class="flex justify-center mb-6">
           <Badge variant="muted">Optional but recommended</Badge>
         </div>
-        <p class="text-center text-lg text-muted mb-12">
-          Sync your 30-day performance signals (Apple Watch, Oura, etc.) for a 
-          <strong class="text-text">deterministic Performance Audit within 24 hours</strong>.
+        <p class="text-center text-lg text-muted mb-6">
+          Sync your 30-day performance data for a 
+          <strong class="text-text">Custom Training Plan in 24 Hours</strong>.
         </p>
+        <div class="text-center mb-12">
+          <a href="#quiz" class="text-xs text-accent uppercase tracking-widest hover:underline">← Back to Step 1</a>
+        </div>
         
-        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12">
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12 shadow-2xl">
           <TallyEmbed 
             formId={statsFormId}
             title="Signal Integration (Optional)"
             height={700}
-            description="Signal integration is used solely for audit analysis and deleted within 30 days."
           />
         </div>
         
@@ -270,6 +290,50 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
 
   <!-- Reviews Section -->
   <Testimonials />
+  
+  <!-- Pricing Section -->
+  <section id="pricing" class="py-24 bg-bg2/50">
+    <Container>
+      <div class="text-center mb-16">
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">Investment Protocol</h2>
+        <p class="text-3xl font-bold text-text mb-4">Transparent Pricing for Serious Results</p>
+        <p class="text-muted">{offer.disclaimer}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {offer.tiers.map((tier) => (
+          <Panel className={`flex flex-col relative ${tier.highlight ? 'border-accent/40 bg-accent/5 ring-1 ring-accent/20' : 'border-white/5'}`}>
+            {tier.highlight && (
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-bg text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                Recommended
+              </div>
+            )}
+            <div class="mb-8">
+              <h3 class="text-lg font-bold text-text mb-2 uppercase tracking-widest">{tier.name}</h3>
+              <div class="flex items-baseline gap-1 mb-4">
+                <span class="text-4xl font-bold text-text">{tier.price}</span>
+                <span class="text-muted text-sm capitalize">/{tier.period}</span>
+              </div>
+              <p class="text-sm text-muted leading-relaxed">{tier.description}</p>
+            </div>
+            
+            <ul class="space-y-4 mb-10 flex-grow">
+              {tier.features.map((feature) => (
+                <li class="flex items-start gap-3 text-sm text-muted2">
+                  <span class="text-accent">✓</span>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <a href="#quiz" class={`w-full text-center py-4 rounded-lg font-bold transition-all ${tier.highlight ? 'bg-accent text-bg hover:brightness-110' : 'bg-white/5 text-text hover:bg-white/10'}`}>
+              {tier.cta}
+            </a>
+          </Panel>
+        ))}
+      </div>
+    </Container>
+  </section>
 
   <!-- Live Spots Remaining Section -->
   <section id="spots-remaining" class="py-12 border-y border-white/5 bg-panel/30">
