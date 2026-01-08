@@ -42,9 +42,9 @@ interface Testimonial {
     </div>
 
     <div class="mt-16 text-center">
-      {googleReviewsUrl ? (
+      <div id="google-reviews-card" class="inline-flex flex-col items-center">
         <a 
-          href={googleReviewsUrl} 
+          href={googleReviewsUrl || '#'} 
           target="_blank" 
           rel="noopener noreferrer"
           class="inline-flex items-center gap-3 bg-transparent text-muted2 hover:text-accent px-6 py-3 rounded-lg border border-white/10 hover:border-accent/20 transition-all font-mono uppercase tracking-[0.2em] text-[10px]"
@@ -57,11 +57,52 @@ interface Testimonial {
               <path d="M12.48 4.75c1.76 0 3.35.61 4.6 1.8l3.42-3.42C18.33 1.19 15.72 0 12.48 0 7.45 0 3.1 2.93 1 7.12l4.98 3.92c.92-2.74 3.48-4.75 6.5-6.75z" />
             </svg>
           </span>
-          {googleReviewsLabel}
+          <span id="google-reviews-label">{googleReviewsLabel}</span>
         </a>
-      ) : (
-        <p class="text-muted2 text-[10px] uppercase tracking-widest font-mono italic">Evidence Repository Offline</p>
-      )}
+        <div id="google-reviews-meta" class="mt-4 opacity-0 transition-opacity duration-500">
+          <p class="text-[10px] text-muted2 uppercase tracking-widest font-mono italic">
+            <span id="google-rating" class="text-accent font-bold"></span> 
+            Average Rating across <span id="google-count" class="text-text font-bold"></span> Reviews
+          </p>
+        </div>
+      </div>
     </div>
   </Container>
 </section>
+
+<script>
+  async function hydrateReviews() {
+    try {
+      const resp = await fetch('/api/reviews');
+      const json = await resp.json();
+      
+      if (json.status === 'ok' || json.status === 'fallback') {
+        const { rating, user_ratings_total } = json.data;
+        
+        const ratingEl = document.getElementById('google-rating');
+        const countEl = document.getElementById('google-count');
+        const metaEl = document.getElementById('google-reviews-meta');
+        
+        if (ratingEl && countEl && metaEl) {
+          ratingEl.textContent = `⭐ ${rating}/5`;
+          countEl.textContent = user_ratings_total;
+          metaEl.classList.remove('opacity-0');
+        }
+      }
+    } catch (e) {
+      console.warn('Reviews hydration failed:', e);
+    }
+  }
+
+  // Use Intersection Observer to fetch when visible
+  const section = document.getElementById('testimonials');
+  if (section) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        hydrateReviews();
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(section);
+  }
+</script>

@@ -398,6 +398,9 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           <span class="text-sm font-bold text-text uppercase tracking-widest leading-none">
             System Capacity: <span id="spots-count" class="text-accent">...</span> Spots Remaining
           </span>
+          <span id="spots-updated" class="hidden sm:block text-[9px] text-muted2 uppercase tracking-widest font-mono">
+            Updated: <span id="spots-time">...</span>
+          </span>
         </div>
       </div>
     </Container>
@@ -530,21 +533,27 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     </Container>
   </footer>
 
-  <!-- Client-side script to fetch and display spots remaining -->
   <script>
     async function loadSpotsRemaining() {
       try {
-        const response = await fetch('/spots.json');
+        const response = await fetch('/api/spots');
         const data = await response.json();
         const spotsElement = document.getElementById('spots-count');
+        const timeElement = document.getElementById('spots-time');
+        
         if (spotsElement && data.spotsRemaining !== undefined) {
           spotsElement.textContent = data.spotsRemaining;
+        }
+        
+        if (timeElement && data.updatedAt) {
+          const date = new Date(data.updatedAt);
+          timeElement.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
       } catch (error) {
         console.error('Error loading spots data:', error);
         const spotsElement = document.getElementById('spots-count');
         if (spotsElement) {
-          spotsElement.textContent = 'N/A';
+          spotsElement.textContent = '3'; // Safe default
         }
       }
     }

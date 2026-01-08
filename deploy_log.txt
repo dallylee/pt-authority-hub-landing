@@ -1,0 +1,16 @@
+
+ Ôøà´©Å wrangler 4.54.0 (update available 4.58.0)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ôû▓ [WARNING] Warning: Your working directory is a git repo and has uncommitted changes
+
+  To silence this warning, pass in --commit-dirty=true
+
+
+Ô£¿ Compiled Worker successfully
+Uploading... (9/9)
+Ô£¿ Success! Uploaded 0 files (9 already uploaded) (0.21 sec)
+
+Ô£¿ Uploading Functions bundle
+­ƒîÄ Deploying...
+Ô£¿ Deployment complete! Take a peek over at https://ebf1557b.pt-authority-hub-landing.pages.dev
+Ô£¿ Deployment alias URL: https://agent-v1-pack-d-trust-automa.pt-authority-hub-landing.pages.dev

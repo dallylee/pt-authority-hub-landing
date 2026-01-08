@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 
 const INDEX_PATH = 'dist/index.html';
 const PRIVACY_PATH = 'dist/privacy/index.html';
@@ -33,12 +32,23 @@ assert(indexContent.includes('id="stats"'), 'Missing id="stats"');
 assert(indexContent.includes('href="#quiz"'), 'Missing link to #quiz');
 assert(indexContent.includes('href="#stats"'), 'Missing link to #stats');
 
-console.log('Checking Section Presence (Repair Pack B & C)...');
+console.log('Checking Section Presence (Repair Pack B, C & D)...');
 assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
 assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');
 assert(indexContent.toLowerCase().includes('trusted by professionals from'), 'Missing "Trusted By" / logos section');
 assert(indexContent.toLowerCase().includes('transformations'), 'Missing "Transformations" section');
 assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
+
+console.log('Checking Trust Automation UI Hooks (Repair Pack D)...');
+assert(indexContent.includes('id="google-reviews-card"'), 'Missing id="google-reviews-card"');
+assert(indexContent.includes('id="google-reviews-meta"'), 'Missing id="google-reviews-meta"');
+assert(indexContent.includes('id="spots-count"'), 'Missing id="spots-count"');
+assert(indexContent.includes('id="spots-updated"'), 'Missing id="spots-updated"');
+
+console.log('Checking Endpoint References...');
+assert(indexContent.includes('/api/reviews'), 'Missing reference to /api/reviews');
+assert(indexContent.includes('/api/spots'), 'Missing reference to /api/spots');
+assert(!indexContent.includes('/spots.json'), 'Still referencing legacy /spots.json');
 
 console.log('Checking FAQ Content...');
 assert(indexContent.includes('Do I need to live in London?'), 'FAQ: Missing London question');
