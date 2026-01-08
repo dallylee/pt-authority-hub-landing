@@ -1,0 +1,46 @@
+---
+import Container from '../components/Container.astro';
+import Panel from '../components/Panel.astro';
+import '../styles/global.css';
+
+const title = "Privacy Policy - PT Authority Hub";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+</head>
+<body class="bg-bg text-text">
+  <Container className="py-24">
+    <a href="/" class="text-accent hover:underline mb-8 inline-block">← Back to home</a>
+    <h1 class="text-4xl font-bold mb-12">Privacy Policy</h1>
+    
+    <Panel className="prose prose-invert max-w-none p-8 sm:p-12">
+      <div class="space-y-8 text-muted leading-relaxed sm:text-[18px]">
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Introduction</h2>
+          <p>We take your privacy seriously. This policy explains how we collect and use your data when you use the PT Authority Hub landing page and services.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Data Collection</h2>
+          <p>We collect information you provide through our intake forms and (if opted-in) your synced fitness data. This includes your name, email, goals, and metrics like sleep and recovery scores.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Data Retention</h2>
+          <p>We only keep your data for as long as necessary to provide our services. Specifically, raw fitness data is deleted from our systems innerhalb of 30 days after your plan is delivered.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Your Rights</h2>
+          <p>You have the right to request access to your data or its deletion at any time. Simply contact us via our support channels.</p>
+        </section>
+      </div>
+    </Panel>
+  </Container>
+</body>
+</html>

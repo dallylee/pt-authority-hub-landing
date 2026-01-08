@@ -1,0 +1,46 @@
+---
+import Container from '../components/Container.astro';
+import Panel from '../components/Panel.astro';
+import '../styles/global.css';
+
+const title = "Terms of Service - PT Authority Hub";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+</head>
+<body class="bg-bg text-text">
+  <Container className="py-24">
+    <a href="/" class="text-accent hover:underline mb-8 inline-block">← Back to home</a>
+    <h1 class="text-4xl font-bold mb-12">Terms of Service</h1>
+    
+    <Panel className="prose prose-invert max-w-none p-8 sm:p-12">
+      <div class="space-y-8 text-muted leading-relaxed sm:text-[18px]">
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Agreement</h2>
+          <p>By using our services, you agree to these terms. Please read them carefully.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Nature of Service</h2>
+          <p>Our service provides professional fitness coaching and data analysis. We are not medical professionals. Always consult your physician before starting a new exercise program.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Cancellations & Refunds</h2>
+          <p>You can cancel your subscription at any time via your dashboard. We offer a 7-day money-back guarantee for first-time users if you are not satisfied with your initial plan.</p>
+        </section>
+
+        <section>
+          <h2 class="text-text text-2xl font-bold mb-4">Liability</h2>
+          <p>We are not responsible for injuries or health issues resulting from the use of our training plans. Users consume our content at their own risk.</p>
+        </section>
+      </div>
+    </Panel>
+  </Container>
+</body>
+</html>

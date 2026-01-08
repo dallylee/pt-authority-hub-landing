@@ -56,7 +56,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
             Start Progressing. <br class="hidden sm:block" />
             Get Your <span class="text-accent">Data-Driven</span> Training Plan.
           </h1>
-          <p class="text-xl sm:text-2xl text-muted mb-8 max-w-xl font-medium">
+          <p class="text-lg sm:text-2xl text-muted mb-8 max-w-xl font-medium leading-relaxed sm:text-[18px]">
             Get a Custom Training Plan in 24 Hours.
           </p>
           
@@ -140,32 +140,69 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
   <!-- Main Content -->
   <main id="content">
 
-  <!-- Trust Logos Section -->
+  <!-- Trust Logos Section (Refined) -->
   <section id="trust-logos" class="py-12 border-y border-white/5 bg-bg2/30">
     <Container>
+      <div class="text-center mb-8">
+        <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono mb-4">Trusted by professionals from</p>
+      </div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
         <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
-          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Elite Performance</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Client Logo</p>
         </div>
         <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
-          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Signal Analysis</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Client Logo</p>
         </div>
         <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
-          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Clinical Protocol</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Client Logo</p>
         </div>
         <div class="flex items-center justify-center h-12 border border-white/5 rounded-lg bg-panel/50">
-          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Metric Tracking</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted2 font-mono">Client Logo</p>
         </div>
+      </div>
+      <p class="text-[9px] text-center text-muted2 mt-6 uppercase tracking-widest">Logos shown with permission</p>
+    </Container>
+  </section>
+
+  <!-- The Why Methodology Section -->
+  <section id="the-why" class="py-24 sm:py-32 bg-bg">
+    <Container>
+      <div class="text-center mb-16">
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">The Methodology</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-text">Why this works</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Panel className="p-8 text-center flex flex-col items-center">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Precision Programming</h3>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">AI-driven training plans that adapt to your progress every single week.</p>
+        </Panel>
+        <Panel className="p-8 text-center flex flex-col items-center">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Metabolic Tracking</h3>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">Simple nutrition guidance synced with your activity for maximum energy.</p>
+        </Panel>
+        <Panel className="p-8 text-center flex flex-col items-center">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Neural Recovery</h3>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">Mindfulness and rest protocols that ensure you never hit a plateau.</p>
+        </Panel>
       </div>
     </Container>
   </section>
 
   <!-- How It Works Section -->
-  <section id="how-it-works" class="py-24">
+  <section id="how-it-works" class="py-24 sm:py-32">
     <Container>
       <div class="text-center mb-16">
         <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">The process</h2>
-        <p class="text-3xl font-bold text-text">How it works</p>
+        <p class="text-3xl sm:text-4xl font-bold text-text">How it works</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <Panel className="text-left flex flex-col items-center text-center p-8">
@@ -174,7 +211,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           </div>
           <h3 class="text-xl font-bold mb-3">1. Tell us about you</h3>
           <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Takes 5 min</p>
-          <p class="text-muted leading-relaxed">Share your goals and fitness level in our quick intake protocol.</p>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">Share your goals and fitness level in our quick intake protocol.</p>
         </Panel>
         <Panel className="text-left flex flex-col items-center text-center p-8 border-accent/20 bg-accent/5">
           <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
@@ -182,7 +219,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           </div>
           <h3 class="text-xl font-bold mb-3">2. We build your plan</h3>
           <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Within 24 hours</p>
-          <p class="text-muted leading-relaxed">Our coaches analyze your data and create your personalized program.</p>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">Our coaches analyze your data and create your personalized program.</p>
         </Panel>
         <Panel className="text-left flex flex-col items-center text-center p-8">
           <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
@@ -190,7 +227,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           </div>
           <h3 class="text-xl font-bold mb-3">3. Start training</h3>
           <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Ready by day 2</p>
-          <p class="text-muted leading-relaxed">Follow your tailored workouts and start seeing measurable progress immediately.</p>
+          <p class="text-muted leading-relaxed text-lg sm:text-[18px]">Follow your tailored workouts and start seeing measurable progress immediately.</p>
         </Panel>
       </div>
     </Container>
@@ -366,25 +403,111 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     </Container>
   </section>
 
-  <!-- FAQ Section -->
+  <!-- Transformation Gallery Section -->
+  <section id="transformations" class="py-24 bg-bg2/30">
+    <Container>
+      <div class="text-center mb-16">
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">Transformations</h2>
+        <p class="text-3xl font-bold text-text">Real Results from Real People</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <Panel className="p-0 overflow-hidden group">
+          <div class="relative aspect-video bg-muted/20 flex items-center justify-center">
+            <p class="text-muted2 text-xs uppercase tracking-widest">Transformation Placeholder</p>
+            <div class="absolute bottom-4 left-4 right-4 flex justify-between gap-4">
+              <Badge variant="accent">Weight: -8kg</Badge>
+              <Badge variant="accent">Body Fat: -5%</Badge>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl mb-2">James P.</h3>
+            <p class="text-muted text-sm leading-relaxed">"The data-driven approach changed everything. I stopped guessing and finally saw the progress I wanted in just 30 days."</p>
+          </div>
+        </Panel>
+        <Panel className="p-0 overflow-hidden group">
+          <div class="relative aspect-video bg-muted/20 flex items-center justify-center">
+            <p class="text-muted2 text-xs uppercase tracking-widest">Transformation Placeholder</p>
+            <div class="absolute bottom-4 left-4 right-4 flex justify-between gap-4">
+              <Badge variant="accent">Pace: -45s/km</Badge>
+              <Badge variant="accent">Recovery: +20%</Badge>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl mb-2">Sarah M.</h3>
+            <p class="text-muted text-sm leading-relaxed">"I was skeptical about AI-driven plans, but the results speak for themselves. My recovery metrics have never been better."</p>
+          </div>
+        </Panel>
+      </div>
+    </Container>
+  </section>
+
+  <!-- FAQ Section (Rewritten) -->
   <section id="faq" class="py-24">
     <Container>
       <div class="max-w-3xl mx-auto">
         <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Frequently asked questions</h2>
         <div class="space-y-4">
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">What data do you require?</h3>
-            <p class="text-muted text-sm leading-relaxed">We focus on heart rate, sleep patterns, and training volume. These give us the information we need to adjust your plan.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">Do I need to live in London?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">No. While we support London-based sessions, our digital coaching and training plans are delivered globally via our secure platform.</p>
           </Panel>
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">How is the 24-hour turnaround maintained?</h3>
-            <p class="text-muted text-sm leading-relaxed">Our coaches use a clear, step-by-step system to review your information as soon as you submit it.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">Do I need fancy equipment?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">No. We build your plan around the equipment you already have access to, whether that's a full gym or just a pair of dumbbells at home.</p>
           </Panel>
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">Is this a remote-only service?</h3>
-            <p class="text-muted text-sm leading-relaxed">We support both London-based sessions and remote digital coaching globally.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">What if I'm a complete beginner?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">That's perfect. Our system is designed to meet you where you are and scale as you become more confident and capable.</p>
+          </Panel>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">How much time do workouts take?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">Most workouts are designed to be completed in 45-60 minutes, though we can adjust this based on your specific daily schedule.</p>
+          </Panel>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">Can I cancel anytime?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">Yes. We don't believe in trapping people in long-term contracts. You can manage your subscription directly from your dashboard.</p>
+          </Panel>
+          <Panel className="border-white/5">
+            <h3 class="font-bold text-text mb-3 tracking-tight text-base italic">What if I have an injury?</h3>
+            <p class="text-muted text-sm leading-relaxed sm:text-[18px]">We take safety seriously. Your initial intake allows you to specify any injuries so we can adapt your movements accordingly.</p>
           </Panel>
         </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Trust & Credibility Block -->
+  <section id="trust" class="py-24 bg-bg2/50 border-t border-white/5">
+    <Container>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">Credentials</h2>
+          <p class="text-3xl font-bold text-text mb-6">Expertise You Can Trust</p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-muted leading-relaxed sm:text-[18px]">
+              <span class="text-accent">✓</span> Certified Performance Specialist (Level 4)
+            </li>
+            <li class="flex items-start gap-3 text-muted leading-relaxed sm:text-[18px]">
+              <span class="text-accent">✓</span> Accredited Nutrition & Metabolic Advisor
+            </li>
+            <li class="flex items-start gap-3 text-muted leading-relaxed sm:text-[18px]">
+              <span class="text-accent">✓</span> 5,000+ Hours of On-Floor Coaching Experience
+            </li>
+          </ul>
+        </div>
+        <Panel className="p-8 border-accent/20 bg-accent/5">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center text-accent">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h3 class="font-bold text-xl">Security & Satisfaction</h3>
+          </div>
+          <p class="text-muted text-sm mb-6 leading-relaxed">Your data is stored with bank-level encryption and is never shared. We also offer a 7-day satisfaction guarantee: not happy? Full refund, no questions asked.</p>
+          <div class="flex items-center gap-2">
+            <Badge variant="muted">Privacy First</Badge>
+            <Badge variant="muted">Secure TLS</Badge>
+          </div>
+        </Panel>
       </div>
     </Container>
   </section>
@@ -399,8 +522,8 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           &copy; 2026 PT Authority Hub. Professional coaching.
         </p>
         <div class="flex gap-6">
-          <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Privacy</a>
-          <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Terms</a>
+          <a href="/privacy" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Privacy</a>
+          <a href="/terms" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Terms</a>
           <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Status</a>
         </div>
       </div>

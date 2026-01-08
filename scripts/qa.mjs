@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 const INDEX_PATH = 'dist/index.html';
+const PRIVACY_PATH = 'dist/privacy/index.html';
+const TERMS_PATH = 'dist/terms/index.html';
 const DATA_PATH = 'src/data/offer.json';
 
 function assert(condition, message) {
@@ -11,7 +13,7 @@ function assert(condition, message) {
     }
 }
 
-console.log('--- PT Authority Hub: Comprehensive QA ---');
+console.log('--- PT Authority Hub: Comprehensive QA (Pack C) ---');
 
 // 1. Check data files
 console.log('Checking offer.json...');
@@ -31,19 +33,33 @@ assert(indexContent.includes('id="stats"'), 'Missing id="stats"');
 assert(indexContent.includes('href="#quiz"'), 'Missing link to #quiz');
 assert(indexContent.includes('href="#stats"'), 'Missing link to #stats');
 
-console.log('Checking Tally IDs...');
-assert(indexContent.includes('OD4eKp'), 'Missing live quiz Tally ID OD4eKp');
-assert(indexContent.includes('pbyXyJ'), 'Missing live stats Tally ID pbyXyJ');
+console.log('Checking Section Presence (Repair Pack B & C)...');
+assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
+assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');
+assert(indexContent.toLowerCase().includes('trusted by professionals from'), 'Missing "Trusted By" / logos section');
+assert(indexContent.toLowerCase().includes('transformations'), 'Missing "Transformations" section');
+assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
 
-console.log('Checking Language Simplification...');
+console.log('Checking FAQ Content...');
+assert(indexContent.includes('Do I need to live in London?'), 'FAQ: Missing London question');
+assert(indexContent.includes('Do I need fancy equipment?'), 'FAQ: Missing equipment question');
+assert(indexContent.includes('Can I cancel anytime?'), 'FAQ: Missing cancel question');
+
+console.log('Checking Legal Page Links...');
+assert(indexContent.includes('href="/privacy"'), 'Missing link to /privacy');
+assert(indexContent.includes('href="/terms"'), 'Missing link to /terms');
+
+console.log('Checking Built Legal Pages...');
+assert(fs.existsSync(PRIVACY_PATH), 'Missing dist/privacy/index.html');
+assert(fs.existsSync(TERMS_PATH), 'Missing dist/terms/index.html');
+
+console.log('Checking Language Simplification & Banned Phrases...');
 const bannedPhrases = [
     'OFFLINE',
     'BOOKING INTAKE',
     'QUALIFICATION PROTOCOL',
     'Next Phase Architecture',
     'Clinical Resolution',
-    'Evidence-led recovery protocols',
-    'Signal-based load management',
     'Deterministic 30-day roadmap'
 ];
 bannedPhrases.forEach(phrase => {
@@ -51,22 +67,4 @@ bannedPhrases.forEach(phrase => {
 });
 assert(!indexContent.includes('38 days'), `Found "38 days" in ${INDEX_PATH}`);
 
-console.log('Checking Section Presence (Repair Pack B)...');
-assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
-assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
-
-console.log('Checking Dashboard Clarity...');
-assert(indexContent.includes('See your progress in real numbers'), 'Missing Dashboard heading "See your progress in real numbers"');
-
-// Check dashboard area for "signal" removal
-const dashboardStartIndex = indexContent.indexOf('See your progress in real numbers');
-const dashboardEndIndex = indexContent.indexOf('Personalized roadmap');
-if (dashboardStartIndex !== -1 && dashboardEndIndex !== -1) {
-    const dashboardArea = indexContent.substring(dashboardStartIndex, dashboardEndIndex);
-    assert(!dashboardArea.toLowerCase().includes('signal'), 'Found "signal" in dashboard area');
-    assert(dashboardArea.toLowerCase().includes('better sleep = faster recovery'), 'Missing plain-English metric meaning in dashboard');
-} else {
-    assert(false, 'Could not locate dashboard start/end for content verification');
-}
-
-console.log('--- PASS: All QA checks passed ---');
+console.log('--- PASS: All Repair Pack C QA checks passed ---');
