@@ -1,0 +1,35 @@
+---
+const bookingUrl = import.meta.env.PUBLIC_BOOKING_URL;
+const bookingLabel = import.meta.env.PUBLIC_BOOKING_LABEL || 'Book a free 15-minute call';
+
+interface Props {
+  className?: string;
+  variant?: 'primary' | 'secondary';
+}
+
+const { className = '', variant = 'secondary' } = Astro.props;
+
+const baseStyles = "inline-flex flex-col items-center gap-1";
+const buttonStyles = variant === 'primary' 
+  ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition-all transform hover:scale-105"
+  : "bg-white hover:bg-gray-50 text-blue-600 font-bold py-4 px-8 rounded-lg border-2 border-blue-600 transition-all transform hover:scale-105";
+---
+
+<div class={baseStyles + " " + className}>
+  {bookingUrl ? (
+    <>
+      <a 
+        href={bookingUrl} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class={buttonStyles}
+        aria-label={`${bookingLabel} (opens in a new tab)`}
+      >
+        {bookingLabel}
+      </a>
+      <span class="text-xs text-gray-500 italic mt-1">Opens in a new tab</span>
+    </>
+  ) : (
+    <p class="text-gray-400 text-sm italic">Booking link not configured yet.</p>
+  )}
+</div>

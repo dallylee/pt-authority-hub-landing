@@ -1,4 +1,6 @@
 ---
+import BookingCTA from '../components/BookingCTA.astro';
+
 const title = "Thank You - PT Authority Hub";
 const description = "Thank you for your submission. We'll be in touch soon with your personalized Performance Audit.";
 const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
@@ -55,29 +57,27 @@ const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
           </p>
         </div>
 
-        <!-- What's Next -->
+        <!-- Next Steps -->
         <div class="mb-8 text-left">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">What happens next?</h2>
-          <ul class="space-y-3 text-gray-700">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Next steps</h2>
+          <ul class="space-y-4 text-gray-700">
             <li class="flex items-start">
-              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>We'll review your information and assess your fitness goals</span>
+              <span class="text-blue-600 mr-3 flex-shrink-0 font-bold">✓</span>
+              <span>Watch for your Performance Audit by email <strong>within 24 hours</strong>.</span>
             </li>
             <li class="flex items-start">
-              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>If you're a good fit, we'll send you a personalized audit</span>
+              <span class="text-blue-600 mr-3 flex-shrink-0 font-bold">✓</span>
+              <span>In the meantime, white-list our email address or move us to your inbox if we land in spam.</span>
             </li>
             <li class="flex items-start">
-              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>You'll receive next steps to start your transformation</span>
+              <span class="text-blue-600 mr-3 flex-shrink-0 font-bold">✓</span>
+              <span><strong>Optional:</strong> If you want to discuss your goals immediately, you can book a call below.</span>
             </li>
           </ul>
+        </div>
+
+        <div class="mb-12">
+          <BookingCTA variant="primary" />
         </div>
 
         <!-- CTA Button -->
