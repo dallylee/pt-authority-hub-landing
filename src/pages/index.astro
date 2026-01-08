@@ -10,8 +10,8 @@ import MiniMetric from '../components/MiniMetric.astro';
 import offer from '../data/offer.json';
 import '../styles/global.css';
 
-const title = "PT Authority Hub - Your Personal Fitness Coach";
-const description = "Get a Custom Training Plan in 24 Hours. Professional coaching for serious results.";
+const title = "PT Authority Hub - Your personal fitness coach";
+const description = "Get a custom training plan in 24 hours. Professional coaching for serious results.";
 const canonicalURL = "https://pt-authority-hub-landing.pages.dev";
 
 const quizFormId = import.meta.env.PUBLIC_TALLY_QUIZ_FORM_ID || "OD4eKp";
@@ -84,58 +84,54 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
 
         <!-- Right: PT Profile + Dashboard -->
         <div class="relative space-y-6">
+          <div class="mb-4">
+            <h2 class="text-xl font-bold text-text mb-2 tracking-tight">See your progress in real numbers</h2>
+            <p class="text-sm text-muted">A clear dashboard showing exactly how you're performing.</p>
+          </div>
+          
           <!-- PT Profile Card -->
           <Panel className="border-accent/10 bg-panel/80 backdrop-blur-sm p-6 flex items-center gap-6">
             <div class="w-20 h-20 rounded-2xl bg-muted/20 overflow-hidden flex-shrink-0 border border-white/5">
               <img src="/coach.jpg" alt="Coach" class="w-full h-full object-cover opacity-50" onerror="this.style.display='none'" />
             </div>
             <div>
-              <p class="text-xs font-bold text-accent uppercase tracking-widest mb-1">Lead Coach</p>
+              <p class="text-xs font-bold text-accent uppercase tracking-widest mb-1">Lead coach</p>
               <h3 class="text-xl font-bold text-text">Coach Name (TODO)</h3>
-              <p class="text-xs text-muted2">Signal Analyst & Performance Specialist</p>
+              <p class="text-xs text-muted2">Professional performance specialist</p>
+            </div>
+          </Panel>
+
+          <Panel className="border-accent/10 bg-panel/80 backdrop-blur-sm">
+            <div class="grid grid-cols-1 gap-4">
+              <div class="flex items-center justify-between p-3 bg-bg/50 rounded-lg border border-white/5">
+                <MiniMetric label="Sleep" value="94%" note="CONSISTENT" />
+                <span class="text-[10px] text-muted2 italic">Better sleep = faster recovery</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-bg/50 rounded-lg border border-white/5">
+                <MiniMetric label="Training balance" value="1.2" note="OPTIMAL" />
+                <span class="text-[10px] text-muted2 italic">No over/under-training</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-bg/50 rounded-lg border border-white/5">
+                <MiniMetric label="Recovery" value="88" note="READY" />
+                <span class="text-[10px] text-muted2 italic">Know when to push vs. rest</span>
+              </div>
             </div>
           </Panel>
 
           <ul class="hidden lg:grid grid-cols-2 gap-3 opacity-50">
             <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
-              <span class="text-accent">/</span> 30-day Data Analysis
+              <span class="text-accent">/</span> 30-day data analysis
             </li>
             <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
-              <span class="text-accent">/</span> Personalized Roadmap
+              <span class="text-accent">/</span> Personalized roadmap
             </li>
             <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
-              <span class="text-accent">/</span> Professional Coaching
+              <span class="text-accent">/</span> Professional coaching
             </li>
             <li class="flex items-center gap-2 text-[10px] text-muted2 uppercase tracking-widest">
-              <span class="text-accent">/</span> Remote Optimization
+              <span class="text-accent">/</span> Remote optimization
             </li>
           </ul>
-        </div>
-
-        <!-- Right: Dashboard Preview -->
-        <div class="relative">
-          <Panel className="border-accent/10 bg-panel/80 backdrop-blur-sm">
-            <h3 class="text-xs font-bold text-muted2 uppercase tracking-[0.2em] mb-8">Performance Snapshot</h3>
-            <div class="grid grid-cols-2 gap-4">
-              <MiniMetric label="Sleep" value="94%" note="CONSISTENT" />
-              <MiniMetric label="Load" value="1.2" note="OPTIMAL" />
-              <MiniMetric label="Recovery" value="88" note="READY" />
-              <MiniMetric label="Movement" value="12k" note="DAILY AVG" />
-            </div>
-            
-            <div class="mt-8 pt-8 border-t border-white/5">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-xs text-muted2 uppercase">Current Signal Strength</span>
-                <span class="text-xs text-accent">High</span>
-              </div>
-              <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                <div class="w-3/4 h-full bg-accent shadow-[0_0_10px_rgba(166,255,0,0.5)]"></div>
-              </div>
-            </div>
-          </Panel>
-          
-          <!-- Decorative element -->
-          <div class="absolute -bottom-6 -left-6 w-24 h-24 border-b-2 border-l-2 border-accent/20 rounded-bl-3xl -z-10"></div>
         </div>
       </div>
     </Container>
@@ -164,19 +160,37 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     </Container>
   </section>
 
-  <!-- Mechanism Section -->
+  <!-- How It Works Section -->
   <section id="how-it-works" class="py-24">
     <Container>
-      <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Process Architecture</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Panel title="Step 01: Tell Us About You" className="text-left">
-          <p class="text-muted leading-relaxed">Share your goals and fitness level in our 5-minute intake protocol.</p>
+      <div class="text-center mb-16">
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">The process</h2>
+        <p class="text-3xl font-bold text-text">How it works</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Panel className="text-left flex flex-col items-center text-center p-8">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">1. Tell us about you</h3>
+          <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Takes 5 min</p>
+          <p class="text-muted leading-relaxed">Share your goals and fitness level in our quick intake protocol.</p>
         </Panel>
-        <Panel title="Step 02: We Build Your Plan" className="text-left">
-          <p class="text-muted leading-relaxed">Our coaches analyze your data and create your personalized program within 24 hours.</p>
+        <Panel className="text-left flex flex-col items-center text-center p-8 border-accent/20 bg-accent/5">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">2. We build your plan</h3>
+          <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Within 24 hours</p>
+          <p class="text-muted leading-relaxed">Our coaches analyze your data and create your personalized program.</p>
         </Panel>
-        <Panel title="Step 03: Start Training" className="text-left">
-          <p class="text-muted leading-relaxed">Follow your tailored workouts and start seeing measurable progress by Day 2.</p>
+        <Panel className="text-left flex flex-col items-center text-center p-8">
+          <div class="w-16 h-16 mb-6 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">3. Start training</h3>
+          <p class="text-sm text-muted2 mb-2 font-bold uppercase tracking-widest">Ready by day 2</p>
+          <p class="text-muted leading-relaxed">Follow your tailored workouts and start seeing measurable progress immediately.</p>
         </Panel>
       </div>
     </Container>
@@ -188,30 +202,30 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
       <Panel className="max-w-4xl mx-auto overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/5">
           <div class="p-8 md:p-12">
-            <h3 class="text-xs font-bold text-muted uppercase tracking-widest mb-8">Common Performance Problems</h3>
+            <h3 class="text-xs font-bold text-muted uppercase tracking-widest mb-8">Common performance problems we solve</h3>
             <ul class="space-y-4">
-              <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> Not seeing results despite working out regularly?
+              <li class="flex items-start gap-4 text-muted2 text-base">
+                <span class="text-accent">—</span> Not seeing results despite working out regularly?
               </li>
-              <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> Confused about what to eat and when?
+              <li class="flex items-start gap-4 text-muted2 text-base">
+                <span class="text-accent">—</span> Confused about what to eat and when?
               </li>
-              <li class="flex items-start gap-3 text-muted2 text-sm italic">
-                <span>—</span> Tired all the time even though you're "healthy"?
+              <li class="flex items-start gap-4 text-muted2 text-base">
+                <span class="text-accent">—</span> Tired all the time even though you're "healthy"?
               </li>
             </ul>
           </div>
           <div class="p-8 md:p-12 bg-white/[0.02]">
-            <h3 class="text-xs font-bold text-accent uppercase tracking-widest mb-8">Clinical Resolution</h3>
+            <h3 class="text-xs font-bold text-accent uppercase tracking-widest mb-8">Professional coaching</h3>
             <ul class="space-y-4">
-              <li class="flex items-start gap-2 text-text text-sm font-medium">
-                <span class="text-accent">✓</span> Evidence-led recovery protocols
+              <li class="flex items-start gap-3 text-text text-base font-medium">
+                <span class="text-accent">✓</span> Proven workout plans
               </li>
-              <li class="flex items-start gap-2 text-text text-sm font-medium">
-                <span class="text-accent">✓</span> Signal-based load management
+              <li class="flex items-start gap-3 text-text text-base font-medium">
+                <span class="text-accent">✓</span> Smart training that prevents burnout
               </li>
-              <li class="flex items-start gap-2 text-text text-sm font-medium">
-                <span class="text-accent">✓</span> Deterministic 30-day roadmap
+              <li class="flex items-start gap-3 text-text text-base font-medium">
+                <span class="text-accent">✓</span> Clear, step-by-step 30-day system
               </li>
             </ul>
           </div>
@@ -227,17 +241,17 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
         <!-- Next steps hint -->
         <div class="mb-12 text-center">
           <Badge variant="accent" className="mb-4">Step 1 of 2</Badge>
-          <h2 class="text-3xl font-bold text-text mb-4">Tell Us About You</h2>
-          <p class="text-muted">Complete the intake protocol (5 minutes) to secure your 24h turnaround.</p>
+          <h2 class="text-3xl font-bold text-text mb-4">Tell us about you</h2>
+          <p class="text-muted">Takes about 2 minutes. Complete this quick protocol to secure your 24h turnaround.</p>
           <div class="mt-6">
-            <a href="#stats" class="text-xs text-accent uppercase tracking-widest hover:underline">Optional: Upload your stats →</a>
+            <a href="#stats" class="text-xs text-accent uppercase tracking-widest hover:underline">Optional: Upload your data →</a>
           </div>
         </div>
 
         <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 shadow-2xl">
           <TallyEmbed 
             formId={quizFormId}
-            title="Intake Protocol"
+            title="Intake protocol"
             height={650}
           />
         </div>
@@ -253,8 +267,8 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           <Badge variant="muted">Optional but recommended</Badge>
         </div>
         <p class="text-center text-lg text-muted mb-6">
-          Sync your 30-day performance data for a 
-          <strong class="text-text">Custom Training Plan in 24 Hours</strong>.
+          Sync your 30-day training data for a 
+          <strong class="text-text">custom training plan in 24 hours</strong>.
         </p>
         <div class="text-center mb-12">
           <a href="#quiz" class="text-xs text-accent uppercase tracking-widest hover:underline">← Back to Step 1</a>
@@ -263,7 +277,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
         <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12 shadow-2xl">
           <TallyEmbed 
             formId={statsFormId}
-            title="Signal Integration (Optional)"
+            title="Data Sync (Optional)"
             height={700}
           />
         </div>
@@ -271,16 +285,16 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
         <!-- Consent and Disclaimer -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
-            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Protocol Consent</h4>
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Consent and privacy</h4>
             <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
-              By submitting, you consent to sharing signals for analysis. Data is purged from all systems within 30 days of delivery.
+              By submitting, you consent to sharing data for analysis. We delete all data from our systems within 30 days of delivery.
             </p>
           </div>
           
           <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
-            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Clinical Boundary</h4>
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Disclaimer</h4>
             <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
-              Analysis provided is high-performance coaching protocol, not medical clinical advice. Consult your physician.
+              Our analysis is professional coaching advice, not medical clinical guidance. Please consult your physician.
             </p>
           </div>
         </div>
@@ -356,19 +370,19 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
   <section id="faq" class="py-24">
     <Container>
       <div class="max-w-3xl mx-auto">
-        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Inquiry Protocol</h2>
+        <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-12 text-center">Frequently asked questions</h2>
         <div class="space-y-4">
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">What data signals do you require?</h3>
-            <p class="text-muted text-sm leading-relaxed">We focus on heart rate variability, sleep architecture, training volume, and metabolic markers. These provide the essential signals for protocol adjustment.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">What data do you require?</h3>
+            <p class="text-muted text-sm leading-relaxed">We focus on heart rate, sleep patterns, and training volume. These give us the information we need to adjust your plan.</p>
           </Panel>
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">How is the 24-hour turnaround maintained?</h3>
-            <p class="text-muted text-sm leading-relaxed">Our clinical analysts use a deterministic framework to review your audit signals immediately upon submission.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">How is the 24-hour turnaround maintained?</h3>
+            <p class="text-muted text-sm leading-relaxed">Our coaches use a clear, step-by-step system to review your information as soon as you submit it.</p>
           </Panel>
           <Panel className="border-white/5">
-            <h3 class="font-bold text-text mb-3 uppercase tracking-tight text-sm italic">Is this a remote-only service?</h3>
-            <p class="text-muted text-sm leading-relaxed">We support both London-based on-site tactical sessions and remote digital signal tracking globally.</p>
+            <h3 class="font-bold text-text mb-3 tracking-tight text-sm italic">Is this a remote-only service?</h3>
+            <p class="text-muted text-sm leading-relaxed">We support both London-based sessions and remote digital coaching globally.</p>
           </Panel>
         </div>
       </div>
@@ -382,7 +396,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     <Container>
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <p class="text-[11px] text-muted2 uppercase tracking-widest font-mono">
-          &copy; 2026 PT Authority Hub. Clinical Performance Protocol.
+          &copy; 2026 PT Authority Hub. Professional coaching.
         </p>
         <div class="flex gap-6">
           <a href="#" class="text-[11px] text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">Privacy</a>

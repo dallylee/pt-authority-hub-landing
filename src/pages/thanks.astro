@@ -6,8 +6,8 @@ import Panel from '../components/Panel.astro';
 import Badge from '../components/Badge.astro';
 import '../styles/global.css';
 
-const title = "Thank You - PT Authority Hub";
-const description = "Thank you for your submission. We'll be in touch soon with your personalized Performance Audit.";
+const title = "Intake complete - PT Authority Hub";
+const description = "Your information has been received. We'll be in touch within 24 hours.";
 const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
 ---
 
@@ -46,29 +46,31 @@ const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
 
           <Badge variant="accent" className="mb-4">Received</Badge>
           <h1 class="text-3xl md:text-5xl font-bold text-text mb-6 tracking-tight">
-            Signal Intake Complete.
+            Intake complete.
           </h1>
-
+          
           <div class="bg-bg2/50 border border-white/5 rounded-lg p-6 mb-10 text-left">
             <p class="text-muted leading-relaxed">
-              Your Performance Audit is being generated via our clinical framework. You will receive the protocol <strong>within 24 hours</strong>.
+              We've received your information. Your personalized fitness plan is being built and will be delivered to your inbox <strong>within 24 hours</strong>.
             </p>
           </div>
 
           <div class="mb-10 text-left">
-            <h2 class="text-xs font-bold text-muted2 uppercase tracking-widest mb-6">Immediate Sequence</h2>
+            <h2 class="text-xs font-bold text-muted2 uppercase tracking-widest mb-6">What happens next</h2>
             <ul class="space-y-4 text-sm text-muted">
-              <li class="flex items-start gap-3">
-                <span class="text-accent font-bold">/</span>
-                <span>Watch for your Performance Audit by email <strong>within 24 hours</strong>.</span>
+              <li class="flex items-start gap-4">
+                <span class="w-6 h-6 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold flex-shrink-0 mt-1">1</span>
+                <div>
+                  <h3 class="text-text font-bold mb-1">Check your inbox</h3>
+                  <p class="text-sm text-muted">You'll receive a confirmation email shortly with your next steps.</p>
+                </div>
               </li>
-              <li class="flex items-start gap-3">
-                <span class="text-accent font-bold">/</span>
-                <span>Check spam folder and whitelist our communication signal.</span>
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="text-accent font-bold">/</span>
-                <span>Optional: Book a 15-minute consultation to discuss goals.</span>
+              <li class="flex items-start gap-4">
+                <span class="w-6 h-6 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold flex-shrink-0 mt-1">2</span>
+                <div>
+                  <h3 class="text-text font-bold mb-1">Review your plan</h3>
+                  <p class="text-sm text-muted">Within 24 hours, you'll receive your custom 30-day training roadmap.</p>
+                </div>
               </li>
             </ul>
           </div>
@@ -77,14 +79,14 @@ const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
             <BookingCTA variant="primary" />
             <a 
               href="/" 
-              class="inline-block border border-white/10 text-muted hover:text-text hover:bg-white/5 px-8 py-4 rounded-lg text-lg font-bold transition-all font-mono uppercase tracking-widest text-xs"
+              class="inline-block border border-white/10 text-muted hover:text-text hover:bg-white/5 px-8 py-4 rounded-lg text-sm font-bold transition-all uppercase tracking-widest"
             >
-              Return to Hub
+              Return to hub
             </a>
           </div>
 
           <p class="text-[10px] text-muted2 uppercase tracking-[0.2em]">
-            Protocol is guidance only. Clinical deletion in 30 days.
+            Coaching advice only. Data deleted in 30 days.
           </p>
         </Panel>
       </div>
