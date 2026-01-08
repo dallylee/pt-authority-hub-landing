@@ -425,6 +425,7 @@ git reset --hard restore/m4-deploy
 
 | M6 | Production Configuration & Wiring | [OD4eKp, pbyXyJ] env config, build & deploy | ✅ |
 | M7A | Curated Testimonials Section | src/data/testimonials.json, Testimonials.astro | ✅ |
+| M8 | Conversion Plumbing | BookingCTA.astro, What happens next copy | ✅ |
 
 ---
 
@@ -446,6 +447,15 @@ This milestone involved transitioning from placeholder form IDs to production-re
 
 ---
 
+## Milestone M8: Conversion Plumbing ✅ COMPLETED
+**Scope:** Add booking CTA (link-only) and clarity copy to improve user conversion.
+- [x] Created `BookingCTA.astro` for optional external booking links (no scripts).
+- [x] Added "What happens next?" block to homepage (clarity on audit delivery).
+- [x] Enhanced thank you page with "Next steps" and booking CTA.
+- [x] Verify build, deploy, and live content on both `/` and `/thanks/`.
+
+---
+
 ## Verification Summary by Milestone
 
 | Milestone | Key Verification | Status |
@@ -458,6 +468,7 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | M5 | Lighthouse scores pass, lazy-load works | ✅ |
 | M6 | Tally forms load with correct IDs | ✅ |
 | M7A | Testimonials render statically on live site | ✅ |
+| M8 | Booking CTA and clarity copy live | ✅ |
 
 ---
 
@@ -473,6 +484,7 @@ This milestone involved transitioning from placeholder form IDs to production-re
 | `restore/m5-polish` | Performance + accessibility + SEO |
 | `restore/m6-live-forms` | Production Tally IDs and config |
 | `restore/m7-reviews` | Curated Testimonials completion |
+| `restore/m8-conversion` | Conversion Plumbing completion |
 
 ---
 
