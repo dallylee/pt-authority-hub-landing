@@ -1,0 +1,12 @@
+---
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+---
+
+{plausibleDomain && (
+  <>
+    <script is:inline define:vars={{ plausibleDomain }}>
+      window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+    </script>
+    <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>
+  </>
+)}

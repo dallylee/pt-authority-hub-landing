@@ -2,6 +2,7 @@
 import TallyEmbed from '../components/TallyEmbed.astro';
 import Testimonials from '../components/Testimonials.astro';
 import BookingCTA from '../components/BookingCTA.astro';
+import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
 
 const title = "PT Authority Hub - Free Performance Audit";
 const description = "Get your free 30-day Performance Audit within 24 hours. Premium personal training for serious results.";
@@ -25,6 +26,8 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalURL} />
+  
+  <AnalyticsPlausible />
 </head>
 <body class="bg-gray-50 text-gray-900">
   
@@ -39,7 +42,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Transform Your Performance</h1>
       <p class="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Get a free 30-day Performance Audit delivered within 24 hours</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#quiz-embed" class="inline-block bg-white text-blue-600 px-8 py-4 min-w-[200px] min-h-[48px] rounded-lg text-lg font-semibold hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+        <a href="#quiz-embed" class="inline-block bg-white text-blue-600 px-8 py-4 min-w-[200px] min-h-[48px] rounded-lg text-lg font-semibold hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 plausible-event-name=Start+Quiz">
           Get Your Free Audit
         </a>
         <BookingCTA variant="secondary" className="text-white" />
@@ -160,7 +163,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   </section>
 
   <!-- Sync My Stats Section -->
-  <section id="sync-my-stats" class="py-16 bg-white">
+  <section id="sync-my-stats" class="py-16 bg-white plausible-event-name=View+Stats+Upload">
     <div class="container mx-auto px-4">
       <div class="max-w-2xl mx-auto">
         <p class="text-center text-lg text-gray-600 mb-8">

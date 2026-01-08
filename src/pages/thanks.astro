@@ -1,5 +1,6 @@
 ---
 import BookingCTA from '../components/BookingCTA.astro';
+import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
 
 const title = "Thank You - PT Authority Hub";
 const description = "Thank you for your submission. We'll be in touch soon with your personalized Performance Audit.";
@@ -20,6 +21,8 @@ const canonicalURL = "https://pt-authority-hub-landing.pages.dev/thanks/";
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalURL} />
+
+  <AnalyticsPlausible />
 </head>
 <body class="bg-gray-50 text-gray-900">
   
