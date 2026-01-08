@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Sarah J.",
+        "descriptor": "London, Marathon Runner",
+        "quote": "The performance audit was a game changer for my training block. I hit a new PB within weeks.",
+        "outcome": "New PB: 3h 15m"
+    },
+    {
+        "name": "Mark D.",
+        "descriptor": "Tech Executive, Weight Loss",
+        "quote": "Finally a program that fits my busy schedule. The data-driven approach is exactly what I needed.",
+        "outcome": "Lost 10kg in 12 weeks"
+    },
+    {
+        "name": "Elena R.",
+        "descriptor": "CrossFit Athlete",
+        "quote": "Recovering from injury was tough, but the personalized plan got me back to RX weights safely.",
+        "outcome": "Full RX status regained"
+    },
+    {
+        "name": "James L.",
+        "descriptor": "Amateur Boxer",
+        "quote": "The audit highlighted exactly where my conditioning was lagging. My engine is now on another level.",
+        "outcome": "Won regional amateur title"
+    }
+]

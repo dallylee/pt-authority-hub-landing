@@ -1,5 +1,6 @@
 ---
 import TallyEmbed from '../components/TallyEmbed.astro';
+import Testimonials from '../components/Testimonials.astro';
 
 const title = "PT Authority Hub - Free Performance Audit";
 const description = "Get your free 30-day Performance Audit within 24 hours. Premium personal training for serious results.";
@@ -163,19 +164,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID;
   </section>
 
   <!-- Reviews Section -->
-  <section id="reviews" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
-      <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-lg shadow p-8 text-center">
-          <p class="text-gray-500 mb-4">
-            [Reviews Widget Placeholder]<br>
-            <span class="text-sm">TODO: Integrate reviews widget (planned for M5 with lazy-load)</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Testimonials />
 
   <!-- Live Spots Remaining Section -->
   <section id="spots-remaining" class="py-16 bg-blue-600 text-white">
