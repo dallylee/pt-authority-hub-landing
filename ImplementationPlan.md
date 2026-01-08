@@ -423,25 +423,26 @@ git reset --hard restore/m4-deploy
 
 ---
 
-## Verification Summary by Milestone
+### Milestone 6: Production Configuration & Wiring ✅ COMPLETED
 
-| Milestone | Key Verification | Tools |
-|-----------|------------------|-------|
-| M1 | SPEC.md + AGENTS.md exist, tag present | `git tag --list` |
-| M1b | Both planning files exist, tag exists | `git log`, `git status` |
-| M2 | Build passes, all sections present | `npm run build`, browser walkthrough |
-| M3 | Embeds visible, consent/disclaimer present | Browser walkthrough |
-| M4 | Deployed URL works on mobile | `curl`, manual mobile test |
-| M5 | Lighthouse scores pass, lazy-load works | Lighthouse CLI, mobile test |
+This milestone involved transitioning from placeholder form IDs to production-ready Tally form IDs and updating the project documentation to accurately reflect the progress made (Milestones 2 through 5 are now complete).
+
+#### [NEW] [.env](file:///c:/PROJECTS/pt-authority-hub-landing/.env) [COMPLETED]
+#### [MODIFY] [TaskList.md](file:///c:/PROJECTS/pt-authority-hub-landing/TaskList.md) [COMPLETED]
 
 ---
 
-## Next Steps After M1b
+## Verification Summary by Milestone
 
-1. **User reviews this plan and TaskList.md**
-2. **User approves or requests changes**
-3. If approved → proceed to M2 (scaffold)
-4. If changes needed → update this plan, re-tag `restore/m1b-planning-artefacts`, re-submit
+| Milestone | Key Verification | Status |
+|-----------|------------------|--------|
+| M1 | SPEC.md + AGENTS.md exist, tag present | ✅ |
+| M1b | Both planning files exist, tag exists | ✅ |
+| M2 | Build passes, all sections present | ✅ |
+| M3 | Embeds visible, consent/disclaimer present | ✅ |
+| M4 | Deployed URL works on mobile | ✅ |
+| M5 | Lighthouse scores pass, lazy-load works | ✅ |
+| M6 | Tally forms load with correct IDs | ✅ |
 
 ---
 
@@ -450,11 +451,12 @@ git reset --hard restore/m4-deploy
 | Tag | Description |
 |-----|-------------|
 | `restore/m1-planning` | Initial SPEC.md + AGENTS.md anchor |
-| `restore/m1b-planning-artefacts` | This plan + TaskList.md (current) |
+| `restore/m1b-planning-artefacts` | This plan + TaskList.md |
 | `restore/m2-scaffold` | Astro + Tailwind + section skeleton |
 | `restore/m3-forms` | Tally embeds + consent copy |
 | `restore/m4-deploy` | Cloudflare Pages deployment |
 | `restore/m5-polish` | Performance + accessibility + SEO |
+| `restore/m6-production` | Real form IDs and final config |
 
 ---
 
