@@ -1,5 +1,0 @@
-<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="60" fill="transparent"/>
-  <path d="M40 30 L50 15 L60 30 L50 45 Z" fill="none" stroke="white" stroke-width="2"/>
-  <text x="125" y="38" font-family="monospace" font-size="18" font-weight="bold" fill="white" text-anchor="middle">KINETIC</text>
-</svg>

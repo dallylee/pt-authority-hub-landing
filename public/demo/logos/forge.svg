@@ -1,5 +1,0 @@
-<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="60" fill="transparent"/>
-  <rect x="70" y="15" width="60" height="30" fill="none" stroke="white" stroke-width="2"/>
-  <text x="100" y="36" font-family="monospace" font-size="16" font-weight="bold" fill="white" text-anchor="middle">FORGE</text>
-</svg>

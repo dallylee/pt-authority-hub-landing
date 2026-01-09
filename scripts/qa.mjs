@@ -44,7 +44,8 @@ assert(!indexContent.includes('tally.so/embed/OD4eKp'), 'Quiz iframe should not 
 console.log('Checking Section Presence (Repair Pack B, C & D)...');
 assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
 assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');
-assert(indexContent.toLowerCase().includes('trusted by professionals from'), 'Missing "Trusted By" / logos section');
+assert(!indexContent.toLowerCase().includes('trusted by professionals from'), 'Logo strip section "Trusted By" still present');
+assert(!indexContent.toLowerCase().includes('sample logos for demonstration'), 'Demo logo strip caption still present');
 assert(indexContent.toLowerCase().includes('real results from real people'), 'Missing "Transformations" section');
 assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
 
@@ -109,7 +110,6 @@ htmlFiles.forEach(file => {
     // Demo Asset assertions (Primary on homepage)
     if (file === INDEX_PATH) {
         assert(content.includes('/demo/transformations/case-1'), `Missing demo transformation assets in ${file}`);
-        assert(content.includes('/demo/logos/'), `Missing demo logos in ${file}`);
     }
 });
 
