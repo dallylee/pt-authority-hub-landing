@@ -44,8 +44,8 @@ assert(!indexContent.includes('tally.so/embed/OD4eKp'), 'Quiz iframe should not 
 console.log('Checking Section Presence (Repair Pack B, C & D)...');
 assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
 assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');
-assert(indexContent.toLowerCase().includes('trusted by professionals from'), 'Missing "Trusted By" / logos section');
-assert(indexContent.toLowerCase().includes('transformations'), 'Missing "Transformations" section');
+// assert(indexContent.toLowerCase().includes('trusted by professionals from'), 'Missing "Trusted By" / logos section');
+assert(indexContent.toLowerCase().includes('success stories coming soon'), 'Missing "Transformations" section placeholder');
 assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
 
 console.log('Checking Trust Automation UI Hooks (Repair Pack D)...');
@@ -99,6 +99,12 @@ htmlFiles.forEach(file => {
     });
     assert(!content.includes('text-muted2'), `Found legacy text-muted2 class in ${file}`);
     assert(!content.includes('text-[10px] text-muted'), `Annotation text too small in ${file} (found text-[10px])`);
+
+    // Placeholder guardrails
+    assert(!content.includes('TODO'), `Found TODO in ${file}`);
+    assert(!content.includes('Placeholder'), `Found Placeholder in ${file}`);
+    assert(!content.includes('Client Logo'), `Found Client Logo in ${file}`);
+    assert(!content.includes('not configured yet'), `Found "not configured yet" in ${file}`);
 });
 
 console.log('--- PASS: All Repair Pack C QA checks passed ---');

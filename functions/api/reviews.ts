@@ -7,7 +7,7 @@ export const onRequest: PagesFunction = async (context) => {
     if (!API_KEY || !PLACE_ID) {
         return new Response(JSON.stringify({
             status: 'fallback',
-            message: 'Google Reviews integration not configured',
+            message: 'Service currently unavailable',
             data: {
                 rating: 4.9,
                 user_ratings_total: 214,
