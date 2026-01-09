@@ -26,17 +26,18 @@ if (!fs.existsSync(INDEX_PATH)) {
 }
 const indexContent = fs.readFileSync(INDEX_PATH, 'utf-8');
 
+console.log('Checking built routes...');
+assert(fs.existsSync('dist/quiz/index.html'), 'Missing dist/quiz/index.html');
+assert(fs.existsSync('dist/upload/index.html'), 'Missing dist/upload/index.html');
+
 console.log('Checking Funnel Wiring (IDs and CTAs)...');
-assert(indexContent.includes('id="quiz"'), 'Missing id="quiz"');
-assert(indexContent.includes('id="stats"'), 'Missing id="stats"');
-assert(indexContent.includes('href="#quiz"'), 'Missing link to #quiz');
-assert(indexContent.includes('href="#stats"'), 'Missing link to #stats');
+assert(indexContent.includes('href="/quiz"'), 'Missing link to /quiz');
+assert(indexContent.includes('href="/upload"'), 'Missing link to /upload');
 
 console.log('Checking Tally iframe src URLs...');
-assert(indexContent.includes('https://tally.so/embed/OD4eKp'), 'Missing Quiz iframe src');
-assert(indexContent.includes('https://tally.so/embed/pbyXyJ'), 'Missing Stats iframe src');
-assert(!indexContent.includes('Synchronising'), 'Found Synchronising placeholder');
-assert(!indexContent.includes('Synchronizing'), 'Found Synchronizing placeholder');
+const uploadContent = fs.readFileSync('dist/upload/index.html', 'utf-8');
+assert(uploadContent.includes('https://tally.so/embed/pbyXyJ'), 'Missing Stats iframe src in upload page');
+assert(!indexContent.includes('tally.so/embed/OD4eKp'), 'Quiz iframe should not be on homepage');
 
 console.log('Checking Section Presence (Repair Pack B, C & D)...');
 assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');

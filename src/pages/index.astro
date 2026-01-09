@@ -61,7 +61,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           </p>
           
           <div class="flex flex-col items-start gap-4 mb-10">
-            <a href="#quiz" class="inline-flex items-center justify-center bg-accent text-bg px-10 py-5 rounded-lg text-xl font-bold hover:brightness-110 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg min-h-[60px] plausible-event-name=Start+Free+Audit">
+            <a href="/quiz" class="inline-flex items-center justify-center bg-accent text-bg px-10 py-5 rounded-lg text-xl font-bold hover:brightness-110 transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg min-h-[60px] plausible-event-name=Start+Free+Audit">
               Start Free Audit
             </a>
             <p class="text-sm text-muted2 ml-2">No credit card required</p>
@@ -281,12 +281,15 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           <h2 class="text-3xl font-bold text-text mb-4">Tell us about you</h2>
           <p class="text-muted">Takes about 2 minutes. Complete this quick protocol to secure your 24h turnaround.</p>
           <div class="mt-6">
-            <a href="#stats" class="text-xs text-accent uppercase tracking-widest hover:underline">Optional: Upload your data →</a>
+            <a href="/upload" class="text-xs text-accent uppercase tracking-widest hover:underline">Optional: Upload your data →</a>
           </div>
         </div>
 
-        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 shadow-2xl">
-          <TallyInline formId={quizFormId} title="Free Performance Audit, 2-Minute Quiz" height={520} />
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-8 shadow-2xl text-center">
+          <p class="text-lg text-text mb-8 italic">Ready to see your performance metrics?</p>
+          <a href="/quiz" class="inline-flex items-center justify-center bg-accent text-bg px-8 py-4 rounded-lg text-lg font-bold hover:brightness-110 transition-all">
+            Start the 2-Minute Audit
+          </a>
         </div>
       </div>
     </Container>
@@ -304,11 +307,14 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
           <strong class="text-text">custom training plan in 24 hours</strong>.
         </p>
         <div class="text-center mb-12">
-          <a href="#quiz" class="text-xs text-accent uppercase tracking-widest hover:underline">← Back to Step 1</a>
+          <a href="/quiz" class="text-xs text-accent uppercase tracking-widest hover:underline">← Back to Step 1</a>
         </div>
         
-        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12 shadow-2xl">
-          <TallyInline formId={statsFormId} title="Upload Your Stats (30-Day Summary)" height={520} />
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-8 mb-12 shadow-2xl text-center">
+          <p class="text-lg text-text mb-8 italic">Want even more precision?</p>
+          <a href="/upload" class="inline-flex items-center justify-center bg-white/5 text-text border border-white/10 px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/10 transition-all">
+            Upload Your Stats
+          </a>
         </div>
         
         <!-- Consent and Disclaimer -->
@@ -369,7 +375,7 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
               ))}
             </ul>
             
-            <a href="#quiz" class={`w-full text-center py-4 rounded-lg font-bold transition-all ${tier.highlight ? 'bg-accent text-bg hover:brightness-110' : 'bg-white/5 text-text hover:bg-white/10'}`}>
+            <a href="/quiz" class={`w-full text-center py-4 rounded-lg font-bold transition-all ${tier.highlight ? 'bg-accent text-bg hover:brightness-110' : 'bg-white/5 text-text hover:bg-white/10'}`}>
               {tier.cta}
             </a>
           </Panel>

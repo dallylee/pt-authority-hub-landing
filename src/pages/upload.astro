@@ -1,0 +1,94 @@
+---
+import Container from '../components/Container.astro';
+import Badge from '../components/Badge.astro';
+import TallyInline from '../components/TallyInline.astro';
+import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
+import '../styles/global.css';
+
+const title = "Upload Stats - PT Authority Hub";
+const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <AnalyticsPlausible />
+</head>
+<body class="selection:bg-accent selection:text-bg min-h-screen bg-bg">
+  <main class="py-12 sm:py-24">
+    <Container>
+      <div class="max-w-2xl mx-auto text-center mb-12">
+        <Badge variant="muted" className="mb-4">Optional but recommended</Badge>
+        <h1 class="text-3xl sm:text-5xl font-bold text-text mb-4 leading-tight">
+          Sync Your Data
+        </h1>
+        <p class="text-muted text-lg">
+          Upload your 30-day training summary (Apple Watch, Oura, Garmin, WHOOP) for a more precise audit.
+        </p>
+      </div>
+
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-panel border border-white/5 rounded-xl overflow-hidden p-1 mb-12 shadow-2xl">
+          <TallyInline formId={statsFormId} title="Upload Your Stats" height={520} />
+        </div>
+        
+        <!-- Consent and Disclaimer -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Consent and privacy</h4>
+            <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
+              All data is deleted from our systems within 30 days of delivery.
+            </p>
+          </div>
+          
+          <div class="bg-bg2/50 border border-white/5 rounded-lg p-5">
+            <h4 class="text-[10px] font-bold text-muted2 uppercase tracking-widest mb-2">Disclaimer</h4>
+            <p class="text-[11px] text-muted2 leading-relaxed uppercase tracking-tight">
+              Our analysis is professional coaching advice, not medical clinical guidance.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="/quiz" class="text-xs text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">
+            ← Back to quiz
+          </a>
+        </div>
+      </div>
+    </Container>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var d = document;
+      var w = "https://tally.so/widgets/embed.js";
+
+      function v() {
+        if (typeof Tally !== "undefined") {
+          Tally.loadEmbeds();
+          return;
+        }
+        d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function (e) {
+          e.src = e.dataset.tallySrc;
+        });
+      }
+
+      if (typeof Tally !== "undefined") {
+        v();
+        return;
+      }
+
+      if (d.querySelector('script[src="' + w + '"]') == null) {
+        var s = d.createElement("script");
+        s.src = w;
+        s.onload = v;
+        s.onerror = v;
+        d.body.appendChild(s);
+      }
+    })();
+  </script>
+</body>
+</html>

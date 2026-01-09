@@ -1,0 +1,92 @@
+export const onRequestPost: PagesFunction<{
+    RESEND_API_KEY: string;
+    EMAIL_TO: string;
+    EMAIL_FROM: string;
+}> = async (context) => {
+    try {
+        const data: any = await context.request.json();
+
+        // 1. Validate required fields
+        const required = ['email', 'first_name', 'location', 'primary_goal', 'start_timeframe', 'biggest_blocker', 'training_days_per_week', 'weekly_time_available', 'monthly_budget', 'coaching_format', 'consent'];
+        for (const field of required) {
+            if (!data[field]) {
+                return new Response(JSON.stringify({ ok: false, error: `Missing required field: ${field}` }), {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+        }
+
+        // 2. Honeypot check
+        if (data.company) {
+            return new Response(JSON.stringify({ ok: true, message: 'Spam filtered' }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // 3. Compose Email
+        const emailHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 10px;">New Performance Audit Lead</h2>
+        
+        <div style="margin: 20px 0;">
+          <p><strong>Contact:</strong> ${data.first_name} (${data.email})</p>
+          <p><strong>Location:</strong> ${data.location}</p>
+        </div>
+
+        <div style="background: #f9f9f9; padding: 15px; border-radius: 5px;">
+          <h3 style="margin-top: 0;">Goal & Urgency</h3>
+          <p><strong>Primary Goal:</strong> ${data.primary_goal}</p>
+          <p><strong>Start Timeframe:</strong> ${data.start_timeframe}</p>
+          <p><strong>Biggest Blocker:</strong> ${data.biggest_blocker}</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+          <h3>Program Fit</h3>
+          <p><strong>Training Days/Week:</strong> ${data.training_days_per_week}</p>
+          <p><strong>Weekly Available:</strong> ${data.weekly_time_available}</p>
+          <p><strong>Monthly Budget:</strong> ${data.monthly_budget}</p>
+          <p><strong>Preferred Format:</strong> ${data.coaching_format}</p>
+          <p><strong>Wants Stats Upload:</strong> ${data.wants_stats_upload || 'No'}</p>
+        </div>
+
+        <p style="font-size: 10px; color: #999; margin-top: 30px;">
+          Submitted at ${new Date().toISOString()} | PT Authority Hub Native Quiz
+        </p>
+      </div>
+    `;
+
+        // 4. Send via Resend
+        const resendResponse = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${context.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from: context.env.EMAIL_FROM,
+                to: [context.env.EMAIL_TO],
+                subject: `New Lead: ${data.first_name} - ${data.primary_goal}`,
+                html: emailHtml
+            })
+        });
+
+        if (!resendResponse.ok) {
+            const errorText = await resendResponse.text();
+            throw new Error(`Resend API Error: ${errorText}`);
+        }
+
+        return new Response(JSON.stringify({ ok: true }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+    } catch (error: any) {
+        console.error('API Error:', error);
+        return new Response(JSON.stringify({ ok: false, error: 'Internal server error' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+};

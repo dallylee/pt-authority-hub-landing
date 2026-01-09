@@ -1,0 +1,317 @@
+---
+---
+
+<div id="quiz-wizard" class="bg-panel border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
+  <!-- Progress Bar -->
+  <div class="h-1 bg-white/5 w-full">
+    <div id="progress-bar" class="h-full bg-accent transition-all duration-500 w-[33.33%]"></div>
+  </div>
+
+  <form id="lead-form" class="p-6 sm:p-10 space-y-8">
+    <!-- Honeypot -->
+    <div class="hidden">
+      <input type="text" name="company" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- Step 1: Contact -->
+    <div data-step="1" class="space-y-6">
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Email Address *</label>
+        <input type="email" name="email" required placeholder="name@example.com" class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">First Name *</label>
+        <input type="text" name="first_name" required placeholder="John" class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors" />
+      </div>
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Location *</label>
+        <select name="location" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <option value="">Select location...</option>
+          <option value="London">London</option>
+          <option value="UK (outside London)">UK (outside London)</option>
+          <option value="Outside the UK">Outside the UK</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 2: Goal/Urgency -->
+    <div data-step="2" class="space-y-6 hidden">
+      <div class="space-y-4">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your primary goal? *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {["Lose fat", "Build strength", "Build muscle", "Improve endurance", "Improve energy/recovery", "Get consistent"].map(goal => (
+            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+              <input type="radio" name="primary_goal" value={goal} required class="sr-only peer" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">{goal}</span>
+            </label>
+          ))}
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
+            <input type="radio" name="primary_goal" value="Other" class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <input type="text" name="primary_goal_other" placeholder="Other..." class="bg-transparent border-none p-0 text-sm text-muted focus:ring-0 focus:text-text w-full" />
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">When do you want to start? *</label>
+        <select name="start_timeframe" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <option value="">Select timeframe...</option>
+          <option value="This week">This week</option>
+          <option value="2–3 weeks">2–3 weeks</option>
+          <option value="4–6 weeks">4–6 weeks</option>
+          <option value="Just researching">Just researching</option>
+        </select>
+      </div>
+
+      <div class="space-y-4">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Biggest blocker? *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {["Results not happening", "Consistency", "Conflicting advice", "Low energy/recovery", "Nutrition", "Time"].map(blocker => (
+            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+              <input type="radio" name="biggest_blocker" value={blocker} required class="sr-only peer" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">{blocker}</span>
+            </label>
+          ))}
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
+            <input type="radio" name="biggest_blocker" value="Other" class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <input type="text" name="biggest_blocker_other" placeholder="Other..." class="bg-transparent border-none p-0 text-sm text-muted focus:ring-0 focus:text-text w-full" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Fit -->
+    <div data-step="3" class="space-y-6 hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Training days/week? *</label>
+          <select name="training_days_per_week" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+            <option value="">Select...</option>
+            <option value="0–1">0–1</option>
+            <option value="2–3">2–3</option>
+            <option value="4–5">4–5</option>
+            <option value="6+">6+</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Time available/week? *</label>
+          <select name="weekly_time_available" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+            <option value="">Select...</option>
+            <option value="1–2h">1–2h</option>
+            <option value="2–3h">2–3h</option>
+            <option value="3–5h">3–5h</option>
+            <option value="5+h">5+h</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Monthly Budget? *</label>
+          <select name="monthly_budget" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+            <option value="">Select...</option>
+            <option value="Under £150">Under £150</option>
+            <option value="£150–£300">£150–£300</option>
+            <option value="£300–£600">£300–£600</option>
+            <option value="£600+">£600+</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Preferred Format? *</label>
+          <select name="coaching_format" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+            <option value="">Select...</option>
+            <option value="1:1 in-person (London)">1:1 in-person (London)</option>
+            <option value="1:1 online">1:1 online</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="space-y-4 pt-4 border-t border-white/5">
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" name="wants_stats_upload" class="sr-only peer" value="Yes" />
+          <div class="w-5 h-5 border border-white/20 rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-colors">
+            <svg class="w-3.5 h-3.5 text-bg hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-sm text-muted group-hover:text-text">I want to upload my 30-day training stats for a more precise audit.</span>
+        </label>
+
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" name="consent" required class="sr-only peer" />
+          <div class="w-5 h-5 border border-white/20 rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-colors">
+            <svg class="w-3.5 h-3.5 text-bg hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+          </div>
+          <span class="text-sm text-muted group-hover:text-text">I consent to the processing of my data to receive the performance audit. *</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Sticky Mobile Footer / Action Bar -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-bg/95 backdrop-blur-md border-t border-white/5 sm:relative sm:bg-transparent sm:border-none sm:p-0 flex items-center justify-between gap-4 z-20">
+      <button type="button" id="prev-btn" class="hidden px-6 py-3 rounded-lg text-sm font-bold text-muted2 hover:text-text hover:bg-white/5 transition-all">Back</button>
+      <div class="flex-grow"></div>
+      <button type="button" id="next-btn" class="px-8 py-3 bg-accent text-bg rounded-lg text-sm font-bold hover:brightness-110 transition-all">Continue</button>
+      <button type="submit" id="submit-btn" class="hidden px-8 py-3 bg-accent text-bg rounded-lg text-sm font-bold hover:brightness-110 transition-all">Get My Audit</button>
+    </div>
+
+    <!-- Error State -->
+    <div id="form-error" class="hidden p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm text-center">
+      Something went wrong. Please try again.
+    </div>
+  </form>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="hidden absolute inset-0 bg-bg/80 backdrop-blur-sm z-30 flex items-center justify-center">
+    <div class="text-center">
+      <div class="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-xs font-bold text-accent uppercase tracking-widest">Submitting your audit...</p>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const form = document.getElementById('lead-form');
+    const progressBar = document.getElementById('progress-bar');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('form-error');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    function updateUI() {
+      // Show/Hide steps
+      document.querySelectorAll('[data-step]').forEach(el => {
+        el.classList.toggle('hidden', parseInt(el.dataset.step) !== currentStep);
+      });
+
+      // Update progress
+      progressBar.style.width = `${(currentStep / totalSteps) * 100}%`;
+
+      // Update buttons
+      prevBtn.classList.toggle('hidden', currentStep === 1);
+      nextBtn.classList.toggle('hidden', currentStep === totalSteps);
+      submitBtn.classList.toggle('hidden', currentStep !== totalSteps);
+      
+      // Scroll to top of wizard on mobile
+      if (window.innerWidth < 640) {
+        document.getElementById('quiz-wizard').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function validateStep(step) {
+      const stepEl = document.querySelector(`[data-step="${step}"]`);
+      const inputs = stepEl.querySelectorAll('input[required], select[required]');
+      
+      let isValid = true;
+      let firstInvalid = null;
+
+      inputs.forEach(input => {
+        if (input.type === 'radio') {
+          const groupName = input.name;
+          const checked = stepEl.querySelector(`input[name="${groupName}"]:checked`);
+          if (!checked) {
+            isValid = false;
+            if (!firstInvalid) firstInvalid = input.parentElement;
+          }
+        } else if (input.type === 'checkbox') {
+          if (!input.checked) {
+            isValid = false;
+            if (!firstInvalid) firstInvalid = input.parentElement;
+          }
+        } else {
+          if (!input.value.trim()) {
+            isValid = false;
+            if (!firstInvalid) firstInvalid = input;
+          }
+        }
+      });
+
+      if (!isValid && firstInvalid) {
+        firstInvalid.focus?.();
+        firstInvalid.classList.add('border-red-500/50');
+        setTimeout(() => firstInvalid.classList.remove('border-red-500/50'), 2000);
+      }
+
+      return isValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (validateStep(currentStep)) {
+        currentStep++;
+        updateUI();
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentStep--;
+      updateUI();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateStep(currentStep)) return;
+
+      errorMsg.classList.add('hidden');
+      loadingOverlay.classList.remove('hidden');
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Handle radio and checkbox "Other" values
+      if (data.primary_goal === 'Other') {
+        data.primary_goal = `Other: ${data.primary_goal_other || ''}`;
+      }
+      if (data.biggest_blocker === 'Other') {
+        data.biggest_blocker = `Other: ${data.biggest_blocker_other || ''}`;
+      }
+      
+      delete data.primary_goal_other;
+      delete data.biggest_blocker_other;
+
+      try {
+        const response = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+          const params = new URLSearchParams();
+          if (data.wants_stats_upload === 'Yes') {
+            params.set('stats', 'true');
+          }
+          window.location.href = `/thanks/?${params.toString()}`;
+        } else {
+          throw new Error(result.error || 'Submission failed');
+        }
+      } catch (err) {
+        console.error('Quiz Submission Error:', err);
+        loadingOverlay.classList.add('hidden');
+        errorMsg.classList.remove('hidden');
+        errorMsg.textContent = err.message || 'Something went wrong. Please try again.';
+      }
+    });
+  })();
+</script>
+
+<style>
+  /* Prevent scrolling on mobile when sticky footer is active */
+  @media (max-width: 640px) {
+    #quiz-wizard {
+      padding-bottom: 80px;
+    }
+  }
+</style>

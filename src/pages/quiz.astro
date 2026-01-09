@@ -1,0 +1,46 @@
+---
+import Container from '../components/Container.astro';
+import Badge from '../components/Badge.astro';
+import QuizWizard from '../components/QuizWizard.astro';
+import AnalyticsPlausible from '../components/AnalyticsPlausible.astro';
+import '../styles/global.css';
+
+const title = "Free Performance Audit - PT Authority Hub";
+const description = "2-minute quiz, no credit card, your audit within 24 hours.";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <AnalyticsPlausible />
+</head>
+<body class="selection:bg-accent selection:text-bg min-h-screen bg-bg">
+  <main class="py-12 sm:py-24">
+    <Container>
+      <div class="max-w-2xl mx-auto text-center mb-12">
+        <Badge variant="accent" className="mb-4">Free Performance Audit</Badge>
+        <h1 class="text-3xl sm:text-5xl font-bold text-text mb-4 leading-tight">
+          Tell us about you
+        </h1>
+        <p class="text-muted text-lg">
+          2-minute quiz, no credit card, your audit within 24 hours.
+        </p>
+      </div>
+
+      <div class="max-w-2xl mx-auto">
+        <QuizWizard />
+      </div>
+      
+      <div class="mt-8 text-center">
+        <a href="/" class="text-xs text-muted2 hover:text-accent uppercase tracking-widest font-mono transition-colors">
+          ← Back to home
+        </a>
+      </div>
+    </Container>
+  </main>
+</body>
+</html>
