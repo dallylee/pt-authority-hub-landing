@@ -8,6 +8,8 @@ import Panel from '../components/Panel.astro';
 import Badge from '../components/Badge.astro';
 import MiniMetric from '../components/MiniMetric.astro';
 import offer from '../data/offer.json';
+import caseStudies from '../data/case_studies.json';
+import logos from '../data/logos.json';
 import '../styles/global.css';
 
 const title = "PT Authority Hub - Your personal fitness coach";
@@ -138,7 +140,22 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
   </section>
   
   <!-- Main Content -->
-  <main id="content">
+  <main id="content">  <!-- Trust Logos Section (Demo) -->
+  <section id="trust-logos" class="py-12 border-y border-white/5 bg-bg2/30">
+    <Container>
+      <div class="text-center mb-8">
+        <p class="text-[11px] uppercase tracking-widest text-muted font-mono mb-4">Trusted by professionals from</p>
+      </div>
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-8 opacity-40 grayscale hover:grayscale-0 transition-all items-center">
+        {logos.map((logo) => (
+          <div class="flex items-center justify-center p-2">
+            <img src={logo.src} alt={logo.alt} class="h-8 md:h-10 w-auto" />
+          </div>
+        ))}
+      </div>
+      <p class="text-[11px] text-center text-muted mt-8 uppercase tracking-widest">Sample logos for demonstration.</p>
+    </Container>
+  </section>
 
 
   <!-- The Why Methodology Section -->
@@ -381,15 +398,42 @@ const statsFormId = import.meta.env.PUBLIC_TALLY_STATS_FORM_ID || "pbyXyJ";
     </Container>
   </section>
 
-  <!-- Transformation Gallery Section -->
   <section id="transformations" class="py-24 bg-bg2/30">
     <Container>
       <div class="text-center mb-16">
         <h2 class="text-xs font-bold text-accent uppercase tracking-[0.3em] mb-4">Transformations</h2>
-        <p class="text-3xl font-bold text-text">Real Results from Real People</p>
+        <p class="text-3xl font-bold text-text mb-4">Real Results from Real People</p>
+        <p class="text-sm text-muted">Sample results for demonstration. Replace with your client outcomes.</p>
       </div>
-      <div class="text-center p-12 bg-panel/30 border border-white/5 rounded-2xl">
-        <p class="text-muted italic">Success stories coming soon. Be one of our first success cases.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {caseStudies.map((caseStudy) => (
+          <Panel className="p-0 overflow-hidden group border-white/5 bg-panel/50">
+            <div class="relative aspect-[4/5] bg-muted/20 flex items-center justify-center overflow-hidden">
+              <img 
+                src={caseStudy.image} 
+                alt={`Transformation: ${caseStudy.name}`}
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div class="absolute top-4 left-4">
+                <p class="text-[10px] font-bold text-accent uppercase tracking-widest bg-bg/80 backdrop-blur-sm px-2 py-1 rounded">
+                  {caseStudy.label}
+                </p>
+              </div>
+              <div class="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
+                {caseStudy.metrics.map((metric) => (
+                  <Badge variant="accent" className="bg-accent text-bg font-bold border-none shadow-lg">
+                    {metric}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-lg mb-2 text-text uppercase tracking-tight">{caseStudy.name}</h3>
+              <p class="text-muted text-sm leading-relaxed italic line-clamp-3">"{caseStudy.quote}"</p>
+            </div>
+          </Panel>
+        ))}
       </div>
     </Container>
   </section>

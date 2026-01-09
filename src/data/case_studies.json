@@ -1,0 +1,32 @@
+[
+    {
+        "name": "James P.",
+        "quote": "The data-driven approach changed everything. I stopped guessing and finally saw the progress I wanted in just 30 days.",
+        "metrics": [
+            "Weight: -8kg",
+            "Body Fat: -5%"
+        ],
+        "image": "/demo/transformations/case-1.png",
+        "label": "Sample case study"
+    },
+    {
+        "name": "Sarah M.",
+        "quote": "I was skeptical about AI-driven plans, but the results speak for themselves. My recovery metrics have never been better.",
+        "metrics": [
+            "Pace: -45s/km",
+            "Recovery: +20%"
+        ],
+        "image": "/demo/transformations/case-2.png",
+        "label": "Sample case study"
+    },
+    {
+        "name": "Omar K.",
+        "quote": "Syncing my data gave my coach the precision needed to fix my sleep. I've never felt this energized during training.",
+        "metrics": [
+            "Sleep: +15%",
+            "Energy: Peak"
+        ],
+        "image": "/demo/transformations/case-3.png",
+        "label": "Sample case study"
+    }
+]

@@ -1,0 +1,5 @@
+<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="60" fill="transparent"/>
+  <text x="100" y="35" font-family="monospace" font-size="22" font-weight="black" fill="white" text-anchor="middle">VERTEX</text>
+  <path d="M80 15 L100 5 L120 15" fill="none" stroke="white" stroke-width="2"/>
+</svg>

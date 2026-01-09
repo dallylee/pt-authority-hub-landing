@@ -1,0 +1,6 @@
+<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="60" fill="transparent"/>
+  <text x="100" y="32" font-family="serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">NORTHBANK</text>
+  <line x1="40" y1="40" x2="160" y2="40" stroke="white" stroke-width="1"/>
+  <text x="100" y="52" font-family="serif" font-size="10" fill="white" text-anchor="middle" letter-spacing="5">ATHLETICS</text>
+</svg>
