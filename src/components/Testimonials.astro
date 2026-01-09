@@ -30,7 +30,7 @@ interface Testimonial {
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-bold text-text uppercase tracking-tight text-sm">{item.name}</p>
-                <p class="text-[10px] text-muted2 uppercase tracking-widest font-mono mt-1">{item.descriptor}</p>
+                <p class="text-[11px] text-muted uppercase tracking-widest font-mono mt-1">{item.descriptor}</p>
               </div>
               {item.outcome && (
                 <Badge variant="muted">{item.outcome}</Badge>
@@ -47,7 +47,7 @@ interface Testimonial {
           href={googleReviewsUrl || '#'} 
           target="_blank" 
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-3 bg-transparent text-muted2 hover:text-accent px-6 py-3 rounded-lg border border-white/10 hover:border-accent/20 transition-all font-mono uppercase tracking-[0.2em] text-[10px]"
+          class="inline-flex items-center gap-3 bg-transparent text-muted hover:text-accent px-6 py-3 rounded-lg border border-white/10 hover:border-accent/20 transition-all font-mono uppercase tracking-[0.2em] text-[10px]"
         >
           <span class="text-accent/60">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@ interface Testimonial {
           <span id="google-reviews-label">{googleReviewsLabel}</span>
         </a>
         <div id="google-reviews-meta" class="mt-4 opacity-0 transition-opacity duration-500">
-          <p class="text-[10px] text-muted2 uppercase tracking-widest font-mono italic">
+          <p class="text-[11px] text-muted uppercase tracking-widest font-mono italic">
             <span id="google-rating" class="text-accent font-bold"></span> 
             Average Rating across <span id="google-count" class="text-text font-bold"></span> Reviews
           </p>

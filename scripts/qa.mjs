@@ -86,4 +86,19 @@ bannedPhrases.forEach(phrase => {
 });
 assert(!indexContent.includes('38 days'), `Found "38 days" in ${INDEX_PATH}`);
 
+console.log('Checking Contrast and Readability (Mobile Optimization) across all pages...');
+const htmlFiles = fs.readdirSync('dist', { recursive: true })
+    .filter(f => f.endsWith('.html'))
+    .map(f => `dist/${f}`);
+
+htmlFiles.forEach(file => {
+    const content = fs.readFileSync(file, 'utf-8');
+    const lowContrastMatches = content.match(/<(p|li)[^>]*class="[^"]*(text-white\/(50|60)|opacity-(40|50|60))[^"]*"[^>]*>/g) || [];
+    lowContrastMatches.forEach(match => {
+        assert(false, `Low contrast text found in ${file} on <p> or <li>: ${match}`);
+    });
+    assert(!content.includes('text-muted2'), `Found legacy text-muted2 class in ${file}`);
+    assert(!content.includes('text-[10px] text-muted'), `Annotation text too small in ${file} (found text-[10px])`);
+});
+
 console.log('--- PASS: All Repair Pack C QA checks passed ---');
