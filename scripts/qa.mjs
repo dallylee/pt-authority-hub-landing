@@ -37,6 +37,8 @@ assert(indexContent.includes('href="/upload"'), 'Missing link to /upload');
 console.log('Checking Tally iframe src URLs...');
 const uploadContent = fs.readFileSync('dist/upload/index.html', 'utf-8');
 assert(uploadContent.includes('https://tally.so/embed/pbyXyJ'), 'Missing Stats iframe src in upload page');
+assert(uploadContent.includes('What to upload'), 'Missing "What to upload" heading on upload page');
+assert(uploadContent.includes('How your upload is used'), 'Missing "How your upload is used" heading on upload page');
 assert(!indexContent.includes('tally.so/embed/OD4eKp'), 'Quiz iframe should not be on homepage');
 
 console.log('Checking Section Presence (Repair Pack B, C & D)...');
