@@ -482,7 +482,7 @@
       delete data.constraints_current_issue_detail;
 
       try {
-        const response = await fetch('/api/lead', {
+        const response = await fetch('/api/leads/ingest', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -500,10 +500,11 @@
           const uploadSkippedMsg = document.getElementById('upload-skipped-msg');
           const skipBtn = document.getElementById('skip-upload-btn');
           
-          // Store email and leadId for upload
+          // Store email, leadId, and leadToken for upload
           window.__quizData = {
             email: data.email,
-            leadId: result.leadId || ''
+            leadId: result.leadId || '',
+            leadToken: result.leadToken || ''
           };
           
           successState.classList.remove('hidden');
@@ -621,6 +622,7 @@
         formData.append('file', selectedFile);
         formData.append('email', window.__quizData.email || '');
         formData.append('leadId', window.__quizData.leadId || '');
+        formData.append('leadToken', window.__quizData.leadToken || '');
         formData.append('consent', 'true');
         
         const xhr = new XMLHttpRequest();
