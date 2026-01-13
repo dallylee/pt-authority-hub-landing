@@ -74,7 +74,7 @@ npx wrangler d1 create pt-authority-hub-db
 [[d1_databases]]
 binding = "DB"
 database_name = "pt-authority-hub-db"
-database_id = "<YOUR_DATABASE_ID>"
+database_id = "324ee536-b279-4798-95d3-b8b24940a1d5"
 
 # 4. Run migration
 npx wrangler d1 execute pt-authority-hub-db --local --file=migrations/0001_initial_schema.sql
