@@ -135,13 +135,21 @@
       </div>
 
       <div class="space-y-4 pt-4 border-t border-white/5">
-        <label class="flex items-center gap-3 cursor-pointer group">
-          <input type="checkbox" name="wants_stats_upload" class="sr-only peer" value="Yes" />
-          <div class="w-5 h-5 border border-white/20 rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-colors">
-            <svg class="w-3.5 h-3.5 text-bg hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        <div class="space-y-3">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Would you like to upload your stats? *</label>
+          <div class="grid grid-cols-1 gap-3">
+            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+              <input type="radio" name="wants_stats_upload" value="Yes" required class="sr-only peer" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">Yes, I will upload my stats (recommended)</span>
+            </label>
+            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+              <input type="radio" name="wants_stats_upload" value="No" class="sr-only peer" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">No, just use my answers</span>
+            </label>
           </div>
-          <span class="text-sm text-muted group-hover:text-text">I want to upload my 30-day training stats for a more precise audit.</span>
-        </label>
+        </div>
 
         <label class="flex items-center gap-3 cursor-pointer group">
           <input type="checkbox" name="consent" required class="sr-only peer" />
@@ -150,6 +158,7 @@
           </div>
           <span class="text-sm text-muted group-hover:text-text">I consent to the processing of my data to receive the performance audit. *</span>
         </label>
+        <p class="text-[11px] text-muted leading-relaxed">This is coaching guidance, not medical advice. Data deleted within 30 days.</p>
       </div>
     </div>
 
@@ -172,6 +181,60 @@
     <div class="text-center">
       <div class="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
       <p class="text-xs font-bold text-accent uppercase tracking-widest">Submitting your audit...</p>
+    </div>
+  </div>
+
+  <!-- Success State (shown after submit) -->
+  <div id="success-state" class="hidden p-6 sm:p-10 space-y-8">
+    <div class="text-center">
+      <div class="w-16 h-16 mx-auto bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center mb-6">
+        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-text mb-4">Intake complete!</h2>
+      <p class="text-muted leading-relaxed">
+        We've received your information. Your personalised audit will arrive by email <strong class="text-text">within 24 hours (business days)</strong>.
+      </p>
+    </div>
+
+    <!-- Inline Upload Panel (only if upload=yes) -->
+    <div id="inline-upload-panel" data-upload-panel="1" class="hidden border border-accent/20 rounded-xl bg-accent/5 p-6 space-y-4">
+      <h3 class="text-lg font-bold text-text">Optional: Upload your 30-day summary</h3>
+      <p class="text-sm text-muted">Screenshots or exports are fine. Accepted formats: PDF, JPG/PNG, CSV.</p>
+      <p class="text-xs text-muted italic">Examples: Apple Health, Garmin, Strava, WHOOP, Oura, Fitbit</p>
+      <p class="text-[11px] text-muted">Please do not upload medical documents.</p>
+      
+      <div class="bg-panel border border-white/5 rounded-lg overflow-hidden">
+        <iframe 
+          id="tally-upload-iframe"
+          data-tally-src=""
+          loading="lazy"
+          width="100%"
+          height="400"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          title="Upload Your Stats"
+        ></iframe>
+      </div>
+      
+      <div class="text-center pt-4">
+        <button type="button" id="skip-upload-btn" class="text-sm text-muted hover:text-accent underline transition-colors">
+          Skip for now – proceed with quiz answers only
+        </button>
+      </div>
+    </div>
+
+    <!-- After upload skipped or not needed -->
+    <div id="upload-skipped-msg" class="hidden text-center text-sm text-muted">
+      <p>Your audit will proceed using your quiz answers. Check your inbox!</p>
+    </div>
+
+    <div class="text-center pt-4">
+      <a href="/" class="text-xs text-muted hover:text-accent uppercase tracking-widest font-mono transition-colors">
+        ← Back to home
+      </a>
     </div>
   </div>
 </div>
@@ -289,11 +352,55 @@
         const result = await response.json();
 
         if (result.ok) {
-          const params = new URLSearchParams();
+          // Hide form, show success state
+          loadingOverlay.classList.add('hidden');
+          form.classList.add('hidden');
+          
+          const successState = document.getElementById('success-state');
+          const uploadPanel = document.getElementById('inline-upload-panel');
+          const uploadSkippedMsg = document.getElementById('upload-skipped-msg');
+          const tallyIframe = document.getElementById('tally-upload-iframe');
+          const skipBtn = document.getElementById('skip-upload-btn');
+          
+          successState.classList.remove('hidden');
+          
+          // If user selected upload=Yes, show the upload panel with Tally embed
           if (data.wants_stats_upload === 'Yes') {
-            params.set('stats', 'true');
+            uploadPanel.classList.remove('hidden');
+            
+            // Build Tally embed URL with email prefill
+            const email = encodeURIComponent(data.email || '');
+            const leadId = result.lead_id ? encodeURIComponent(result.lead_id) : '';
+            let tallyUrl = `https://tally.so/embed/pbyXyJ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
+            if (email) {
+              tallyUrl += `&email=${email}`;
+            }
+            if (leadId) {
+              tallyUrl += `&lead_id=${leadId}`;
+            }
+            tallyIframe.src = tallyUrl;
+            tallyIframe.dataset.tallySrc = tallyUrl;
+            
+            // Load Tally widget
+            if (typeof Tally !== 'undefined') {
+              Tally.loadEmbeds();
+            }
+          } else {
+            // User selected No upload
+            uploadSkippedMsg.classList.remove('hidden');
           }
-          window.location.href = `/thanks/?${params.toString()}`;
+          
+          // Handle skip button
+          if (skipBtn) {
+            skipBtn.addEventListener('click', () => {
+              uploadPanel.classList.add('hidden');
+              uploadSkippedMsg.classList.remove('hidden');
+            });
+          }
+          
+          // Scroll to top
+          document.getElementById('quiz-wizard').scrollIntoView({ behavior: 'smooth' });
+          
         } else {
           throw new Error(result.error || 'Submission failed');
         }
