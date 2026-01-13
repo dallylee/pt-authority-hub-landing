@@ -244,29 +244,63 @@
     </div>
 
     <!-- Inline Upload Panel (only if wants_upload=Yes) -->
-    <div id="inline-upload-panel" data-upload-panel="1" class="hidden border border-accent/20 rounded-xl bg-accent/5 p-6 space-y-4">
+    <div id="inline-upload-panel" data-upload-panel="1" data-native-upload="1" class="hidden border border-accent/20 rounded-xl bg-accent/5 p-6 space-y-4">
       <h3 class="text-lg font-bold text-text">Optional: Upload Your 30-Day Summary</h3>
-      <p class="text-sm text-muted">Screenshots or exports are fine. Accepted formats: PDF, JPG/PNG, CSV.</p>
-      <p class="text-xs text-muted italic">Examples: Apple Health, Garmin, Strava, WHOOP, Oura, Fitbit</p>
-      <p class="text-[11px] text-muted">Please do not upload medical documents.</p>
+      <ul class="text-sm text-muted space-y-1 list-disc list-inside">
+        <li>Screenshots or exports are fine.</li>
+        <li>Accepted formats: PDF, JPG/PNG, CSV.</li>
+        <li>Examples: Apple Health, Garmin, Strava, WHOOP, Oura, Fitbit.</li>
+        <li>Please do not upload medical documents.</li>
+      </ul>
       
-      <div class="bg-panel border border-white/5 rounded-lg overflow-hidden">
-        <iframe 
-          id="tally-upload-iframe"
-          data-tally-src=""
-          loading="lazy"
-          width="100%"
-          height="400"
-          frameborder="0"
-          marginheight="0"
-          marginwidth="0"
-          title="Upload Your Stats"
-        ></iframe>
+      <!-- Native file input -->
+      <div id="upload-dropzone" class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-accent/50 transition-colors cursor-pointer">
+        <input type="file" id="upload-file-input" accept=".pdf,.jpg,.jpeg,.png,.csv" class="hidden" />
+        <div id="upload-dropzone-content">
+          <svg class="w-10 h-10 mx-auto mb-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+          </svg>
+          <p class="text-sm text-muted mb-2">Drag and drop your file here, or</p>
+          <span class="text-sm text-accent underline">click to browse</span>
+        </div>
+        <div id="upload-file-selected" class="hidden">
+          <p class="text-sm text-text font-medium" id="selected-file-name"></p>
+          <p class="text-xs text-muted" id="selected-file-size"></p>
+        </div>
       </div>
       
-      <div class="text-center pt-4">
+      <!-- Progress bar -->
+      <div id="upload-progress-container" class="hidden">
+        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div id="upload-progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-muted mt-1" id="upload-progress-text">Uploading...</p>
+      </div>
+      
+      <!-- Consent checkbox -->
+      <label class="flex items-start gap-3 cursor-pointer group">
+        <input type="checkbox" id="upload-consent" class="sr-only peer" />
+        <div class="w-5 h-5 mt-0.5 border border-white/20 rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-colors flex-shrink-0">
+          <svg class="w-3.5 h-3.5 text-bg hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <span class="text-sm text-muted group-hover:text-text">I consent to you processing this file to produce my Performance Audit and contacting me about it.</span>
+      </label>
+      
+      <!-- Upload error message -->
+      <div id="upload-error" class="hidden p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm"></div>
+      
+      <!-- Upload success message -->
+      <div id="upload-success" class="hidden p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm">
+        Upload received. I will include it in your audit.
+      </div>
+      
+      <!-- Buttons -->
+      <div class="flex items-center gap-4 pt-2">
+        <button type="button" id="upload-submit-btn" class="px-6 py-3 bg-accent text-bg rounded-lg text-sm font-bold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          Upload File
+        </button>
         <button type="button" id="skip-upload-btn" class="text-sm text-muted hover:text-accent underline transition-colors">
-          Skip for Now – Proceed with Quiz Answers Only
+          Skip for Now
         </button>
       </div>
     </div>
@@ -464,32 +498,20 @@
           const successState = document.getElementById('success-state');
           const uploadPanel = document.getElementById('inline-upload-panel');
           const uploadSkippedMsg = document.getElementById('upload-skipped-msg');
-          const tallyIframe = document.getElementById('tally-upload-iframe');
           const skipBtn = document.getElementById('skip-upload-btn');
+          
+          // Store email and leadId for upload
+          window.__quizData = {
+            email: data.email,
+            leadId: result.leadId || ''
+          };
           
           successState.classList.remove('hidden');
           
-          // If user selected upload=Yes, show the upload panel with Tally embed
+          // If user selected upload=Yes, show the native upload panel
           if (data.wants_upload === 'Yes') {
             uploadPanel.classList.remove('hidden');
-            
-            // Build Tally embed URL with email prefill
-            const email = encodeURIComponent(data.email || '');
-            const leadId = result.lead_id ? encodeURIComponent(result.lead_id) : '';
-            let tallyUrl = `https://tally.so/embed/pbyXyJ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
-            if (email) {
-              tallyUrl += `&email=${email}`;
-            }
-            if (leadId) {
-              tallyUrl += `&lead_id=${leadId}`;
-            }
-            tallyIframe.src = tallyUrl;
-            tallyIframe.dataset.tallySrc = tallyUrl;
-            
-            // Load Tally widget
-            if (typeof Tally !== 'undefined') {
-              Tally.loadEmbeds();
-            }
+            initNativeUpload();
           } else {
             // User selected No upload
             uploadSkippedMsg.classList.remove('hidden');
@@ -516,6 +538,134 @@
         errorMsg.textContent = err.message || 'Something went wrong. Please try again.';
       }
     });
+    
+    // Native Upload Handler
+    function initNativeUpload() {
+      const dropzone = document.getElementById('upload-dropzone');
+      const fileInput = document.getElementById('upload-file-input');
+      const dropzoneContent = document.getElementById('upload-dropzone-content');
+      const fileSelected = document.getElementById('upload-file-selected');
+      const selectedFileName = document.getElementById('selected-file-name');
+      const selectedFileSize = document.getElementById('selected-file-size');
+      const consent = document.getElementById('upload-consent');
+      const uploadBtn = document.getElementById('upload-submit-btn');
+      const progressContainer = document.getElementById('upload-progress-container');
+      const progressBar = document.getElementById('upload-progress-bar');
+      const progressText = document.getElementById('upload-progress-text');
+      const uploadError = document.getElementById('upload-error');
+      const uploadSuccess = document.getElementById('upload-success');
+      const skipBtn = document.getElementById('skip-upload-btn');
+      const uploadPanel = document.getElementById('inline-upload-panel');
+      const uploadSkippedMsg = document.getElementById('upload-skipped-msg');
+      
+      let selectedFile = null;
+      
+      // Click to browse
+      dropzone.addEventListener('click', () => fileInput.click());
+      
+      // Drag and drop
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-accent');
+      });
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('border-accent');
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-accent');
+        if (e.dataTransfer.files.length) {
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+      
+      // File input change
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+          handleFileSelect(fileInput.files[0]);
+        }
+      });
+      
+      function handleFileSelect(file) {
+        selectedFile = file;
+        dropzoneContent.classList.add('hidden');
+        fileSelected.classList.remove('hidden');
+        selectedFileName.textContent = file.name;
+        selectedFileSize.textContent = formatFileSize(file.size);
+        updateUploadBtnState();
+      }
+      
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      }
+      
+      // Consent checkbox
+      consent.addEventListener('change', updateUploadBtnState);
+      
+      function updateUploadBtnState() {
+        uploadBtn.disabled = !(selectedFile && consent.checked);
+      }
+      
+      // Upload button
+      uploadBtn.addEventListener('click', async () => {
+        if (!selectedFile || !consent.checked) return;
+        
+        uploadError.classList.add('hidden');
+        uploadBtn.disabled = true;
+        progressContainer.classList.remove('hidden');
+        progressBar.style.width = '0%';
+        
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('email', window.__quizData.email || '');
+        formData.append('leadId', window.__quizData.leadId || '');
+        formData.append('consent', 'true');
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            progressBar.style.width = pct + '%';
+            progressText.textContent = `Uploading... ${pct}%`;
+          }
+        });
+        
+        xhr.addEventListener('load', () => {
+          progressContainer.classList.add('hidden');
+          try {
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200 && result.ok) {
+              uploadSuccess.classList.remove('hidden');
+              dropzone.classList.add('hidden');
+              document.querySelector('label:has(#upload-consent)').classList.add('hidden');
+              uploadBtn.classList.add('hidden');
+              skipBtn.classList.add('hidden');
+            } else {
+              uploadError.textContent = result.error || 'Upload failed. Please try again.';
+              uploadError.classList.remove('hidden');
+              uploadBtn.disabled = false;
+            }
+          } catch (e) {
+            uploadError.textContent = 'Upload failed. Please try again.';
+            uploadError.classList.remove('hidden');
+            uploadBtn.disabled = false;
+          }
+        });
+        
+        xhr.addEventListener('error', () => {
+          progressContainer.classList.add('hidden');
+          uploadError.textContent = 'Network error. Please check your connection and try again.';
+          uploadError.classList.remove('hidden');
+          uploadBtn.disabled = false;
+        });
+        
+        xhr.open('POST', '/api/upload');
+        xhr.send(formData);
+      });
+    }
   })();
 </script>
 

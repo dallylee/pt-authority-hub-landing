@@ -1,0 +1,179 @@
+interface Env {
+    RESEND_API_KEY: string;
+    EMAIL_TO: string;
+    EMAIL_FROM: string;
+    DOWNLOAD_TOKEN_SECRET: string;
+    AUDIT_UPLOADS: R2Bucket;
+    UPLOAD_MAX_BYTES?: string;
+    UPLOAD_ALLOWED_TYPES?: string;
+}
+
+interface CFContext {
+    request: Request;
+    env: Env;
+}
+
+const DEFAULT_MAX_BYTES = 15728640; // 15 MB
+const DEFAULT_ALLOWED_TYPES = 'application/pdf,image/jpeg,image/png,text/csv';
+
+export const onRequestPost = async (context: CFContext): Promise<Response> => {
+    try {
+        // Check required bindings
+        if (!context.env.AUDIT_UPLOADS) {
+            return new Response(JSON.stringify({ ok: false, error: 'R2 binding AUDIT_UPLOADS missing' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        if (!context.env.DOWNLOAD_TOKEN_SECRET) {
+            return new Response(JSON.stringify({ ok: false, error: 'DOWNLOAD_TOKEN_SECRET not configured' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        if (!context.env.RESEND_API_KEY || !context.env.EMAIL_TO || !context.env.EMAIL_FROM) {
+            return new Response(JSON.stringify({ ok: false, error: 'Email configuration missing (RESEND_API_KEY, EMAIL_TO, EMAIL_FROM)' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const formData = await context.request.formData();
+        const file = formData.get('file') as File | null;
+        const email = formData.get('email') as string | null;
+        const leadId = formData.get('leadId') as string | null;
+        const consent = formData.get('consent') as string | null;
+
+        // Validate required fields
+        if (!file || !(file instanceof File)) {
+            return new Response(JSON.stringify({ ok: false, error: 'No file provided' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        if (!email || !email.includes('@')) {
+            return new Response(JSON.stringify({ ok: false, error: 'Invalid email' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        if (consent !== 'true') {
+            return new Response(JSON.stringify({ ok: false, error: 'Consent required' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // Validate file size
+        const maxBytes = parseInt(context.env.UPLOAD_MAX_BYTES || '') || DEFAULT_MAX_BYTES;
+        if (file.size > maxBytes) {
+            return new Response(JSON.stringify({ ok: false, error: `File too large. Maximum size is ${Math.round(maxBytes / 1024 / 1024)} MB` }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // Validate file type
+        const allowedTypes = (context.env.UPLOAD_ALLOWED_TYPES || DEFAULT_ALLOWED_TYPES).split(',');
+        if (!allowedTypes.includes(file.type)) {
+            return new Response(JSON.stringify({ ok: false, error: `File type not allowed. Accepted: PDF, JPG, PNG, CSV` }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // Generate key path
+        const now = new Date();
+        const year = now.getUTCFullYear();
+        const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+        const uuid = crypto.randomUUID();
+        const sanitizedFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 100);
+        const key = `uploads/${year}/${month}/${leadId || 'unknown'}/${uuid}_${sanitizedFilename}`;
+
+        // Store in R2
+        await context.env.AUDIT_UPLOADS.put(key, file.stream(), {
+            httpMetadata: {
+                contentType: file.type
+            },
+            customMetadata: {
+                email: email,
+                leadId: leadId || '',
+                originalName: file.name,
+                uploadedAt: now.toISOString()
+            }
+        });
+
+        // Generate signed download token (valid 24 hours)
+        const expiry = Math.floor(Date.now() / 1000) + (24 * 60 * 60);
+        const payload = JSON.stringify({ key, exp: expiry, nonce: crypto.randomUUID() });
+        const payloadB64 = btoa(payload).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(context.env.DOWNLOAD_TOKEN_SECRET);
+        const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(payloadB64));
+        const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+        const token = `${payloadB64}.${sigB64}`;
+        const downloadUrl = `https://pt-authority-hub-landing.pages.dev/api/download?t=${token}`;
+
+        // Send notification email via Resend
+        let emailNotice = 'sent';
+        try {
+            const emailHtml = `
+                <h2>New Audit File Upload</h2>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Lead ID:</strong> ${leadId || 'N/A'}</p>
+                <p><strong>Uploaded At:</strong> ${now.toISOString()}</p>
+                <hr>
+                <p><strong>File Name:</strong> ${file.name}</p>
+                <p><strong>File Type:</strong> ${file.type}</p>
+                <p><strong>File Size:</strong> ${(file.size / 1024).toFixed(1)} KB</p>
+                <hr>
+                <p><strong>Download Link (expires in 24h):</strong></p>
+                <p><a href="${downloadUrl}">${downloadUrl}</a></p>
+            `;
+
+            const resendRes = await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${context.env.RESEND_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    from: context.env.EMAIL_FROM,
+                    to: context.env.EMAIL_TO,
+                    subject: `New audit upload received: ${email}`,
+                    html: emailHtml
+                })
+            });
+
+            if (!resendRes.ok) {
+                console.error('Resend error:', await resendRes.text());
+                emailNotice = 'failed';
+            }
+        } catch (e) {
+            console.error('Email send error:', e);
+            emailNotice = 'failed';
+        }
+
+        return new Response(JSON.stringify({
+            ok: true,
+            key: key,
+            originalName: file.name,
+            size: file.size,
+            contentType: file.type,
+            emailNotice: emailNotice
+        }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+    } catch (error: any) {
+        console.error('Upload API Error:', error);
+        return new Response(JSON.stringify({ ok: false, error: 'Upload failed: ' + (error.message || 'Unknown error') }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+};
