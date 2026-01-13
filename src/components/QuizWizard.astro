@@ -4,7 +4,7 @@
 <div id="quiz-wizard" class="bg-panel border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
   <!-- Progress Bar -->
   <div class="h-1 bg-white/5 w-full">
-    <div id="progress-bar" class="h-full bg-accent transition-all duration-500 w-[33.33%]"></div>
+    <div id="progress-bar" class="h-full bg-accent transition-all duration-500 w-[20%]"></div>
   </div>
 
   <form id="lead-form" class="p-6 sm:p-10 space-y-8">
@@ -26,7 +26,7 @@
       <div class="space-y-2">
         <label class="block text-xs font-bold text-accent uppercase tracking-widest">Location *</label>
         <select name="location" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
-          <option value="">Select location...</option>
+          <option value="">Select Location...</option>
           <option value="London">London</option>
           <option value="UK (outside London)">UK (outside London)</option>
           <option value="Outside the UK">Outside the UK</option>
@@ -35,62 +35,68 @@
       </div>
     </div>
 
-    <!-- Step 2: Goal/Urgency -->
+    <!-- Step 2: Goal and Urgency -->
     <div data-step="2" class="space-y-6 hidden">
       <div class="space-y-4">
-        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your main goal right now? *</label>
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What Is Your Main Goal Right Now? *</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {["Lose fat and look leaner", "Build strength", "Build muscle", "Improve conditioning/endurance", "Improve energy and recovery", "Get consistent again"].map(goal => (
+          {["Lose Fat and Look Leaner", "Build Strength", "Build Muscle", "Improve Conditioning and Endurance", "Improve Energy and Recovery", "Get Consistent Again"].map(goal => (
             <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
-              <input type="radio" name="primary_goal" value={goal} required class="sr-only peer" />
+              <input type="radio" name="main_goal" value={goal} required class="sr-only peer" />
               <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
               <span class="text-sm text-muted group-hover:text-text">{goal}</span>
             </label>
           ))}
-          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
-            <input type="radio" name="primary_goal" value="Other" class="sr-only peer" />
-            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
-            <input type="text" name="primary_goal_other" placeholder="Other..." class="bg-transparent border-none p-0 text-sm text-muted focus:ring-0 focus:text-text w-full" />
+          <label class="flex flex-col gap-2 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
+            <div class="flex items-center gap-3">
+              <input type="radio" name="main_goal" value="Other" class="sr-only peer" id="main_goal_other_radio" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">Other</span>
+            </div>
+            <input type="text" name="main_goal_other" id="main_goal_other_field" placeholder="Tell Us Briefly..." class="hidden bg-bg border border-white/10 rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-accent transition-colors mt-2" />
           </label>
         </div>
       </div>
 
       <div class="space-y-2">
-        <label class="block text-xs font-bold text-accent uppercase tracking-widest">When do you want to start? *</label>
-        <select name="start_timeframe" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
-          <option value="">Select timeframe...</option>
-          <option value="This week">This week</option>
-          <option value="2–3 weeks">2–3 weeks</option>
-          <option value="4–6 weeks">4–6 weeks</option>
-          <option value="Just researching">Just researching</option>
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">When Would You Like to Start? *</label>
+        <select name="start_timing" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <option value="">Select...</option>
+          <option value="This Week">This Week</option>
+          <option value="In 2–3 Weeks">In 2–3 Weeks</option>
+          <option value="In 4–6 Weeks">In 4–6 Weeks</option>
+          <option value="Just Researching for Now">Just Researching for Now</option>
         </select>
       </div>
 
       <div class="space-y-4">
-        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your biggest blocker right now? *</label>
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What Is Your Biggest Blocker Right Now? *</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {["I train, but results are not happening", "I cannot stay consistent", "I do not know what to do (conflicting advice)", "Low energy, poor recovery, stress", "Nutrition consistency", "Time constraints"].map(blocker => (
+          {["I Train, but Results Are Not Happening", "I Cannot Stay Consistent", "I Do Not Know What to Do (Conflicting Advice)", "Low Energy, Poor Recovery, Stress", "Nutrition Consistency", "Time Constraints"].map(blocker => (
             <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
               <input type="radio" name="biggest_blocker" value={blocker} required class="sr-only peer" />
               <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
               <span class="text-sm text-muted group-hover:text-text">{blocker}</span>
             </label>
           ))}
-          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
-            <input type="radio" name="biggest_blocker" value="Other" class="sr-only peer" />
-            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
-            <input type="text" name="biggest_blocker_other" placeholder="Other..." class="bg-transparent border-none p-0 text-sm text-muted focus:ring-0 focus:text-text w-full" />
+          <label class="flex flex-col gap-2 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group sm:col-span-2">
+            <div class="flex items-center gap-3">
+              <input type="radio" name="biggest_blocker" value="Other" class="sr-only peer" id="biggest_blocker_other_radio" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">Other</span>
+            </div>
+            <input type="text" name="biggest_blocker_other" id="biggest_blocker_other_field" placeholder="Tell Us Briefly..." class="hidden bg-bg border border-white/10 rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-accent transition-colors mt-2" />
           </label>
         </div>
       </div>
     </div>
 
-    <!-- Step 3: Fit -->
+    <!-- Step 3: Commitment and Fit -->
     <div data-step="3" class="space-y-6 hidden">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Training days/week? *</label>
-          <select name="training_days_per_week" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">How Many Days per Week Do You Train Right Now? *</label>
+          <select name="training_days_current" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
             <option value="0–1">0–1</option>
             <option value="2–3">2–3</option>
@@ -99,58 +105,78 @@
           </select>
         </div>
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Time available/week? *</label>
-          <select name="weekly_time_available" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Realistically, How Much Time Can You Commit per Week? *</label>
+          <select name="time_commitment_weekly" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
-            <option value="1–2h">1–2h</option>
-            <option value="2–3h">2–3h</option>
-            <option value="3–5h">3–5h</option>
-            <option value="5+h">5+h</option>
+            <option value="1–2 Hours">1–2 Hours</option>
+            <option value="2–3 Hours">2–3 Hours</option>
+            <option value="3–5 Hours">3–5 Hours</option>
+            <option value="5+ Hours">5+ Hours</option>
           </select>
         </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your monthly budget for personal training? *</label>
-          <select name="monthly_budget" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What Monthly Investment Range Feels Realistic for Coaching? *</label>
+          <select name="monthly_investment" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
-            <option value="Under £150">Under £150</option>
-            <option value="£150–£300">£150–£300</option>
-            <option value="£300–£600">£300–£600</option>
-            <option value="£600+">£600+</option>
-            <option value="Not sure">Not sure</option>
+            <option value="Under £150/month">Under £150/month</option>
+            <option value="£150–£300/month">£150–£300/month</option>
+            <option value="£300–£600/month">£300–£600/month</option>
+            <option value="£600+/month">£600+/month</option>
+            <option value="Not Sure Yet">Not Sure Yet</option>
           </select>
         </div>
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What type of coaching do you prefer? *</label>
-          <select name="coaching_format" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What Type of Coaching Do You Prefer? *</label>
+          <select name="coaching_preference" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
-            <option value="1:1 in-person (London)">1:1 in-person (London)</option>
-            <option value="1:1 online">1:1 online</option>
+            <option value="1:1 In-Person (London)">1:1 In-Person (London)</option>
+            <option value="1:1 Online">1:1 Online</option>
             <option value="Hybrid">Hybrid</option>
-            <option value="Not sure">Not sure</option>
+            <option value="Not Sure">Not Sure</option>
           </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Safety and Constraints (NEW) -->
+    <div data-step="4" class="space-y-6 hidden">
+      <div class="space-y-4">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Any Injuries or Issues That Affect Training Right Now? *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {["None", "Past Injury (Not Limiting)", "Current Issue (Limits Training)", "Prefer not to say"].map(option => (
+            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+              <input type="radio" name="constraints" value={option} required class="sr-only peer" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">{option}</span>
+            </label>
+          ))}
+        </div>
+        <p class="text-[11px] text-muted leading-relaxed">This is not medical advice, it helps tailor recommendations.</p>
+      </div>
+    </div>
+
+    <!-- Step 5: Optional Upload Decision -->
+    <div data-step="5" class="space-y-6 hidden">
+      <div class="space-y-4">
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Want a Deeper Audit by Uploading Your Stats? *</label>
+        <div class="grid grid-cols-1 gap-3">
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <input type="radio" name="wants_upload" value="Yes" required class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <span class="text-sm text-muted group-hover:text-text">Yes, I Will Upload (Recommended)</span>
+          </label>
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <input type="radio" name="wants_upload" value="No" class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <span class="text-sm text-muted group-hover:text-text">No, Just Use My Answers</span>
+          </label>
         </div>
       </div>
 
       <div class="space-y-4 pt-4 border-t border-white/5">
-        <div class="space-y-3">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Optional: do you want to upload your 30-day summary for a deeper audit? *</label>
-          <div class="grid grid-cols-1 gap-3">
-            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
-              <input type="radio" name="wants_stats_upload" value="Yes" required class="sr-only peer" />
-              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
-              <span class="text-sm text-muted group-hover:text-text">Yes, I will upload my stats (recommended)</span>
-            </label>
-            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
-              <input type="radio" name="wants_stats_upload" value="No" class="sr-only peer" />
-              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
-              <span class="text-sm text-muted group-hover:text-text">No, just use my answers</span>
-            </label>
-          </div>
-        </div>
-
         <label class="flex items-center gap-3 cursor-pointer group">
           <input type="checkbox" name="consent" required class="sr-only peer" />
           <div class="w-5 h-5 border border-white/20 rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-colors">
@@ -158,7 +184,7 @@
           </div>
           <span class="text-sm text-muted group-hover:text-text">I consent to the processing of my data to receive the performance audit. *</span>
         </label>
-        <p class="text-[11px] text-muted leading-relaxed">This is coaching guidance, not medical advice. Data deleted within 30 days.</p>
+        <p class="text-[11px] text-muted leading-relaxed">This is coaching guidance, not medical advice. If you have medical concerns, consult your GP or clinician.</p>
       </div>
     </div>
 
@@ -192,15 +218,15 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
       </div>
-      <h2 class="text-2xl font-bold text-text mb-4">Intake complete!</h2>
+      <h2 class="text-2xl font-bold text-text mb-4">Thanks, Your Audit Is Received.</h2>
       <p class="text-muted leading-relaxed">
-        We've received your information. Your personalised audit will arrive by email <strong class="text-text">within 24 hours (business days)</strong>.
+        Reply within <strong class="text-text">24 hours (business days)</strong>.
       </p>
     </div>
 
-    <!-- Inline Upload Panel (only if upload=yes) -->
+    <!-- Inline Upload Panel (only if wants_upload=Yes) -->
     <div id="inline-upload-panel" data-upload-panel="1" class="hidden border border-accent/20 rounded-xl bg-accent/5 p-6 space-y-4">
-      <h3 class="text-lg font-bold text-text">Optional: Upload your 30-day summary</h3>
+      <h3 class="text-lg font-bold text-text">Optional: Upload Your 30-Day Summary</h3>
       <p class="text-sm text-muted">Screenshots or exports are fine. Accepted formats: PDF, JPG/PNG, CSV.</p>
       <p class="text-xs text-muted italic">Examples: Apple Health, Garmin, Strava, WHOOP, Oura, Fitbit</p>
       <p class="text-[11px] text-muted">Please do not upload medical documents.</p>
@@ -221,7 +247,7 @@
       
       <div class="text-center pt-4">
         <button type="button" id="skip-upload-btn" class="text-sm text-muted hover:text-accent underline transition-colors">
-          Skip for now – proceed with quiz answers only
+          Skip for Now – Proceed with Quiz Answers Only
         </button>
       </div>
     </div>
@@ -233,7 +259,7 @@
 
     <div class="text-center pt-4">
       <a href="/" class="text-xs text-muted hover:text-accent uppercase tracking-widest font-mono transition-colors">
-        ← Back to home
+        ← Back to Home
       </a>
     </div>
   </div>
@@ -250,7 +276,30 @@
     const loadingOverlay = document.getElementById('loading-overlay');
     
     let currentStep = 1;
-    const totalSteps = 3;
+    const totalSteps = 5;
+
+    // "Other" reveal logic
+    function setupOtherReveal(radioName, textFieldId) {
+      const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+      const textField = document.getElementById(textFieldId);
+      
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.value === 'Other' && radio.checked) {
+            textField.classList.remove('hidden');
+            textField.required = true;
+          } else if (radio.checked) {
+            textField.classList.add('hidden');
+            textField.required = false;
+            textField.value = '';
+          }
+        });
+      });
+    }
+
+    // Initialize Other reveal for main_goal and biggest_blocker
+    setupOtherReveal('main_goal', 'main_goal_other_field');
+    setupOtherReveal('biggest_blocker', 'biggest_blocker_other_field');
 
     function updateUI() {
       // Show/Hide steps
@@ -331,15 +380,15 @@
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
       
-      // Handle radio and checkbox "Other" values
-      if (data.primary_goal === 'Other') {
-        data.primary_goal = `Other: ${data.primary_goal_other || ''}`;
+      // Handle "Other" values
+      if (data.main_goal === 'Other') {
+        data.main_goal = `Other: ${data.main_goal_other || ''}`;
       }
       if (data.biggest_blocker === 'Other') {
         data.biggest_blocker = `Other: ${data.biggest_blocker_other || ''}`;
       }
       
-      delete data.primary_goal_other;
+      delete data.main_goal_other;
       delete data.biggest_blocker_other;
 
       try {
@@ -365,7 +414,7 @@
           successState.classList.remove('hidden');
           
           // If user selected upload=Yes, show the upload panel with Tally embed
-          if (data.wants_stats_upload === 'Yes') {
+          if (data.wants_upload === 'Yes') {
             uploadPanel.classList.remove('hidden');
             
             // Build Tally embed URL with email prefill

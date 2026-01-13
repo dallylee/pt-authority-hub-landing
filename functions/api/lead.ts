@@ -7,7 +7,7 @@ export const onRequestPost: PagesFunction<{
         const data: any = await context.request.json();
 
         // 1. Validate required fields
-        const required = ['email', 'first_name', 'location', 'primary_goal', 'start_timeframe', 'biggest_blocker', 'training_days_per_week', 'weekly_time_available', 'monthly_budget', 'coaching_format', 'consent'];
+        const required = ['email', 'first_name', 'location', 'main_goal', 'start_timing', 'biggest_blocker', 'training_days_current', 'time_commitment_weekly', 'monthly_investment', 'coaching_preference', 'constraints', 'wants_upload', 'consent'];
         for (const field of required) {
             if (!data[field]) {
                 return new Response(JSON.stringify({ ok: false, error: `Missing required field: ${field}` }), {
@@ -37,18 +37,19 @@ export const onRequestPost: PagesFunction<{
 
         <div style="background: #f9f9f9; padding: 15px; border-radius: 5px;">
           <h3 style="margin-top: 0;">Goal & Urgency</h3>
-          <p><strong>Primary Goal:</strong> ${data.primary_goal}</p>
-          <p><strong>Start Timeframe:</strong> ${data.start_timeframe}</p>
+          <p><strong>Main Goal:</strong> ${data.main_goal}</p>
+          <p><strong>Start Timing:</strong> ${data.start_timing}</p>
           <p><strong>Biggest Blocker:</strong> ${data.biggest_blocker}</p>
         </div>
 
         <div style="margin: 20px 0;">
           <h3>Program Fit</h3>
-          <p><strong>Training Days/Week:</strong> ${data.training_days_per_week}</p>
-          <p><strong>Weekly Available:</strong> ${data.weekly_time_available}</p>
-          <p><strong>Monthly Budget:</strong> ${data.monthly_budget}</p>
-          <p><strong>Preferred Format:</strong> ${data.coaching_format}</p>
-          <p><strong>Wants Stats Upload:</strong> ${data.wants_stats_upload || 'No'}</p>
+          <p><strong>Training Days/Week:</strong> ${data.training_days_current}</p>
+          <p><strong>Weekly Available:</strong> ${data.time_commitment_weekly}</p>
+          <p><strong>Monthly Investment:</strong> ${data.monthly_investment}</p>
+          <p><strong>Coaching Preference:</strong> ${data.coaching_preference}</p>
+          <p><strong>Constraints:</strong> ${data.constraints}</p>
+          <p><strong>Wants Upload:</strong> ${data.wants_upload || 'No'}</p>
         </div>
 
         <p style="font-size: 10px; color: #999; margin-top: 30px;">
@@ -67,7 +68,7 @@ export const onRequestPost: PagesFunction<{
             body: JSON.stringify({
                 from: context.env.EMAIL_FROM,
                 to: [context.env.EMAIL_TO],
-                subject: `New Lead: ${data.first_name} - ${data.primary_goal}`,
+                subject: `New Lead: ${data.first_name} - ${data.main_goal}`,
                 html: emailHtml
             })
         });
