@@ -13,6 +13,9 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
     try {
         const data: any = await context.request.json();
 
+        // Generate leadId
+        const leadId = crypto.randomUUID();
+
         // 1. Validate required fields
         const required = ['email', 'first_name', 'location', 'main_goal', 'start_timing', 'biggest_blocker', 'training_days_current', 'time_commitment_weekly', 'monthly_investment', 'coaching_preference', 'constraints', 'wants_upload', 'consent'];
         for (const field of required) {
@@ -85,7 +88,7 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             throw new Error(`Resend API Error: ${errorText}`);
         }
 
-        return new Response(JSON.stringify({ ok: true }), {
+        return new Response(JSON.stringify({ ok: true, leadId: leadId }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
