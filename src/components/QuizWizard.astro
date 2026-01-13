@@ -38,9 +38,9 @@
     <!-- Step 2: Goal/Urgency -->
     <div data-step="2" class="space-y-6 hidden">
       <div class="space-y-4">
-        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your primary goal? *</label>
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your main goal right now? *</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {["Lose fat", "Build strength", "Build muscle", "Improve endurance", "Improve energy/recovery", "Get consistent"].map(goal => (
+          {["Lose fat and look leaner", "Build strength", "Build muscle", "Improve conditioning/endurance", "Improve energy and recovery", "Get consistent again"].map(goal => (
             <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
               <input type="radio" name="primary_goal" value={goal} required class="sr-only peer" />
               <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
@@ -67,9 +67,9 @@
       </div>
 
       <div class="space-y-4">
-        <label class="block text-xs font-bold text-accent uppercase tracking-widest">Biggest blocker? *</label>
+        <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your biggest blocker right now? *</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {["Results not happening", "Consistency", "Conflicting advice", "Low energy/recovery", "Nutrition", "Time"].map(blocker => (
+          {["I train, but results are not happening", "I cannot stay consistent", "I do not know what to do (conflicting advice)", "Low energy, poor recovery, stress", "Nutrition consistency", "Time constraints"].map(blocker => (
             <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
               <input type="radio" name="biggest_blocker" value={blocker} required class="sr-only peer" />
               <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
@@ -112,7 +112,7 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Monthly Budget? *</label>
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What is your monthly budget for personal training? *</label>
           <select name="monthly_budget" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
             <option value="Under £150">Under £150</option>
@@ -123,7 +123,7 @@
           </select>
         </div>
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Preferred Format? *</label>
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">What type of coaching do you prefer? *</label>
           <select name="coaching_format" required class="w-full bg-bg border border-white/10 rounded-lg px-4 py-3 text-text focus:outline-none focus:border-accent transition-colors">
             <option value="">Select...</option>
             <option value="1:1 in-person (London)">1:1 in-person (London)</option>
@@ -136,7 +136,7 @@
 
       <div class="space-y-4 pt-4 border-t border-white/5">
         <div class="space-y-3">
-          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Would you like to upload your stats? *</label>
+          <label class="block text-xs font-bold text-accent uppercase tracking-widest">Optional: do you want to upload your 30-day summary for a deeper audit? *</label>
           <div class="grid grid-cols-1 gap-3">
             <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
               <input type="radio" name="wants_stats_upload" value="Yes" required class="sr-only peer" />
