@@ -1,8 +1,15 @@
-export const onRequestPost: PagesFunction<{
+interface Env {
     RESEND_API_KEY: string;
     EMAIL_TO: string;
     EMAIL_FROM: string;
-}> = async (context) => {
+}
+
+interface CFContext {
+    request: Request;
+    env: Env;
+}
+
+export const onRequestPost = async (context: CFContext): Promise<Response> => {
     try {
         const data: any = await context.request.json();
 

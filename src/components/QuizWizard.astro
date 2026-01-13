@@ -146,13 +146,32 @@
       <div class="space-y-4">
         <label class="block text-xs font-bold text-accent uppercase tracking-widest">Any Injuries or Issues That Affect Training Right Now? *</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {["None", "Past Injury (Not Limiting)", "Current Issue (Limits Training)", "Prefer not to say"].map(option => (
-            <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
-              <input type="radio" name="constraints" value={option} required class="sr-only peer" />
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <input type="radio" name="constraints" value="None" required class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <span class="text-sm text-muted group-hover:text-text">None</span>
+          </label>
+          <label class="flex flex-col gap-2 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <div class="flex items-center gap-3">
+              <input type="radio" name="constraints" value="Past Injury (Not Limiting)" class="sr-only peer" id="constraints_past_injury_radio" />
               <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
-              <span class="text-sm text-muted group-hover:text-text">{option}</span>
-            </label>
-          ))}
+              <span class="text-sm text-muted group-hover:text-text">Past Injury (Not Limiting)</span>
+            </div>
+            <input type="text" name="constraints_past_injury_detail" id="constraints_past_injury_field" placeholder="Describe briefly..." class="hidden bg-bg border border-white/10 rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-accent transition-colors mt-2" />
+          </label>
+          <label class="flex flex-col gap-2 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <div class="flex items-center gap-3">
+              <input type="radio" name="constraints" value="Current Issue (Limits Training)" class="sr-only peer" id="constraints_current_issue_radio" />
+              <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+              <span class="text-sm text-muted group-hover:text-text">Current Issue (Limits Training)</span>
+            </div>
+            <input type="text" name="constraints_current_issue_detail" id="constraints_current_issue_field" placeholder="Describe briefly..." class="hidden bg-bg border border-white/10 rounded-lg px-3 py-2 text-sm text-text focus:outline-none focus:border-accent transition-colors mt-2" />
+          </label>
+          <label class="flex items-center gap-3 p-4 bg-bg border border-white/10 rounded-lg cursor-pointer hover:border-accent/50 transition-colors group">
+            <input type="radio" name="constraints" value="Prefer not to say" class="sr-only peer" />
+            <div class="w-4 h-4 rounded-full border border-white/20 peer-checked:bg-accent peer-checked:border-accent flex-shrink-0"></div>
+            <span class="text-sm text-muted group-hover:text-text">Prefer not to say</span>
+          </label>
         </div>
         <p class="text-[11px] text-muted leading-relaxed">This is not medical advice, it helps tailor recommendations.</p>
       </div>
@@ -301,6 +320,33 @@
     setupOtherReveal('main_goal', 'main_goal_other_field');
     setupOtherReveal('biggest_blocker', 'biggest_blocker_other_field');
 
+    // Constraints reveal logic (for Past Injury and Current Issue)
+    function setupConstraintsReveal() {
+      const radios = document.querySelectorAll('input[name="constraints"]');
+      const pastInjuryField = document.getElementById('constraints_past_injury_field');
+      const currentIssueField = document.getElementById('constraints_current_issue_field');
+      
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          // Hide both fields first
+          pastInjuryField.classList.add('hidden');
+          pastInjuryField.required = false;
+          currentIssueField.classList.add('hidden');
+          currentIssueField.required = false;
+          
+          // Show the relevant field
+          if (radio.value === 'Past Injury (Not Limiting)' && radio.checked) {
+            pastInjuryField.classList.remove('hidden');
+            pastInjuryField.required = true;
+          } else if (radio.value === 'Current Issue (Limits Training)' && radio.checked) {
+            currentIssueField.classList.remove('hidden');
+            currentIssueField.required = true;
+          }
+        });
+      });
+    }
+    setupConstraintsReveal();
+
     function updateUI() {
       // Show/Hide steps
       document.querySelectorAll('[data-step]').forEach(el => {
@@ -388,8 +434,18 @@
         data.biggest_blocker = `Other: ${data.biggest_blocker_other || ''}`;
       }
       
+      // Handle constraints details
+      if (data.constraints === 'Past Injury (Not Limiting)' && data.constraints_past_injury_detail) {
+        data.constraints = `Past Injury (Not Limiting): ${data.constraints_past_injury_detail}`;
+      }
+      if (data.constraints === 'Current Issue (Limits Training)' && data.constraints_current_issue_detail) {
+        data.constraints = `Current Issue (Limits Training): ${data.constraints_current_issue_detail}`;
+      }
+      
       delete data.main_goal_other;
       delete data.biggest_blocker_other;
+      delete data.constraints_past_injury_detail;
+      delete data.constraints_current_issue_detail;
 
       try {
         const response = await fetch('/api/lead', {
