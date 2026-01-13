@@ -1,0 +1,103 @@
+---
+import Container from './Container.astro';
+import Panel from './Panel.astro';
+import Badge from './Badge.astro';
+---
+
+<section id="what-you-get" class="py-24 bg-bg2/50 relative overflow-hidden">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      
+      <!-- Content -->
+      <div>
+        <h2 class="text-xs font-bold text-accent tracking-[0.3em] mb-4">The Deliverables</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-text mb-6">What You Get From the Audit</p>
+        <p class="text-lg text-muted mb-8 leading-relaxed">
+          We don't just give you a generic template. You get a deep-dive analysis of your current situation and a clear path forward.
+        </p>
+
+        <ul class="space-y-6 mb-10">
+          <li class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent flex-shrink-0 mt-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-text text-lg mb-1">Your biggest bottleneck right now</h3>
+              <p class="text-sm text-muted">We identify exactly what's holding you back: training, recovery, consistency, or nutrition.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent flex-shrink-0 mt-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-text text-lg mb-1">Your next-step focus</h3>
+              <p class="text-sm text-muted">A clear, actionable priority for the next 2 to 4 weeks to break through your plateau.</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent flex-shrink-0 mt-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-text text-lg mb-1">The best coaching track for you</h3>
+              <p class="text-sm text-muted">We'll recommend the specific program that fits your goals, schedule, and budget, if we're a good fit.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="flex flex-col items-start gap-3">
+          <a href="/quiz" class="inline-flex items-center justify-center bg-accent text-bg px-8 py-4 rounded-lg text-lg font-bold hover:brightness-110 transition-all plausible-event-name=Start+Free+Audit">
+            Start Free Audit
+          </a>
+          <p class="text-sm text-muted ml-2">Takes 2 minutes</p>
+        </div>
+      </div>
+
+      <!-- Visual -->
+      <div class="relative">
+        <div class="absolute -inset-4 bg-accent/5 blur-3xl rounded-[3rem]"></div>
+        <Panel className="relative border-white/10 bg-panel shadow-2xl overflow-hidden group">
+          <div class="bg-bg2 border-b border-white/5 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+            </div>
+            <Badge variant="accent" className="text-[10px] py-0.5 px-2">Sample Audit Summary</Badge>
+          </div>
+          
+          <div class="p-6 sm:p-8 space-y-6">
+            <div class="space-y-2">
+              <div class="h-4 w-3/4 bg-white/10 rounded animate-pulse"></div>
+              <div class="h-4 w-1/2 bg-white/10 rounded animate-pulse"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 rounded-lg bg-bg/50 border border-white/5">
+                <p class="text-[10px] text-muted uppercase tracking-widest mb-1">Primary Bottleneck</p>
+                <div class="h-6 w-24 bg-red-500/20 rounded"></div>
+              </div>
+               <div class="p-4 rounded-lg bg-bg/50 border border-white/5">
+                <p class="text-[10px] text-muted uppercase tracking-widest mb-1">Action Plan</p>
+                <div class="h-6 w-24 bg-accent/20 rounded"></div>
+              </div>
+            </div>
+
+            <div class="space-y-3 pt-4 border-t border-white/5">
+               <div class="h-3 w-full bg-white/5 rounded"></div>
+               <div class="h-3 w-5/6 bg-white/5 rounded"></div>
+               <div class="h-3 w-4/6 bg-white/5 rounded"></div>
+            </div>
+          </div>
+          
+          <!-- "Sample" Overlay -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+             <p class="text-6xl font-bold text-white/5 -rotate-12 uppercase tracking-widest select-none">Sample</p>
+          </div>
+        </Panel>
+      </div>
+
+    </div>
+  </Container>
+</section>

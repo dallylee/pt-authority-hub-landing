@@ -5,9 +5,9 @@
   --bg2: #0B0F0F;
   --panel: #0E1414;
   --border: rgba(255, 255, 255, 0.08);
-  --text: rgba(255, 255, 255, 0.92);
-  --muted: rgba(255, 255, 255, 0.85);
-  --muted2: rgba(255, 255, 255, 0.65);
+  --text: rgba(255, 255, 255, 0.95);
+  --muted: rgba(255, 255, 255, 0.90);
+  --muted2: rgba(255, 255, 255, 0.75);
   --accent: #A6FF00;
   --accent2: rgba(166, 255, 0, 0.16);
   --danger: #FF4D4D;
@@ -32,6 +32,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   font-family: 'Inter', sans-serif;
+  font-size: 16px;
   /* Fallback to sans-serif if Inter is not yet imported */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;

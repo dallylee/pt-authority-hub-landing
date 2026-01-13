@@ -1,0 +1,88 @@
+---
+import Panel from './Panel.astro';
+import Badge from './Badge.astro';
+
+// Props not strictly needed if hardcoded for this single landing page, 
+// but good for structure.
+---
+
+<Panel className="relative border-accent/20 bg-panel/80 backdrop-blur-sm p-6 sm:p-8">
+  <!-- Coach Header -->
+  <div class="flex items-start gap-5 mb-6">
+    <div class="w-20 h-20 rounded-2xl bg-muted/20 overflow-hidden flex-shrink-0 border border-white/10 relative group">
+      <img 
+        src="/coach.jpg" 
+        alt="Coach Mark Ellison" 
+        class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+        onerror="this.style.display='none'" 
+      />
+    </div>
+    <div>
+      <h3 class="text-2xl font-bold text-text tracking-tight mb-1">Mark Ellison</h3>
+      <p class="text-xs text-accent font-bold uppercase tracking-widest mb-3">Performance Coach</p>
+      
+      <!-- Chips -->
+      <div class="flex flex-wrap gap-2">
+        <span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-muted font-medium">
+          London (In-person)
+        </span>
+        <span class="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[10px] text-muted font-medium">
+          Online (UK-wide)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credibility Line -->
+  <div class="mb-6 pb-6 border-b border-white/5">
+    <p class="text-sm text-white/90 leading-relaxed">
+      10+ years coaching clients in London. Results-led coaching, client-first programming.
+    </p>
+  </div>
+
+  <!-- Best For -->
+  <div class="mb-6">
+    <p class="text-[10px] text-muted uppercase tracking-widest font-bold mb-3">Specialising in:</p>
+    <ul class="space-y-2">
+      <li class="flex items-center gap-2 text-sm text-white/80">
+        <span class="text-accent">✓</span> Busy professionals
+      </li>
+      <li class="flex items-center gap-2 text-sm text-white/80">
+        <span class="text-accent">✓</span> Hybrid athletes
+      </li>
+      <li class="flex items-center gap-2 text-sm text-white/80">
+        <span class="text-accent">✓</span> Body composition & performance
+      </li>
+    </ul>
+  </div>
+
+  <!-- Micro-process -->
+  <div class="bg-bg/50 rounded-lg p-4 border border-white/5 mb-6">
+    <p class="text-[10px] text-muted uppercase tracking-widest font-bold mb-3">How it works:</p>
+    <ol class="space-y-3 relative border-l border-white/10 ml-1 pl-4">
+      <li class="text-xs text-white/80 relative">
+        <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-accent"></span>
+        Take the 2-minute audit
+      </li>
+      <li class="text-xs text-white/80 relative">
+        <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-white/20"></span>
+        Optional: upload 30-day summary
+      </li>
+      <li class="text-xs text-white/80 relative">
+        <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-white/20"></span>
+        Get audit reply within 24h
+      </li>
+    </ol>
+  </div>
+  
+  <!-- Proof Strip -->
+  <div class="flex items-center gap-3 pt-2">
+     <div class="flex -space-x-2">
+        <!-- Placeholder avatars or stars -->
+        <span class="text-accent text-sm tracking-widest">★★★★★</span>
+      </div>
+    <div class="text-xs text-muted">
+      Rated <strong>5/5</strong> on Google
+    </div>
+  </div>
+</Panel>

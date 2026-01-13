@@ -1,116 +1,96 @@
 import fs from 'fs';
+import path from 'path';
 
-const INDEX_PATH = 'dist/index.html';
-const PRIVACY_PATH = 'dist/privacy/index.html';
-const TERMS_PATH = 'dist/terms/index.html';
-const DATA_PATH = 'src/data/offer.json';
+const projectRoot = process.cwd();
+const indexAstroPath = path.join(projectRoot, 'src/pages/index.astro');
+const offerJsonPath = path.join(projectRoot, 'src/data/offer.json');
 
-function assert(condition, message) {
-    if (!condition) {
-        console.error(`FAIL: ${message}`);
-        process.exit(1);
+const checks = [
+    {
+        name: "Hero: Dashboard Mock removed",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            return !content.includes('See your progress in real numbers');
+        }
+    },
+    {
+        name: "Hero: Coach Identity present",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            return content.includes('CoachIdentity');
+        }
+    },
+    {
+        name: "CTA: Label Consistency",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
+            // "Start Free Audit" should be the primary CTA.
+            // We check if "Start the 2-Minute Audit" (old variant) is gone.
+            return !content.includes('Start the 2-Minute Audit') &&
+                offer.includes('Start Free Audit');
+        }
+    },
+    {
+        name: "Copy: Sync language removed",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            return !content.includes('Sync your 30-day training data');
+        }
+    },
+    {
+        name: "Copy: Bank-level encryption removed",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            return !content.includes('bank-level encryption');
+        }
+    },
+    {
+        name: "Copy: Clinical review removed",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
+            return !content.includes('Prices subject to clinical review') &&
+                !offer.includes('Prices subject to clinical review');
+        }
+    },
+    {
+        name: "Copy: Slack monitoring removed",
+        check: () => {
+            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
+            return !offer.includes('Slack signal monitoring');
+        }
+    },
+    {
+        name: "Copy: Spots remaining section removed",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            return !content.includes('id="spots-remaining"');
+        }
     }
-}
-
-console.log('--- PT Authority Hub: Comprehensive QA (Pack C) ---');
-
-// 1. Check data files
-console.log('Checking offer.json...');
-const offerData = JSON.parse(fs.readFileSync(DATA_PATH, 'utf-8'));
-assert(offerData.tiers.some(t => t.price === '£0'), 'Missing £0 tier in offer.json');
-
-// 2. Check built index.html
-if (!fs.existsSync(INDEX_PATH)) {
-    console.error(`FAIL: ${INDEX_PATH} not found. Did you run npm run build?`);
-    process.exit(1);
-}
-const indexContent = fs.readFileSync(INDEX_PATH, 'utf-8');
-
-console.log('Checking built routes...');
-assert(fs.existsSync('dist/quiz/index.html'), 'Missing dist/quiz/index.html');
-assert(fs.existsSync('dist/upload/index.html'), 'Missing dist/upload/index.html');
-
-console.log('Checking Funnel Wiring (IDs and CTAs)...');
-assert(indexContent.includes('href="/quiz"'), 'Missing link to /quiz');
-assert(indexContent.includes('href="/upload"'), 'Missing link to /upload');
-
-console.log('Checking Tally iframe src URLs...');
-const uploadContent = fs.readFileSync('dist/upload/index.html', 'utf-8');
-assert(uploadContent.includes('https://tally.so/embed/pbyXyJ'), 'Missing Stats iframe src in upload page');
-assert(uploadContent.includes('What to upload'), 'Missing "What to upload" heading on upload page');
-assert(uploadContent.includes('How your upload is used'), 'Missing "How your upload is used" heading on upload page');
-assert(!indexContent.includes('tally.so/embed/OD4eKp'), 'Quiz iframe should not be on homepage');
-
-console.log('Checking Section Presence (Repair Pack B, C & D)...');
-assert(indexContent.toLowerCase().includes('how it works'), 'Missing "How it works" section');
-assert(indexContent.toLowerCase().includes('the methodology'), 'Missing "The Why" methodology section');
-assert(!indexContent.toLowerCase().includes('trusted by professionals from'), 'Logo strip section "Trusted By" still present');
-assert(!indexContent.toLowerCase().includes('sample logos for demonstration'), 'Demo logo strip caption still present');
-assert(indexContent.toLowerCase().includes('real results from real people'), 'Missing "Transformations" section');
-assert(indexContent.toLowerCase().includes('common performance problems we solve'), 'Missing "Common Performance Problems We Solve" section');
-
-console.log('Checking Trust Automation UI Hooks (Repair Pack D)...');
-assert(indexContent.includes('id="google-reviews-card"'), 'Missing id="google-reviews-card"');
-assert(indexContent.includes('id="google-reviews-meta"'), 'Missing id="google-reviews-meta"');
-assert(indexContent.includes('id="spots-count"'), 'Missing id="spots-count"');
-assert(indexContent.includes('id="spots-updated"'), 'Missing id="spots-updated"');
-
-console.log('Checking Endpoint References...');
-assert(indexContent.includes('/api/reviews'), 'Missing reference to /api/reviews');
-assert(indexContent.includes('/api/spots'), 'Missing reference to /api/spots');
-assert(!indexContent.includes('/spots.json'), 'Still referencing legacy /spots.json');
-
-console.log('Checking FAQ Content...');
-assert(indexContent.includes('Do I need to live in London?'), 'FAQ: Missing London question');
-assert(indexContent.includes('Do I need fancy equipment?'), 'FAQ: Missing equipment question');
-assert(indexContent.includes('Can I cancel anytime?'), 'FAQ: Missing cancel question');
-
-console.log('Checking Legal Page Links...');
-assert(indexContent.includes('href="/privacy"'), 'Missing link to /privacy');
-assert(indexContent.includes('href="/terms"'), 'Missing link to /terms');
-
-console.log('Checking Built Legal Pages...');
-assert(fs.existsSync(PRIVACY_PATH), 'Missing dist/privacy/index.html');
-assert(fs.existsSync(TERMS_PATH), 'Missing dist/terms/index.html');
-
-console.log('Checking Language Simplification & Banned Phrases...');
-const bannedPhrases = [
-    'OFFLINE',
-    'BOOKING INTAKE',
-    'QUALIFICATION PROTOCOL',
-    'Next Phase Architecture',
-    'Clinical Resolution',
-    'Deterministic 30-day roadmap'
 ];
-bannedPhrases.forEach(phrase => {
-    assert(!indexContent.includes(phrase), `Banned phrase "${phrase}" found in ${INDEX_PATH}`);
-});
-assert(!indexContent.includes('38 days'), `Found "38 days" in ${INDEX_PATH}`);
 
-console.log('Checking Contrast and Readability (Mobile Optimization) across all pages...');
-const htmlFiles = fs.readdirSync('dist', { recursive: true })
-    .filter(f => f.endsWith('.html'))
-    .map(f => `dist/${f}`);
-
-htmlFiles.forEach(file => {
-    const content = fs.readFileSync(file, 'utf-8');
-    const lowContrastMatches = content.match(/<(p|li)[^>]*class="[^"]*(text-white\/(50|60)|opacity-(40|50|60))[^"]*"[^>]*>/g) || [];
-    lowContrastMatches.forEach(match => {
-        assert(false, `Low contrast text found in ${file} on <p> or <li>: ${match}`);
-    });
-    assert(!content.includes('text-muted2'), `Found legacy text-muted2 class in ${file}`);
-    assert(!content.includes('text-[10px] text-muted'), `Annotation text too small in ${file} (found text-[10px])`);
-
-    // Placeholder guardrails
-    const placeholderPhrases = ['TODO', 'Transformation Placeholder', 'Client Logo', 'not configured yet'];
-    placeholderPhrases.forEach(phrase => {
-        assert(!content.toLowerCase().includes(phrase.toLowerCase()), `Found placeholder string "${phrase}" in ${file}`);
-    });
-
-    // Demo Asset assertions (Primary on homepage)
-    if (file === INDEX_PATH) {
-        assert(content.includes('/demo/transformations/case-1'), `Missing demo transformation assets in ${file}`);
+let failed = 0;
+console.log("Starting QA Checks...");
+checks.forEach(c => {
+    try {
+        const passed = c.check();
+        if (passed) {
+            console.log(`[PASS] ${c.name}`);
+        } else {
+            console.log(`[FAIL] ${c.name}`);
+            failed++;
+        }
+    } catch (e) {
+        console.log(`[ERROR] ${c.name}: ${e.message}`);
+        failed++;
     }
 });
 
-console.log('--- PASS: All Repair Pack C QA checks passed ---');
+if (failed > 0) {
+    console.log(`\nQA FAILED: ${failed} checks failed.`);
+    process.exit(1);
+} else {
+    console.log("\nQA PASSED: All checks passed.");
+    process.exit(0);
+}

@@ -12,6 +12,7 @@
                 "24-hour delivery"
             ],
             "cta": "Start Free Audit",
+            "ctaSubtext": "Start here",
             "highlight": false
         },
         {
@@ -22,10 +23,11 @@
             "features": [
                 "Everything in Free Audit",
                 "Weekly protocol adjustments",
-                "Slack signal monitoring",
+                "Weekly check-ins and adjustments via email",
                 "Monthly 1-on-1 strategy call"
             ],
             "cta": "Start Free Audit",
+            "ctaSubtext": "Audit first, then enrol if it’s a fit",
             "highlight": true
         },
         {
@@ -40,8 +42,9 @@
                 "Priority 12h signal review"
             ],
             "cta": "Start Free Audit",
+            "ctaSubtext": "Audit first, then priority booking if accepted",
             "highlight": false
         }
     ],
-    "disclaimer": "Prices subject to clinical review. Limited capacity."
+    "disclaimer": "Prices subject to intake review and availability."
 }
