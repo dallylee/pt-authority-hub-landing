@@ -1,0 +1,170 @@
+---
+import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PT Console Login</title>
+  <AnalyticsPlausible />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    p {
+      color: #888;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    input[type="email"]:focus {
+      outline: none;
+      border-color: #00ff88;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00ff88;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #00dd77;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .message.success {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+    }
+    .message.error {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PT Console</h1>
+    <p>Enter your email to receive a login link</p>
+    
+    <div id="message" class="message"></div>
+    
+    <form id="login-form">
+      <label for="email">Email Address</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        required 
+        autocomplete="email"
+        placeholder="you@example.com"
+      />
+      <button type="submit" id="submit-btn">Send Login Link</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submit-btn');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      message.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/auth/request-link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+          message.className = 'message success';
+          message.textContent = result.message || 'Check your email for the login link.';
+          message.style.display = 'block';
+          emailInput.value = '';
+        } else {
+          throw new Error(result.error || 'Failed to send login link');
+        }
+      } catch (error) {
+        message.className = 'message error';
+        message.textContent = error.message || 'Something went wrong. Please try again.';
+        message.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Login Link';
+      }
+    });
+  </script>
+</body>
+</html>

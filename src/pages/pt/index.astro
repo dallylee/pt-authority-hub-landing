@@ -1,0 +1,193 @@
+---
+import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
+// Note: In production, this page will be server-rendered with D1 data
+// For initial implementation, we'll use client-side fetch
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Inbox - PT Console</title>
+  <AnalyticsPlausible />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav h1 {
+      font-size: 18px;
+      color: #00ff88;
+    }
+    nav button {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #888;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    nav button:hover {
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .header {
+      margin-bottom: 24px;
+    }
+    .header h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .filters select {
+      padding: 8px 12px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #ccc;
+      font-size: 13px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      background: #0a0a0a;
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 16px;
+      border-top: 1px solid #2a2a2a;
+      font-size: 14px;
+    }
+    tr:hover {
+      background: #222;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge.hot { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+    .badge.warm { background: rgba(255, 184, 0, 0.2); color: #ffb800; }
+    .badge.nurture { background: rgba(0, 136, 255, 0.2); color: #0088ff; }
+    .badge.disqualified { background: rgba(136, 136, 136, 0.2); color: #888; }
+    .empty {
+      text-align: center;
+      padding: 48px;
+      color: #666;
+    }
+    a {
+      color: #00ff88;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>PT Console</h1>
+    <form action="/api/auth/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <h2>Lead Inbox</h2>
+      <div class="filters">
+        <select id="segment-filter">
+          <option value="">All Segments</option>
+          <option value="HOT">Hot</option>
+          <option value="WARM">Warm</option>
+          <option value="NURTURE">Nurture</option>
+          <option value="DISQUALIFIED">Disqualified</option>
+        </select>
+        <select id="upload-filter">
+          <option value="">All Upload Status</option>
+          <option value="PENDING">Pending</option>
+          <option value="RECEIVED">Received</option>
+          <option value="NONE">None</option>
+        </select>
+      </div>
+    </div>
+
+    <table id="leads-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Segment</th>
+          <th>Score</th>
+          <th>Goal</th>
+          <th>Start</th>
+          <th>Budget</th>
+          <th>Bottleneck</th>
+          <th>Upload</th>
+        </tr>
+      </thead>
+      <tbody id="leads-tbody">
+        <tr>
+          <td colspan="10" class="empty">Loading leads...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // NOTE: This will need a server endpoint /api/pt/leads to fetch data
+    // For now, showing placeholder message
+    const tbody = document.getElementById('leads-tbody');
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="10" class="empty">
+          PT Console requires D1 database setup.<br>
+          Run migrations and configure WORKSPACE_ID to see leads.
+        </td>
+      </tr>
+    `;
+  </script>
+</body>
+</html>

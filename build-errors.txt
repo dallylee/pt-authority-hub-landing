@@ -1,0 +1,141 @@
+[2m17:57:49[22m [34m[content][39m Syncing content
+[2m17:57:49[22m [34m[content][39m Synced content
+[2m17:57:49[22m [34m[types][39m Generated [2m50ms[22m
+[2m17:57:49[22m [34m[check][39m Getting diagnostics for Astro files in C:\PROJECTS\pt-authority-hub-landing...
+[96mscripts/qa.mjs[0m:[93m10[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'distIndexPath' is declared but its value is never read.
+
+[7m10[0m const distIndexPath = path.join(projectRoot, 'dist/index.html');
+[7m  [0m [93m      ~~~~~~~~~~~~~[0m
+
+[96msrc/components/AnalyticsPlausible.astro[0m:[93m10[0m:[93m13[0m - [93mwarning[0m[90m astro(4000): [0mThis script will be treated as if it has the `is:inline` directive because it contains an attribute. Therefore, features that require processing (e.g. using TypeScript or npm packages in the script) are unavailable.
+
+See docs for more details: https://docs.astro.build/en/guides/client-side-scripts/#script-processing.
+
+Add the `is:inline` directive explicitly to silence this hint.
+
+[7m10[0m     <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>
+[7m  [0m [93m            ~~~~~[0m
+
+[96msrc/components/CoachIdentity.astro[0m:[93m3[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Badge' is declared but its value is never read.
+
+[7m3[0m import Badge from './Badge.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/components/QuizWizard.astro[0m:[93m560[0m:[93m13[0m - [93mwarning[0m[90m ts(6133): [0m'uploadSkippedMsg' is declared but its value is never read.
+
+[7m560[0m       const uploadSkippedMsg = document.getElementById('upload-skipped-msg');
+[7m   [0m [93m            ~~~~~~~~~~~~~~~~[0m
+[96msrc/components/QuizWizard.astro[0m:[93m559[0m:[93m13[0m - [93mwarning[0m[90m ts(6133): [0m'uploadPanel' is declared but its value is never read.
+
+[7m559[0m       const uploadPanel = document.getElementById('inline-upload-panel');
+[7m   [0m [93m            ~~~~~~~~~~~[0m
+
+[96msrc/pages/index.astro[0m:[93m8[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'MiniMetric' is declared but its value is never read.
+
+[7m8[0m import MiniMetric from '../components/MiniMetric.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/pages/index.astro[0m:[93m3[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'BookingCTA' is declared but its value is never read.
+
+[7m3[0m import BookingCTA from '../components/BookingCTA.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/pages/pt/index.astro[0m:[93m183[0m:[93m5[0m - [91merror[0m[90m ts(18047): [0m'tbody' is possibly 'null'.
+
+[7m183[0m     tbody.innerHTML = `
+[7m   [0m [91m    ~~~~~[0m
+
+[96msrc/pages/pt/login.astro[0m:[93m165[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'submitBtn' is possibly 'null'.
+
+[7m165[0m         submitBtn.textContent = 'Send Login Link';
+[7m   [0m [91m        ~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m164[0m:[93m19[0m - [91merror[0m[90m ts(2339): [0mProperty 'disabled' does not exist on type 'HTMLElement'.
+
+[7m164[0m         submitBtn.disabled = false;
+[7m   [0m [91m                  ~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m164[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'submitBtn' is possibly 'null'.
+
+[7m164[0m         submitBtn.disabled = false;
+[7m   [0m [91m        ~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m162[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m162[0m         message.style.display = 'block';
+[7m   [0m [91m        ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m161[0m:[93m31[0m - [91merror[0m[90m ts(18046): [0m'error' is of type 'unknown'.
+
+[7m161[0m         message.textContent = error.message || 'Something went wrong. Please try again.';
+[7m   [0m [91m                              ~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m161[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m161[0m         message.textContent = error.message || 'Something went wrong. Please try again.';
+[7m   [0m [91m        ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m160[0m:[93m9[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m160[0m         message.className = 'message error';
+[7m   [0m [91m        ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m155[0m:[93m22[0m - [91merror[0m[90m ts(2339): [0mProperty 'value' does not exist on type 'HTMLElement'.
+
+[7m155[0m           emailInput.value = '';
+[7m   [0m [91m                     ~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m155[0m:[93m11[0m - [91merror[0m[90m ts(18047): [0m'emailInput' is possibly 'null'.
+
+[7m155[0m           emailInput.value = '';
+[7m   [0m [91m          ~~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m154[0m:[93m11[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m154[0m           message.style.display = 'block';
+[7m   [0m [91m          ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m153[0m:[93m11[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m153[0m           message.textContent = result.message || 'Check your email for the login link.';
+[7m   [0m [91m          ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m152[0m:[93m11[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m152[0m           message.className = 'message success';
+[7m   [0m [91m          ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m140[0m:[93m7[0m - [91merror[0m[90m ts(18047): [0m'message' is possibly 'null'.
+
+[7m140[0m       message.style.display = 'none';
+[7m   [0m [91m      ~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m139[0m:[93m7[0m - [91merror[0m[90m ts(18047): [0m'submitBtn' is possibly 'null'.
+
+[7m139[0m       submitBtn.textContent = 'Sending...';
+[7m   [0m [91m      ~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m138[0m:[93m17[0m - [91merror[0m[90m ts(2339): [0mProperty 'disabled' does not exist on type 'HTMLElement'.
+
+[7m138[0m       submitBtn.disabled = true;
+[7m   [0m [91m                ~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m138[0m:[93m7[0m - [91merror[0m[90m ts(18047): [0m'submitBtn' is possibly 'null'.
+
+[7m138[0m       submitBtn.disabled = true;
+[7m   [0m [91m      ~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m135[0m:[93m32[0m - [91merror[0m[90m ts(2339): [0mProperty 'value' does not exist on type 'HTMLElement'.
+
+[7m135[0m       const email = emailInput.value.trim();
+[7m   [0m [91m                               ~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m135[0m:[93m21[0m - [91merror[0m[90m ts(18047): [0m'emailInput' is possibly 'null'.
+
+[7m135[0m       const email = emailInput.value.trim();
+[7m   [0m [91m                    ~~~~~~~~~~[0m
+[96msrc/pages/pt/login.astro[0m:[93m132[0m:[93m5[0m - [91merror[0m[90m ts(18047): [0m'form' is possibly 'null'.
+
+[7m132[0m     form.addEventListener('submit', async (e) => {
+[7m   [0m [91m    ~~~~[0m
+
+[96msrc/pages/pt/leads/[id].astro[0m:[93m7[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'id' is declared but its value is never read.
+
+[7m7[0m const { id } = Astro.params;
+[7m [0m [93m      ~~~~~~[0m
+[96msrc/pages/pt/leads/[id].astro[0m:[93m193[0m:[93m5[0m - [91merror[0m[90m ts(2531): [0mObject is possibly 'null'.
+
+[7m193[0m     document.getElementById('lead-info').innerHTML = `
+[7m   [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/pages/pt/leads/[id].astro[0m:[93m200[0m:[93m14[0m - [93mwarning[0m[90m ts(6133): [0m'saveNotes' is declared but its value is never read.
+
+[7m200[0m     function saveNotes() {
+[7m   [0m [93m             ~~~~~~~~~[0m
+
+Result (22 files): 
+- 21 errors
+- 0 warnings
+- 9 hints
+

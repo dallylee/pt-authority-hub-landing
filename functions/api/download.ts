@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 interface Env {
     DOWNLOAD_TOKEN_SECRET: string;
     AUDIT_UPLOADS: R2Bucket;
