@@ -1,0 +1,69 @@
+V1 QUIZ REALIGNMENT - EVIDENCE REPORT
+======================================
+Date: 2026-01-13
+Status: PASS
+
+GIT STATUS
+----------
+HEAD: d52e7241373ea061107bc60996eb9110e79e8828
+Tag: (merge commit, tag restore/v1-quiz-realignment on feature branch)
+
+CTA LOCATIONS (all point to /quiz)
+----------------------------------
+1. src/pages/index.astro:67 - Hero CTA - href="/quiz"
+2. src/pages/index.astro:208 - Quiz Section CTA - href="/quiz"  
+3. src/pages/index.astro:257 - Pricing CTAs (3x via tier.cta) - href="/quiz"
+4. src/components/WhatYouGet.astro:50 - What You Get CTA - href="/quiz"
+
+Total: 6 "Start Free Audit" CTAs, all href="/quiz"
+
+BUILD OUTPUT
+------------
+npm run build: SUCCESS
+- 0 errors
+- 0 warnings  
+- 20 files generated
+
+QA SCRIPT OUTPUT
+----------------
+node scripts/qa.mjs: ALL PASS
+- Hero: Dashboard Mock removed
+- Hero: Coach Identity present
+- Copy: Spots remaining section removed
+- V1: Homepage CTA 1 (Hero) has href=/quiz
+- V1: Homepage CTA 2 (Quiz Section) has href=/quiz
+- V1: WhatYouGet CTA has href=/quiz
+- V1: Pricing CTAs use href=/quiz
+- V1: dist/quiz/index.html exists
+- V1: QuizWizard has budget question
+- V1: QuizWizard has upload choice question
+- V1: QuizWizard has data-upload-panel marker
+- V1: QuizWizard references Tally embed pbyXyJ
+- V1: QuizWizard has email prefill in Tally URL
+
+DEPLOY OUTPUT
+-------------
+Command: npx wrangler pages deploy dist --project-name pt-authority-hub-landing --branch main
+Result: SUCCESS
+- Uploaded 6 files (7 already uploaded)
+- 1.39 sec
+
+PRODUCTION URLs
+---------------
+https://pt-authority-hub-landing.pages.dev/
+https://pt-authority-hub-landing.pages.dev/quiz
+https://pt-authority-hub-landing.pages.dev/thanks/
+
+(Note: curl verification skipped due to Windows TLS/schannel certificate error. Recommend browser verification.)
+
+CHANGES IMPLEMENTED
+-------------------
+1. All 6 CTAs now point to /quiz
+2. QuizWizard updated with required upload choice radio (Yes/No)
+3. Quiz now shows inline success state after submit (no redirect)
+4. Inline upload panel appears if user selected upload=Yes
+5. Tally embed (pbyXyJ) includes email prefill from quiz submission
+6. Skip button allows proceeding without upload
+7. Disclaimer text added per brief
+
+END REPORT
