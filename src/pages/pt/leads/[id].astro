@@ -1,0 +1,205 @@
+---
+import AnalyticsPlausible from '../../../components/AnalyticsPlausible.astro';
+
+// Enable SSR for this page so it can be generated dynamically
+export const prerender = false;
+
+const { id } = Astro.params;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Detail - PT Console</title>
+  <AnalyticsPlausible />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav h1 {
+      font-size: 18px;
+      color: #00ff88;
+    }
+    nav a {
+      color: #888;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    nav a:hover {
+      color: #00ff88;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 24px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .field .value {
+      font-size: 14px;
+      color: #ccc;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge.hot { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+    .badge.warm { background: rgba(255, 184, 0, 0.2); color: #ffb800; }
+    .badge.nurture { background: rgba(0, 136, 255, 0.2); color: #0088ff; }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #ccc;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+    }
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #ccc;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #00ff88;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00dd77;
+    }
+    .empty {
+      text-align: center;
+      padding: 48px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>PT Console</h1>
+    <a href="/pt">← Back to Inbox</a>
+  </nav>
+
+  <div class="container">
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Lead Information</h2>
+          <div id="lead-info" class="empty">Loading lead details...</div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <h2>Quiz Answers</h2>
+          <div id="quiz-answers" class="empty">Loading answers...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Triage & Scoring</h2>
+          <div id="triage-info" class="empty">Loading...</div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <h2>Internal Notes</h2>
+          <div class="field">
+            <label>Notes</label>
+            <textarea id="notes-field" placeholder="Add internal notes..."></textarea>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="status-field">
+              <option value="NEW">New</option>
+              <option value="IN_REVIEW">In Review</option>
+              <option value="CLOSED">Closed</option>
+            </select>
+          </div>
+          <button onclick="saveNotes()">Save Notes</button>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <h2>Uploads</h2>
+          <div id="uploads-list" class="empty">No uploads</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leadId = '{id}';
+    
+    // NOTE: This will need server endpoint /api/pt/leads/:id
+    // For now, showing placeholder
+    document.getElementById('lead-info').innerHTML = `
+      <div class="empty">
+        PT Console requires D1 database setup.<br>
+        Lead ID: ${leadId}
+      </div>
+    `;
+    
+    function saveNotes() {
+      alert('Save functionality requires database setup');
+    }
+  </script>
+</body>
+</html>

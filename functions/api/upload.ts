@@ -1,9 +1,13 @@
+/// <reference types="@cloudflare/workers-types" />
+
 interface Env {
+    DB: D1Database;
     RESEND_API_KEY: string;
     EMAIL_TO: string;
     EMAIL_FROM: string;
     DOWNLOAD_TOKEN_SECRET: string;
     AUDIT_UPLOADS: R2Bucket;
+    WORKSPACE_ID: string;
     UPLOAD_MAX_BYTES?: string;
     UPLOAD_ALLOWED_TYPES?: string;
 }
@@ -42,6 +46,7 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
         const file = formData.get('file') as File | null;
         const email = formData.get('email') as string | null;
         const leadId = formData.get('leadId') as string | null;
+        const leadToken = formData.get('leadToken') as string | null;
         const consent = formData.get('consent') as string | null;
 
         // Validate required fields
@@ -62,6 +67,35 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
+        }
+
+        // Validate leadToken if provided and DB is available
+        let validatedLeadId = leadId;
+        if (leadToken && context.env.DB && context.env.WORKSPACE_ID) {
+            try {
+                // Hash the token to look up in database
+                const encoder = new TextEncoder();
+                const tokenData = encoder.encode(leadToken);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', tokenData);
+                const tokenHash = Array.from(new Uint8Array(hashBuffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+
+                // Look up lead by token hash
+                const leadResult = await context.env.DB.prepare(
+                    'SELECT id, client_email FROM leads WHERE workspace_id = ? AND lead_token_hash = ?'
+                ).bind(context.env.WORKSPACE_ID, tokenHash).first();
+
+                if (leadResult) {
+                    validatedLeadId = leadResult.id as string;
+                    console.log('Upload linked to lead:', validatedLeadId);
+                } else {
+                    console.warn('Invalid leadToken provided, upload will be unlinked');
+                }
+            } catch (err) {
+                console.error('Lead token validation error:', err);
+                // Continue with upload even if validation fails
+            }
         }
 
         // Validate file size
@@ -97,11 +131,46 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             },
             customMetadata: {
                 email: email,
-                leadId: leadId || '',
+                leadId: validatedLeadId || '',
                 originalName: file.name,
                 uploadedAt: now.toISOString()
             }
         });
+
+        // Store in D1 if DB is available
+        if (context.env.DB && context.env.WORKSPACE_ID) {
+            try {
+                const uploadId = crypto.randomUUID();
+
+                // Insert upload row
+                await context.env.DB.prepare(`
+                    INSERT INTO uploads (
+                        id, workspace_id, lead_id, file_name, mime_type, 
+                        file_size_bytes, storage_key, status, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, 'ACTIVE', datetime('now'))
+                `).bind(
+                    uploadId,
+                    context.env.WORKSPACE_ID,
+                    validatedLeadId || null,
+                    file.name,
+                    file.type,
+                    file.size,
+                    key
+                ).run();
+
+                // Update lead upload_status if linked
+                if (validatedLeadId) {
+                    await context.env.DB.prepare(
+                        'UPDATE leads SET upload_status = ?, updated_at = datetime("now") WHERE id = ?'
+                    ).bind('RECEIVED', validatedLeadId).run();
+
+                    console.log('Lead upload_status updated to RECEIVED for:', validatedLeadId);
+                }
+            } catch (dbErr) {
+                console.error('D1 upload record error:', dbErr);
+                // Don't fail the upload if D1 fails
+            }
+        }
 
         // Generate signed download token (valid 30 days)
         const expiry = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60);
