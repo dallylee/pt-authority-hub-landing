@@ -1,5 +1,14 @@
-export const onRequest: PagesFunction = async (context) => {
-    const { env } = context;
+import type { APIContext } from 'astro';
+
+export const prerender = false;
+
+interface Env {
+    GOOGLE_PLACES_API_KEY: string;
+    GOOGLE_PLACE_ID: string;
+}
+
+export const GET = async (context: APIContext) => {
+    const env = context.locals.runtime.env as Env;
     const API_KEY = env.GOOGLE_PLACES_API_KEY;
     const PLACE_ID = env.GOOGLE_PLACE_ID;
 
@@ -18,7 +27,7 @@ export const onRequest: PagesFunction = async (context) => {
         });
     }
 
-    const cache = caches.default;
+    const cache = (caches as any).default;
     const cacheKey = new Request(context.request.url);
     let response = await cache.match(cacheKey);
 
@@ -28,7 +37,7 @@ export const onRequest: PagesFunction = async (context) => {
 
         try {
             const apiResponse = await fetch(url);
-            const data = await apiResponse.json();
+            const data: any = await apiResponse.json();
 
             if (data.status !== 'OK') {
                 throw new Error(`Google API returned ${data.status}: ${data.error_message || 'Unknown error'}`);
@@ -51,8 +60,10 @@ export const onRequest: PagesFunction = async (context) => {
             });
 
             // Cache the response
-            context.waitUntil(cache.put(cacheKey, response.clone()));
-        } catch (error) {
+            if (context.locals.runtime.waitUntil) {
+                context.locals.runtime.waitUntil(cache.put(cacheKey, response.clone()));
+            }
+        } catch (error: any) {
             console.error('Error fetching Google Reviews:', error);
             return new Response(JSON.stringify({
                 status: 'error',
