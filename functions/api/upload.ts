@@ -103,8 +103,8 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             }
         });
 
-        // Generate signed download token (valid 24 hours)
-        const expiry = Math.floor(Date.now() / 1000) + (24 * 60 * 60);
+        // Generate signed download token (valid 30 days)
+        const expiry = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60);
         const payload = JSON.stringify({ key, exp: expiry, nonce: crypto.randomUUID() });
         const payloadB64 = btoa(payload).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
@@ -130,7 +130,7 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
                 <p><strong>File Type:</strong> ${file.type}</p>
                 <p><strong>File Size:</strong> ${(file.size / 1024).toFixed(1)} KB</p>
                 <hr>
-                <p><strong>Download Link (expires in 24h):</strong></p>
+                <p><strong>Download Link (expires in 30 days):</strong></p>
                 <p><a href="${downloadUrl}">${downloadUrl}</a></p>
             `;
 

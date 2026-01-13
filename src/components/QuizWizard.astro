@@ -639,10 +639,14 @@
             const result = JSON.parse(xhr.responseText);
             if (xhr.status === 200 && result.ok) {
               uploadSuccess.classList.remove('hidden');
+              // Hide all upload UI elements, keeping only success message
               dropzone.classList.add('hidden');
               document.querySelector('label:has(#upload-consent)').classList.add('hidden');
               uploadBtn.classList.add('hidden');
               skipBtn.classList.add('hidden');
+              // Also hide the header and instructions
+              document.querySelector('#inline-upload-panel h3').classList.add('hidden');
+              document.querySelector('#inline-upload-panel ul').classList.add('hidden');
             } else {
               uploadError.textContent = result.error || 'Upload failed. Please try again.';
               uploadError.classList.remove('hidden');
