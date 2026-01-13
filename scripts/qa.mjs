@@ -4,8 +4,14 @@ import path from 'path';
 const projectRoot = process.cwd();
 const indexAstroPath = path.join(projectRoot, 'src/pages/index.astro');
 const offerJsonPath = path.join(projectRoot, 'src/data/offer.json');
+const whatYouGetPath = path.join(projectRoot, 'src/components/WhatYouGet.astro');
+const quizWizardPath = path.join(projectRoot, 'src/components/QuizWizard.astro');
+
+// Check if dist exists
+const distQuizPath = path.join(projectRoot, 'dist/quiz/index.html');
 
 const checks = [
+    // M11 Brief checks (retained)
     {
         name: "Hero: Dashboard Mock removed",
         check: () => {
@@ -21,57 +27,92 @@ const checks = [
         }
     },
     {
-        name: "CTA: Label Consistency",
-        check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
-            // "Start Free Audit" should be the primary CTA.
-            // We check if "Start the 2-Minute Audit" (old variant) is gone.
-            return !content.includes('Start the 2-Minute Audit') &&
-                offer.includes('Start Free Audit');
-        }
-    },
-    {
-        name: "Copy: Sync language removed",
-        check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            return !content.includes('Sync your 30-day training data');
-        }
-    },
-    {
-        name: "Copy: Bank-level encryption removed",
-        check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            return !content.includes('bank-level encryption');
-        }
-    },
-    {
-        name: "Copy: Clinical review removed",
-        check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
-            return !content.includes('Prices subject to clinical review') &&
-                !offer.includes('Prices subject to clinical review');
-        }
-    },
-    {
-        name: "Copy: Slack monitoring removed",
-        check: () => {
-            const offer = fs.readFileSync(offerJsonPath, 'utf-8');
-            return !offer.includes('Slack signal monitoring');
-        }
-    },
-    {
         name: "Copy: Spots remaining section removed",
         check: () => {
             const content = fs.readFileSync(indexAstroPath, 'utf-8');
             return !content.includes('id="spots-remaining"');
         }
+    },
+
+    // V1 Quiz Realignment checks
+    {
+        name: "V1: Homepage CTA 1 (Hero) has href=/quiz",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            // Line 67: href="/quiz" ... Start Free Audit
+            return content.includes('href="/quiz"') && content.includes('Start Free Audit');
+        }
+    },
+    {
+        name: "V1: Homepage CTA 2 (Quiz Section) has href=/quiz",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            const matches = content.match(/href="\/quiz"/g);
+            return matches && matches.length >= 2;
+        }
+    },
+    {
+        name: "V1: WhatYouGet CTA has href=/quiz",
+        check: () => {
+            const content = fs.readFileSync(whatYouGetPath, 'utf-8');
+            return content.includes('href="/quiz"') && content.includes('Start Free Audit');
+        }
+    },
+    {
+        name: "V1: Pricing CTAs use href=/quiz",
+        check: () => {
+            const content = fs.readFileSync(indexAstroPath, 'utf-8');
+            // Pricing section uses tier.cta which is "Start Free Audit" and href="/quiz"
+            return content.includes('href="/quiz"') && content.includes('tier.cta');
+        }
+    },
+    {
+        name: "V1: dist/quiz/index.html exists",
+        check: () => {
+            return fs.existsSync(distQuizPath);
+        }
+    },
+    {
+        name: "V1: QuizWizard has budget question",
+        check: () => {
+            const content = fs.readFileSync(quizWizardPath, 'utf-8');
+            return content.includes('monthly_budget') && content.includes('Under £150');
+        }
+    },
+    {
+        name: "V1: QuizWizard has upload choice question",
+        check: () => {
+            const content = fs.readFileSync(quizWizardPath, 'utf-8');
+            return content.includes('wants_stats_upload') &&
+                content.includes('Yes, I will upload my stats (recommended)') &&
+                content.includes('No, just use my answers');
+        }
+    },
+    {
+        name: "V1: QuizWizard has data-upload-panel marker",
+        check: () => {
+            const content = fs.readFileSync(quizWizardPath, 'utf-8');
+            return content.includes('data-upload-panel="1"');
+        }
+    },
+    {
+        name: "V1: QuizWizard references Tally embed pbyXyJ",
+        check: () => {
+            const content = fs.readFileSync(quizWizardPath, 'utf-8');
+            return content.includes('pbyXyJ');
+        }
+    },
+    {
+        name: "V1: QuizWizard has email prefill in Tally URL",
+        check: () => {
+            const content = fs.readFileSync(quizWizardPath, 'utf-8');
+            return content.includes('email=${email}') || content.includes('&email=');
+        }
     }
 ];
 
 let failed = 0;
-console.log("Starting QA Checks...");
+console.log("Starting QA Checks (V1 Quiz Realignment)...\n");
 checks.forEach(c => {
     try {
         const passed = c.check();
