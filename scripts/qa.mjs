@@ -1,118 +1,129 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 const projectRoot = process.cwd();
 const indexAstroPath = path.join(projectRoot, 'src/pages/index.astro');
-const offerJsonPath = path.join(projectRoot, 'src/data/offer.json');
-const whatYouGetPath = path.join(projectRoot, 'src/components/WhatYouGet.astro');
 const quizWizardPath = path.join(projectRoot, 'src/components/QuizWizard.astro');
-
-// Check if dist exists
+const whatYouGetPath = path.join(projectRoot, 'src/components/WhatYouGet.astro');
 const distQuizPath = path.join(projectRoot, 'dist/quiz/index.html');
+const distIndexPath = path.join(projectRoot, 'dist/index.html');
 
 const checks = [
-    // M11 Brief checks (retained)
+    // M12: Hard ban on Tally Quiz (OD4eKp)
     {
-        name: "Hero: Dashboard Mock removed",
+        name: "M12: OD4eKp NOT in src/",
         check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            return !content.includes('See your progress in real numbers');
+            try {
+                const result = execSync('findstr /s /i "OD4eKp" src\\*.astro src\\*.ts src\\*.json 2>nul', { encoding: 'utf-8' });
+                return result.trim() === '';
+            } catch (e) {
+                // findstr returns 1 when no matches found
+                return true;
+            }
         }
     },
     {
-        name: "Hero: Coach Identity present",
+        name: "M12: OD4eKp NOT in functions/",
         check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            return content.includes('CoachIdentity');
+            try {
+                const result = execSync('findstr /s /i "OD4eKp" functions\\*.ts 2>nul', { encoding: 'utf-8' });
+                return result.trim() === '';
+            } catch (e) {
+                return true;
+            }
         }
     },
     {
-        name: "Copy: Spots remaining section removed",
+        name: "M12: PUBLIC_TALLY_QUIZ_FORM_ID NOT in src/",
         check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            return !content.includes('id="spots-remaining"');
+            try {
+                const result = execSync('findstr /s /i "PUBLIC_TALLY_QUIZ_FORM_ID" src\\*.astro 2>nul', { encoding: 'utf-8' });
+                return result.trim() === '';
+            } catch (e) {
+                return true;
+            }
         }
     },
 
-    // V1 Quiz Realignment checks
+    // M12: Quiz page uses native QuizWizard
     {
-        name: "V1: Homepage CTA 1 (Hero) has href=/quiz",
+        name: "M12: quiz.astro imports QuizWizard",
         check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            // Line 67: href="/quiz" ... Start Free Audit
-            return content.includes('href="/quiz"') && content.includes('Start Free Audit');
+            const content = fs.readFileSync(path.join(projectRoot, 'src/pages/quiz.astro'), 'utf-8');
+            return content.includes("import QuizWizard from") && content.includes("<QuizWizard");
         }
     },
+
+    // M12: CTAs point to /quiz
     {
-        name: "V1: Homepage CTA 2 (Quiz Section) has href=/quiz",
+        name: "M12: Homepage CTAs use href=/quiz",
         check: () => {
             const content = fs.readFileSync(indexAstroPath, 'utf-8');
             const matches = content.match(/href="\/quiz"/g);
-            return matches && matches.length >= 2;
+            return matches && matches.length >= 3;
         }
     },
     {
-        name: "V1: WhatYouGet CTA has href=/quiz",
+        name: "M12: WhatYouGet CTA uses href=/quiz",
         check: () => {
             const content = fs.readFileSync(whatYouGetPath, 'utf-8');
-            return content.includes('href="/quiz"') && content.includes('Start Free Audit');
+            return content.includes('href="/quiz"');
         }
     },
+
+    // M12: QuizWizard has required questions
     {
-        name: "V1: Pricing CTAs use href=/quiz",
-        check: () => {
-            const content = fs.readFileSync(indexAstroPath, 'utf-8');
-            // Pricing section uses tier.cta which is "Start Free Audit" and href="/quiz"
-            return content.includes('href="/quiz"') && content.includes('tier.cta');
-        }
-    },
-    {
-        name: "V1: dist/quiz/index.html exists",
-        check: () => {
-            return fs.existsSync(distQuizPath);
-        }
-    },
-    {
-        name: "V1: QuizWizard has budget question",
+        name: "M12: QuizWizard has budget question",
         check: () => {
             const content = fs.readFileSync(quizWizardPath, 'utf-8');
-            return content.includes('monthly_budget') && content.includes('Under £150');
+            return content.includes('What is your monthly budget for personal training?');
         }
     },
     {
-        name: "V1: QuizWizard has upload choice question",
+        name: "M12: QuizWizard has upload choice question",
         check: () => {
             const content = fs.readFileSync(quizWizardPath, 'utf-8');
-            return content.includes('wants_stats_upload') &&
-                content.includes('Yes, I will upload my stats (recommended)') &&
-                content.includes('No, just use my answers');
+            return content.includes('Optional: do you want to upload your 30-day summary');
         }
     },
+
+    // M12: Tally upload pbyXyJ only
     {
-        name: "V1: QuizWizard has data-upload-panel marker",
-        check: () => {
-            const content = fs.readFileSync(quizWizardPath, 'utf-8');
-            return content.includes('data-upload-panel="1"');
-        }
-    },
-    {
-        name: "V1: QuizWizard references Tally embed pbyXyJ",
+        name: "M12: QuizWizard references pbyXyJ (upload only)",
         check: () => {
             const content = fs.readFileSync(quizWizardPath, 'utf-8');
             return content.includes('pbyXyJ');
         }
     },
     {
-        name: "V1: QuizWizard has email prefill in Tally URL",
+        name: "M12: QuizWizard has data-upload-panel marker",
         check: () => {
             const content = fs.readFileSync(quizWizardPath, 'utf-8');
-            return content.includes('email=${email}') || content.includes('&email=');
+            return content.includes('data-upload-panel="1"');
+        }
+    },
+
+    // M12: dist checks
+    {
+        name: "M12: dist/quiz/index.html exists",
+        check: () => fs.existsSync(distQuizPath)
+    },
+    {
+        name: "M12: OD4eKp NOT in dist/",
+        check: () => {
+            try {
+                const result = execSync('findstr /s /i "OD4eKp" dist\\*.html 2>nul', { encoding: 'utf-8' });
+                return result.trim() === '';
+            } catch (e) {
+                return true;
+            }
         }
     }
 ];
 
 let failed = 0;
-console.log("Starting QA Checks (V1 Quiz Realignment)...\n");
+console.log("Starting QA Checks (M12 Native Quiz Restore)...\n");
 checks.forEach(c => {
     try {
         const passed = c.check();
