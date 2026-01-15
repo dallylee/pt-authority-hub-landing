@@ -1,5 +1,9 @@
-export const onRequest: PagesFunction = async (context) => {
-    const { env } = context;
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ locals }) => {
+    const env = locals.runtime.env as {
+        SPOTS_REMAINING?: string;
+    };
 
     // Try to get from env var, default to 3 if not set
     const spotsRemaining = parseInt(env.SPOTS_REMAINING || '3', 10);

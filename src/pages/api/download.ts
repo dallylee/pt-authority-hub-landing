@@ -1,26 +1,22 @@
 /// <reference types="@cloudflare/workers-types" />
+import type { APIRoute } from 'astro';
 
-interface Env {
-    DOWNLOAD_TOKEN_SECRET: string;
-    AUDIT_UPLOADS: R2Bucket;
-}
-
-interface CFContext {
-    request: Request;
-    env: Env;
-}
-
-export const onRequestGet = async (context: CFContext): Promise<Response> => {
+export const GET: APIRoute = async ({ request, locals }) => {
     try {
+        const env = locals.runtime.env as {
+            DOWNLOAD_TOKEN_SECRET: string;
+            AUDIT_UPLOADS: R2Bucket;
+        };
+
         // Check required bindings
-        if (!context.env.AUDIT_UPLOADS) {
+        if (!env.AUDIT_UPLOADS) {
             return new Response('R2 binding not configured', { status: 500 });
         }
-        if (!context.env.DOWNLOAD_TOKEN_SECRET) {
+        if (!env.DOWNLOAD_TOKEN_SECRET) {
             return new Response('Download token secret not configured', { status: 500 });
         }
 
-        const url = new URL(context.request.url);
+        const url = new URL(request.url);
         const token = url.searchParams.get('t');
 
         if (!token) {
@@ -37,7 +33,7 @@ export const onRequestGet = async (context: CFContext): Promise<Response> => {
 
         // Verify signature
         const encoder = new TextEncoder();
-        const keyData = encoder.encode(context.env.DOWNLOAD_TOKEN_SECRET);
+        const keyData = encoder.encode(env.DOWNLOAD_TOKEN_SECRET);
         const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
 
         // Decode signature
@@ -66,7 +62,7 @@ export const onRequestGet = async (context: CFContext): Promise<Response> => {
         }
 
         // Fetch from R2
-        const object = await context.env.AUDIT_UPLOADS.get(payload.key);
+        const object = await env.AUDIT_UPLOADS.get(payload.key);
         if (!object) {
             return new Response('File not found', { status: 404 });
         }

@@ -1,17 +1,14 @@
-interface Env {
-    RESEND_API_KEY: string;
-    EMAIL_TO: string;
-    EMAIL_FROM: string;
-}
+import type { APIRoute } from 'astro';
 
-interface CFContext {
-    request: Request;
-    env: Env;
-}
-
-export const onRequestPost = async (context: CFContext): Promise<Response> => {
+export const POST: APIRoute = async ({ request, locals }) => {
     try {
-        const data: any = await context.request.json();
+        const env = locals.runtime.env as {
+            RESEND_API_KEY: string;
+            EMAIL_TO: string;
+            EMAIL_FROM: string;
+        };
+
+        const data: any = await request.json();
 
         // Generate leadId
         const leadId = crypto.randomUUID();
@@ -72,12 +69,12 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
         const resendResponse = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${context.env.RESEND_API_KEY}`,
+                'Authorization': `Bearer ${env.RESEND_API_KEY}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                from: context.env.EMAIL_FROM,
-                to: [context.env.EMAIL_TO],
+                from: env.EMAIL_FROM,
+                to: [env.EMAIL_TO],
                 subject: `New Lead: ${data.first_name} - ${data.main_goal}`,
                 html: emailHtml
             })
