@@ -185,21 +185,141 @@ const { id } = Astro.params;
     </div>
   </div>
 
-  <script>
-    const leadId = '{id}';
+  <script define:vars={{ id }}>
+    const leadId = id;
     
-    // NOTE: This will need server endpoint /api/pt/leads/:id
-    // For now, showing placeholder
-    document.getElementById('lead-info').innerHTML = `
-      <div class="empty">
-        PT Console requires D1 database setup.<br>
-        Lead ID: ${leadId}
-      </div>
-    `;
-    
-    function saveNotes() {
-      alert('Save functionality requires database setup');
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
     }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        return new Date(dateStr).toLocaleString();
+      } catch {
+        return dateStr;
+      }
+    }
+
+    function getBadgeClass(segment) {
+      switch (segment?.toUpperCase()) {
+        case 'HOT': return 'badge hot';
+        case 'WARM': return 'badge warm';
+        case 'NURTURE': return 'badge nurture';
+        case 'DISQUALIFIED': return 'badge disqualified';
+        default: return 'badge';
+      }
+    }
+
+    async function loadLead() {
+      try {
+        const res = await fetch(`/api/pt/leads/${encodeURIComponent(leadId)}`, {
+          headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          document.getElementById('lead-info').innerHTML = `<div class="empty">Error: ${esc(data.error || 'Failed to load lead')}</div>`;
+          return;
+        }
+
+        const lead = data.lead;
+        const uploads = data.uploads || [];
+
+        // Render lead info
+        document.getElementById('lead-info').innerHTML = `
+          <div class="field"><label>Email</label><div class="value">${esc(lead.client_email || lead.email)}</div></div>
+          <div class="field"><label>Name</label><div class="value">${esc(lead.client_first_name || lead.first_name || 'N/A')}</div></div>
+          <div class="field"><label>Location</label><div class="value">${esc(lead.client_location || lead.location || 'N/A')}</div></div>
+          <div class="field"><label>Submitted</label><div class="value">${formatDate(lead.created_at)}</div></div>
+          <div class="field"><label>Goal</label><div class="value">${esc(lead.goal || lead.main_goal || 'N/A')}</div></div>
+          <div class="field"><label>Start Timeline</label><div class="value">${esc(lead.start_timeline || lead.start_timing || 'N/A')}</div></div>
+          <div class="field"><label>Coaching Preference</label><div class="value">${esc(lead.coaching_preference || 'N/A')}</div></div>
+        `;
+
+        // Render triage info
+        const segment = lead.triage_segment || 'UNKNOWN';
+        const score = lead.triage_score ?? 'N/A';
+        const bottleneck = lead.inferred_bottleneck || 'UNKNOWN';
+        const confidence = lead.inferred_confidence || 'N/A';
+        
+        document.getElementById('triage-info').innerHTML = `
+          <div class="field"><label>Segment</label><div class="value"><span class="${getBadgeClass(segment)}">${esc(segment)}</span></div></div>
+          <div class="field"><label>Score</label><div class="value">${esc(score)}</div></div>
+          <div class="field"><label>Bottleneck</label><div class="value">${esc(bottleneck)} (${esc(confidence)})</div></div>
+          <div class="field"><label>Fit Risk</label><div class="value">${lead.fit_risk ? 'Yes' : 'No'}</div></div>
+        `;
+
+        // Render quiz answers
+        let answersHtml = '';
+        try {
+          const answers = lead.answers_raw_json ? JSON.parse(lead.answers_raw_json) : {};
+          for (const [key, value] of Object.entries(answers)) {
+            if (key !== 'company' && key !== 'consent') {
+              answersHtml += `<div class="field"><label>${esc(key.replace(/_/g, ' '))}</label><div class="value">${esc(value)}</div></div>`;
+            }
+          }
+        } catch {
+          answersHtml = `
+            <div class="field"><label>Biggest Blocker</label><div class="value">${esc(lead.biggest_blocker || 'N/A')}</div></div>
+            <div class="field"><label>Training Days/Week</label><div class="value">${esc(lead.training_days_now || 'N/A')}</div></div>
+            <div class="field"><label>Time Commitment</label><div class="value">${esc(lead.time_commitment_weekly || 'N/A')}</div></div>
+            <div class="field"><label>Monthly Budget</label><div class="value">${esc(lead.budget_monthly || 'N/A')}</div></div>
+            <div class="field"><label>Constraints</label><div class="value">${esc(lead.injury_notes || (lead.injury_flag ? 'Has constraints' : 'None'))}</div></div>
+            <div class="field"><label>Wants Upload</label><div class="value">${lead.wants_upload_stats ? 'Yes' : 'No'}</div></div>
+          `;
+        }
+        document.getElementById('quiz-answers').innerHTML = answersHtml || '<div class="empty">No answers recorded</div>';
+
+        // Load existing notes and status
+        document.getElementById('notes-field').value = lead.notes || '';
+        document.getElementById('status-field').value = lead.status || 'NEW';
+
+        // Render uploads
+        if (uploads.length > 0) {
+          document.getElementById('uploads-list').innerHTML = uploads.map(u => `
+            <div class="field">
+              <label>${formatDate(u.uploaded_at)}</label>
+              <div class="value">${esc(u.filename)}</div>
+            </div>
+          `).join('');
+        } else {
+          document.getElementById('uploads-list').innerHTML = '<div class="empty">No uploads</div>';
+        }
+
+      } catch (err) {
+        console.error('Load lead error:', err);
+        document.getElementById('lead-info').innerHTML = `<div class="empty">Failed to load lead data</div>`;
+      }
+    }
+
+    async function saveNotes() {
+      const notes = document.getElementById('notes-field').value;
+      const status = document.getElementById('status-field').value;
+
+      try {
+        const res = await fetch(`/api/pt/leads/${encodeURIComponent(leadId)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ notes, status })
+        });
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert('Notes saved!');
+        } else {
+          alert('Failed to save: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Failed to save notes');
+      }
+    }
+
+    // Make saveNotes available globally
+    window.saveNotes = saveNotes;
+
+    // Load the lead on page load
+    loadLead();
   </script>
 </body>
 </html>
