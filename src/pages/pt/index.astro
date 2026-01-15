@@ -260,7 +260,17 @@ import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
     async function loadLeads() {
       try {
         renderEmpty("Loading leads...");
-        const res = await fetch("/api/pt/leads?limit=50", { headers: { "Accept": "application/json" } });
+        
+        // Get filter values
+        const segmentFilter = document.getElementById('filter-segment')?.value || '';
+        const uploadFilter = document.getElementById('filter-upload')?.value || '';
+        
+        // Build URL with filters
+        let url = "/api/pt/leads?limit=50";
+        if (segmentFilter) url += `&segment=${encodeURIComponent(segmentFilter)}`;
+        if (uploadFilter) url += `&upload_status=${encodeURIComponent(uploadFilter)}`;
+        
+        const res = await fetch(url, { headers: { "Accept": "application/json" } });
         const data = await res.json();
         if (!res.ok || !data.ok) {
           renderEmpty(data?.error ? `Error: ${data.error}` : "Failed to load leads.");
@@ -271,6 +281,10 @@ import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
         renderEmpty("Failed to load leads.");
       }
     }
+
+    // Wire up filter change events
+    document.getElementById('filter-segment')?.addEventListener('change', loadLeads);
+    document.getElementById('filter-upload')?.addEventListener('change', loadLeads);
 
     loadLeads();
   </script>

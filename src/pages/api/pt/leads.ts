@@ -5,12 +5,6 @@ type Env = {
   WORKSPACE_ID?: string;
 };
 
-async function tableHasColumn(db: D1Database, table: string, col: string) {
-  const res = await db.prepare(`PRAGMA table_info(${table});`).all();
-  const rows = (res.results ?? []) as Array<{ name: string }>;
-  return rows.some((r) => r.name === col);
-}
-
 export const GET: APIRoute = async ({ locals, url }) => {
   try {
     const env = (locals as any)?.runtime?.env as Env | undefined;
@@ -31,14 +25,42 @@ export const GET: APIRoute = async ({ locals, url }) => {
     }
 
     const limit = Math.min(Number(url.searchParams.get("limit") ?? "50") || 50, 200);
+    const segmentFilter = url.searchParams.get("segment");
+    const uploadFilter = url.searchParams.get("upload_status");
 
-    // Order by created_at if it exists, otherwise rowid
-    const hasCreatedAt = await tableHasColumn(env.DB, "leads", "created_at");
-    const orderBy = hasCreatedAt ? "created_at DESC" : "rowid DESC";
+    // Build query with optional filters
+    let query = `SELECT 
+      id, workspace_id, created_at, updated_at,
+      client_email, client_first_name, client_location,
+      goal, start_timeline, biggest_blocker, training_days_now, 
+      time_commitment_weekly, budget_monthly, coaching_preference,
+      injury_flag, injury_notes, wants_upload_stats, upload_status,
+      triage_score, triage_segment, inferred_bottleneck, inferred_confidence,
+      bottleneck_reasons, bottleneck_breakdown, bottleneck_version,
+      internal_notes, status,
+      analysis_draft, analysis_sent_at
+    FROM leads WHERE workspace_id = ?`;
+
+    const bindings: any[] = [workspaceId];
+
+    // Add segment filter
+    if (segmentFilter && segmentFilter !== 'all') {
+      query += ` AND triage_segment = ?`;
+      bindings.push(segmentFilter.toUpperCase());
+    }
+
+    // Add upload status filter
+    if (uploadFilter && uploadFilter !== 'all') {
+      query += ` AND upload_status = ?`;
+      bindings.push(uploadFilter.toUpperCase());
+    }
+
+    query += ` ORDER BY created_at DESC LIMIT ?`;
+    bindings.push(limit);
 
     const rs = await env.DB
-      .prepare(`SELECT * FROM leads WHERE workspace_id = ? ORDER BY ${orderBy} LIMIT ?;`)
-      .bind(workspaceId, limit)
+      .prepare(query)
+      .bind(...bindings)
       .all();
 
     return new Response(JSON.stringify({ ok: true, leads: rs.results ?? [] }), {
