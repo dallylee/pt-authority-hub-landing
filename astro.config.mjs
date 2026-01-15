@@ -12,5 +12,11 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    routes: {
+      extend: {
+        include: [{ pattern: '/quiz' }, { pattern: '/thanks' }, { pattern: '/upload' }]
+      }
+    }
+  }),
 });

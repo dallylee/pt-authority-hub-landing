@@ -179,17 +179,70 @@ import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
   </div>
 
   <script>
-    // NOTE: This will need a server endpoint /api/pt/leads to fetch data
-    // For now, showing placeholder message
     const tbody = document.getElementById('leads-tbody');
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="10" class="empty">
-          PT Console requires D1 database setup.<br>
-          Run migrations and configure WORKSPACE_ID to see leads.
-        </td>
-      </tr>
-    `;
+
+    function pick(obj, keys) {
+      for (const k of keys) {
+        if (obj && obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k];
+      }
+      return "";
+    }
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function renderEmpty(msg) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="10" class="empty">${esc(msg)}</td>
+        </tr>
+      `;
+    }
+
+    function renderRows(leads) {
+      if (!Array.isArray(leads) || leads.length === 0) {
+        renderEmpty("No leads yet. Submit the quiz to create your first lead.");
+        return;
+      }
+
+      tbody.innerHTML = leads.map((lead) => {
+        const id = pick(lead, ["id", "lead_id"]);
+        const email = pick(lead, ["email", "client_email", "lead_email"]);
+        const name = pick(lead, ["name", "full_name", "client_name"]);
+        const createdAt = pick(lead, ["created_at", "submitted_at", "created"]);
+        const uploadStatus = pick(lead, ["upload_status", "status"]);
+
+        // Fill your existing 10 columns safely. If you have different column layout, adjust here.
+        return `
+          <tr>
+            <td><a href="/pt/leads/${encodeURIComponent(id)}">${esc(id)}</a></td>
+            <td>${esc(name)}</td>
+            <td>${esc(email)}</td>
+            <td>${esc(createdAt)}</td>
+            <td>${esc(uploadStatus)}</td>
+            <td></td><td></td><td></td><td></td><td></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    async function loadLeads() {
+      try {
+        renderEmpty("Loading leads...");
+        const res = await fetch("/api/pt/leads?limit=50", { headers: { "Accept": "application/json" } });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          renderEmpty(data?.error ? `Error: ${data.error}` : "Failed to load leads.");
+          return;
+        }
+        renderRows(data.leads);
+      } catch (e) {
+        renderEmpty("Failed to load leads.");
+      }
+    }
+
+    loadLeads();
   </script>
 </body>
 </html>

@@ -1,5 +1,11 @@
 {
   "version": 1,
-  "include": ["/api/*", "/pt/*"],
+  "include": [
+    "/api/*",
+    "/pt/*",
+    "/quiz",
+    "/thanks",
+    "/upload"
+  ],
   "exclude": []
 }
