@@ -48,7 +48,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
         let uploads: any[] = [];
         try {
             const uploadsRes = await env.DB
-                .prepare(`SELECT id, filename, uploaded_at FROM lead_uploads WHERE lead_id = ? ORDER BY uploaded_at DESC;`)
+                .prepare(`SELECT id, file_name, file_size_bytes, mime_type, storage_key, created_at FROM uploads WHERE lead_id = ? AND status = 'ACTIVE' ORDER BY created_at DESC;`)
                 .bind(id)
                 .all();
             uploads = uploadsRes.results ?? [];
@@ -103,7 +103,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
         const values: any[] = [];
 
         if (body.notes !== undefined) {
-            updates.push("notes = ?");
+            updates.push("internal_notes = ?");
             values.push(body.notes);
         }
 

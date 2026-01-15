@@ -272,15 +272,18 @@ const { id } = Astro.params;
         document.getElementById('quiz-answers').innerHTML = answersHtml || '<div class="empty">No answers recorded</div>';
 
         // Load existing notes and status
-        document.getElementById('notes-field').value = lead.notes || '';
+        document.getElementById('notes-field').value = lead.internal_notes || '';
         document.getElementById('status-field').value = lead.status || 'NEW';
 
         // Render uploads
         if (uploads.length > 0) {
           document.getElementById('uploads-list').innerHTML = uploads.map(u => `
             <div class="field">
-              <label>${formatDate(u.uploaded_at)}</label>
-              <div class="value">${esc(u.filename)}</div>
+              <label>${formatDate(u.created_at)}</label>
+              <div class="value">
+                <strong>${esc(u.file_name)}</strong>
+                <span style="color:#666; font-size:12px;"> (${(u.file_size_bytes / 1024).toFixed(1)} KB)</span>
+              </div>
             </div>
           `).join('');
         } else {
