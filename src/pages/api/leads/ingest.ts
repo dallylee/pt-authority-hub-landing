@@ -14,9 +14,87 @@ interface LeadPayload {
     monthly_investment?: string;
     coaching_preference?: string;
     constraints?: string;
-    wants _upload ?: string;
-consent: string;
+    wants_upload?: string;
+    consent: string;
 }
+
+// Normalize quiz inputs to canonical values used in scoring
+// This maps the actual form values to the expected switch statement values
+function normalizeQuizInput(data: LeadPayload): LeadPayload {
+    const normalized = { ...data };
+
+    // Normalize biggest_blocker (quiz form → canonical)
+    const blockerMap: Record<string, string> = {
+        'I Train, but Results Are Not Happening': 'Results Not Happening',
+        'I Cannot Stay Consistent': "Can't Stay Consistent",
+        'I Do Not Know What to Do (Conflicting Advice)': 'Conflicting Advice',
+        'Low Energy, Poor Recovery, Stress': 'Low Energy/Recovery/Stress',
+        'Nutrition Consistency': 'Nutrition Consistency',
+        'Time Constraints': 'Time Constraints'
+    };
+    if (normalized.biggest_blocker && blockerMap[normalized.biggest_blocker]) {
+        normalized.biggest_blocker = blockerMap[normalized.biggest_blocker];
+    }
+
+    // Normalize training_days_current (quiz uses "2–3" format, scoring expects "2-3 days")
+    const trainingDaysMap: Record<string, string> = {
+        '0–1': '0-1 days',
+        '2–3': '2-3 days',
+        '4–5': '4-5 days',
+        '6+': '6+ days'
+    };
+    if (normalized.training_days_current && trainingDaysMap[normalized.training_days_current]) {
+        normalized.training_days_current = trainingDaysMap[normalized.training_days_current];
+    }
+
+    // Normalize time_commitment_weekly (quiz uses "1–2 Hours", scoring expects "1-2 hours")
+    const timeMap: Record<string, string> = {
+        '1–2 Hours': '1-2 hours',
+        '2–3 Hours': '2-3 hours',
+        '3–5 Hours': '3-5 hours',
+        '5+ Hours': '5+ hours'
+    };
+    if (normalized.time_commitment_weekly && timeMap[normalized.time_commitment_weekly]) {
+        normalized.time_commitment_weekly = timeMap[normalized.time_commitment_weekly];
+    }
+
+    // Normalize start_timing (quiz uses en-dashes)
+    const startMap: Record<string, string> = {
+        'This Week': 'This Week',
+        'In 2–3 Weeks': 'In 2-3 Weeks',
+        'In 4–6 Weeks': 'In 4-6 Weeks',
+        'Just Researching for Now': 'Just Researching'
+    };
+    if (normalized.start_timing && startMap[normalized.start_timing]) {
+        normalized.start_timing = startMap[normalized.start_timing];
+    }
+
+    // Normalize monthly_investment (quiz uses "/month" suffix)
+    const budgetMap: Record<string, string> = {
+        'Under £150/month': 'Under £150',
+        '£150–£300/month': '£150-300',
+        '£300–£600/month': '£300-600',
+        '£600+/month': '£600+',
+        'Not Sure Yet': 'Not Sure'
+    };
+    if (normalized.monthly_investment && budgetMap[normalized.monthly_investment]) {
+        normalized.monthly_investment = budgetMap[normalized.monthly_investment];
+    }
+
+    // Normalize coaching_preference
+    const coachingMap: Record<string, string> = {
+        '1:1 In-Person (London)': 'In-Person (London)',
+        '1:1 Online': 'Online',
+        'Hybrid': 'Hybrid',
+        'Not Sure': 'Not Sure'
+    };
+    if (normalized.coaching_preference && coachingMap[normalized.coaching_preference]) {
+        normalized.coaching_preference = coachingMap[normalized.coaching_preference];
+    }
+
+    return normalized;
+}
+
 
 // Scoring Logic
 function computeTriageScore(data: LeadPayload): { score: number; segment: string; fitRisk: boolean } {
@@ -257,6 +335,9 @@ export const POST: APIRoute = async (context) => {
             });
         }
 
+        // Normalize quiz inputs to canonical values for scoring
+        const normalizedData = normalizeQuizInput(data);
+
         // Generate IDs and tokens
         const leadId = crypto.randomUUID();
         const leadToken = crypto.randomUUID() + crypto.randomUUID().replace(/-/g, '');
@@ -269,10 +350,10 @@ export const POST: APIRoute = async (context) => {
             .map(b => b.toString(16).padStart(2, '0'))
             .join('');
 
-        // Compute triage
-        const wantsUpload = data.wants_upload === 'Yes';
-        const { score, segment, fitRisk } = computeTriageScore(data);
-        const { bottleneck, confidence, reasons, breakdown } = inferBottleneck(data, wantsUpload);
+        // Compute triage using normalized data for correct scoring
+        const wantsUpload = normalizedData.wants_upload === 'Yes';
+        const { score, segment, fitRisk } = computeTriageScore(normalizedData);
+        const { bottleneck, confidence, reasons, breakdown } = inferBottleneck(normalizedData, wantsUpload);
 
         // Prepare injury data
         const injuryFlag = data.constraints &&
@@ -304,16 +385,16 @@ export const POST: APIRoute = async (context) => {
         `).bind(
             leadId,
             WORKSPACE_ID || 'default',
-            data.email,
-            data.first_name || null,
-            data.location || null,
-            data.main_goal || null,
-            data.start_timing || null,
-            data.biggest_blocker || null,
-            data.training_days_current || null,
-            data.time_commitment_weekly || null,
-            data.monthly_investment || null,
-            data.coaching_preference || null,
+            data.email, // Keep original email
+            data.first_name || null, // Keep original name
+            data.location || null, // Keep original location
+            normalizedData.main_goal || null,
+            normalizedData.start_timing || null,
+            normalizedData.biggest_blocker || null,
+            normalizedData.training_days_current || null,
+            normalizedData.time_commitment_weekly || null,
+            normalizedData.monthly_investment || null,
+            normalizedData.coaching_preference || null,
             injuryFlag,
             injuryNotes,
             wantsUpload ? 1 : 0,
@@ -326,7 +407,7 @@ export const POST: APIRoute = async (context) => {
             JSON.stringify(breakdown),
             1, // bottleneck_version
             leadTokenHash,
-            answersRawJson,
+            answersRawJson, // Keep original data for audit
             'NEW'
         ).run();
 
