@@ -1,25 +1,102 @@
-{
-  "pages_build_output_dir": "./dist",
-  "main": "dist/_worker.js/index.js",
+﻿{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Pages project name (must match your Pages project)
   "name": "pt-authority-hub-landing",
+  // Astro SSR build output
+  "pages_build_output_dir": "./dist",
+  // Runtime compatibility settings
   "compatibility_date": "2026-01-13",
   "compatibility_flags": [
     "nodejs_compat",
+    "disable_nodejs_process_v2",
     "global_fetch_strictly_public"
   ],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": "./dist"
-  },
-  "observability": {
-    "enabled": true
-  },
-  // D1 binding (use env.DB in code)
+  // IMPORTANT:
+  // Pages provides env.ASSETS automatically in Advanced Mode.
+  // Do NOT declare an "assets" section or an assets binding (e.g., "ASSETS") for Pages projects.
+  // Default (applies to all environments unless overridden below)
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "b793cdaf51734b0e9268328a86e54264"
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "pt-authority-hub-db",
-      "database_id": "324ee536-b279-4798-95d3-b8b24940a1d5"
+      "database_id": "324ee536-b279-4798-95d3-b8b24940a1d5",
+      "database_name": "pt-authority-hub-db"
     }
-  ]
+  ],
+  "r2_buckets": [
+    {
+      "binding": "AUDIT_UPLOADS",
+      "bucket_name": "pt-authority-hub-audit-uploads"
+    }
+  ],
+  // Non-secret environment variables (keep secrets out of this file)
+  "vars": {
+    "EMAIL_FROM": "onboarding@resend.dev",
+    "EMAIL_TO": "dallyzg@gmail.com"
+  },
+  // Optional but useful for debugging in Cloudflare logs
+  "observability": {
+    "enabled": true
+  },
+  // Explicit environment blocks (recommended to avoid drift)
+  // Secrets like WORKSPACE_ID / RESEND_API_KEY should be set via:
+  //   npx wrangler pages secret put <NAME> --project-name pt-authority-hub-landing --env production
+  //   npx wrangler pages secret put <NAME> --project-name pt-authority-hub-landing --env preview
+  "env": {
+    "production": {
+      "vars": {
+        "EMAIL_FROM": "onboarding@resend.dev",
+        "EMAIL_TO": "dallyzg@gmail.com"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "SESSION",
+          "id": "b793cdaf51734b0e9268328a86e54264"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "324ee536-b279-4798-95d3-b8b24940a1d5",
+          "database_name": "pt-authority-hub-db"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "AUDIT_UPLOADS",
+          "bucket_name": "pt-authority-hub-audit-uploads"
+        }
+      ]
+    },
+    "preview": {
+      "vars": {
+        "EMAIL_FROM": "onboarding@resend.dev",
+        "EMAIL_TO": "dallyzg@gmail.com"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "SESSION",
+          "id": "b793cdaf51734b0e9268328a86e54264"
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "324ee536-b279-4798-95d3-b8b24940a1d5",
+          "database_name": "pt-authority-hub-db"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "AUDIT_UPLOADS",
+          "bucket_name": "pt-authority-hub-audit-uploads"
+        }
+      ]
+    }
+  }
 }
