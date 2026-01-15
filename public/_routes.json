@@ -4,8 +4,11 @@
     "/api/*",
     "/pt/*",
     "/quiz",
+    "/quiz/",
     "/thanks",
-    "/upload"
+    "/thanks/",
+    "/upload",
+    "/upload/"
   ],
   "exclude": []
 }
