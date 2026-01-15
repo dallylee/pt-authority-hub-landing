@@ -1,17 +1,6 @@
-/// <reference types="@cloudflare/workers-types" />
+export const prerender = false;
 
-interface Env {
-    DB: D1Database;
-    RESEND_API_KEY: string;
-    EMAIL_TO: string;
-    EMAIL_FROM: string;
-    WORKSPACE_ID: string;
-}
-
-interface CFContext {
-    request: Request;
-    env: Env;
-}
+import type { APIRoute } from "astro";
 
 interface LeadPayload {
     email: string;
@@ -25,16 +14,16 @@ interface LeadPayload {
     monthly_investment?: string;
     coaching_preference?: string;
     constraints?: string;
-    wants_upload?: string;
-    consent: string;
+    wants _upload ?: string;
+consent: string;
 }
 
-// Scoring Logic Implementation
+// Scoring Logic
 function computeTriageScore(data: LeadPayload): { score: number; segment: string; fitRisk: boolean } {
     let score = 0;
     let fitRisk = false;
 
-    // A) Urgency (start_timing)
+    // A) Urgency
     switch (data.start_timing) {
         case 'This Week': score += 25; break;
         case 'In 2-3 Weeks': score += 18; break;
@@ -42,7 +31,7 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
         case 'Just Researching': score += 0; break;
     }
 
-    // B) Budget (monthly_investment)
+    // B) Budget
     switch (data.monthly_investment) {
         case '£600+': score += 25; break;
         case '£300-600': score += 18; break;
@@ -51,7 +40,7 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
         case 'Not Sure': score += 5; break;
     }
 
-    // C) Time commitment (time_commitment_weekly)
+    // C) Time commitment
     switch (data.time_commitment_weekly) {
         case '5+ hours': score += 10; break;
         case '3-5 hours': score += 8; break;
@@ -59,7 +48,7 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
         case '1-2 hours': score += 2; break;
     }
 
-    // D) Training days (training_days_current)
+    // D) Training days
     switch (data.training_days_current) {
         case '4-5 days': score += 6; break;
         case '6+ days': score += 5; break;
@@ -67,11 +56,11 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
         case '0-1 days': score += 3; break;
     }
 
-    // E) Coaching fit - simplified for now
+    // E) Coaching fit
     if (data.coaching_preference === 'Not Sure') {
         score += 6;
     } else {
-        score += 10; // Assume match for simplicity in V1
+        score += 10;
     }
 
     // F) Location fit
@@ -106,9 +95,8 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
     return { score, segment, fitRisk };
 }
 
-// Bottleneck Inference Logic
+// Bottleneck Inference
 function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck: string; confidence: string } {
-    // Check injury first
     const hasInjury = data.constraints &&
         (data.constraints.includes('Past Injury') || data.constraints.includes('Current Issue'));
 
@@ -116,7 +104,6 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
         return { bottleneck: 'INJURY_CONSTRAINTS', confidence: 'HIGH' };
     }
 
-    // Initialize points
     const points = {
         TRAINING: 0,
         CONSISTENCY: 0,
@@ -124,7 +111,6 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
         RECOVERY: 0
     };
 
-    // Apply signals from biggest_blocker
     switch (data.biggest_blocker) {
         case 'Results Not Happening':
             points.TRAINING += 5;
@@ -147,7 +133,6 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
             break;
     }
 
-    // Context modifiers
     if (data.training_days_current === '0-1 days') {
         points.CONSISTENCY += 2;
     }
@@ -162,7 +147,6 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
         points.NUTRITION += 2;
     }
 
-    // Find best category
     const sorted = Object.entries(points).sort((a, b) => b[1] - a[1]);
     const best = sorted[0];
     const secondBest = sorted[1];
@@ -175,7 +159,6 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
         confidence = 'MEDIUM';
     }
 
-    // Bump LOW to MEDIUM if wants upload
     if (confidence === 'LOW' && wantsUpload) {
         confidence = 'MEDIUM';
     }
@@ -185,9 +168,16 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
     return { bottleneck, confidence };
 }
 
-export const onRequestPost = async (context: CFContext): Promise<Response> => {
+export const POST: APIRoute = async (context) => {
     try {
-        if (!context.env.DB) {
+        const env = context.locals.runtime?.env;
+        const DB = env?.DB;
+        const WORKSPACE_ID = env?.WORKSPACE_ID;
+        const RESEND_API_KEY = env?.RESEND_API_KEY;
+        const EMAIL_FROM = env?.EMAIL_FROM;
+        const EMAIL_TO = env?.EMAIL_TO;
+
+        if (!DB) {
             return new Response(JSON.stringify({ ok: false, error: 'Database not configured' }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' }
@@ -207,7 +197,6 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             }
         }
 
-        // Validate email format
         if (!data.email.includes('@')) {
             return new Response(JSON.stringify({ ok: false, error: 'Invalid email format' }), {
                 status: 400,
@@ -217,9 +206,9 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
 
         // Generate IDs and tokens
         const leadId = crypto.randomUUID();
-        const leadToken = crypto.randomUUID() + crypto.randomUUID().replace(/-/g, ''); // 64 char token
+        const leadToken = crypto.randomUUID() + crypto.randomUUID().replace(/-/g, '');
 
-        // Hash the lead token for storage
+        // Hash the lead token
         const encoder = new TextEncoder();
         const tokenData = encoder.encode(leadToken);
         const hashBuffer = await crypto.subtle.digest('SHA-256', tokenData);
@@ -243,10 +232,14 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
         // Determine upload status
         const uploadStatus = wantsUpload ? 'PENDING' : 'NONE';
 
+        if (!WORKSPACE_ID) {
+            console.error('WORKSPACE_ID not configured');
+        }
+
         // Insert into database
-        await context.env.DB.prepare(`
+        await DB.prepare(`
             INSERT INTO leads (
-                id, workspace_id, client_email, client_first_name, client_location,
+                id, workspace_id, client_email, client_first_name,client_location,
                 goal, start_timeline, biggest_blocker, training_days_now, time_commitment_weekly,
                 budget_monthly, coaching_preference, injury_flag, injury_notes, wants_upload_stats,
                 upload_status, triage_score, triage_segment, inferred_bottleneck, inferred_confidence,
@@ -256,7 +249,7 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             )
         `).bind(
             leadId,
-            context.env.WORKSPACE_ID,
+            WORKSPACE_ID || 'default',
             data.email,
             data.first_name || null,
             data.location || null,
@@ -280,51 +273,52 @@ export const onRequestPost = async (context: CFContext): Promise<Response> => {
             'NEW'
         ).run();
 
-        // Send notification email (preserve existing behavior)
-        try {
-            const emailHtml = `
-                <h2>New Lead: ${data.first_name || 'Unknown'} - ${data.main_goal || 'No Goal'}</h2>
-                <p><strong>Lead ID:</strong> ${leadId}</p>
-                <p><strong>Triage:</strong> ${segment} (Score: ${score})</p>
-                <p><strong>Bottleneck:</strong> ${bottleneck} (${confidence} confidence)</p>
-                <hr>
-                <p><strong>Email:</strong> ${data.email}</p>
-                <p><strong>Name:</strong> ${data.first_name || 'N/A'}</p>
-                <p><strong>Location:</strong> ${data.location || 'N/A'}</p>
-                <hr>
-                <p><strong>Main Goal:</strong> ${data.main_goal || 'N/A'}</p>
-                <p><strong>Start Timing:</strong> ${data.start_timing || 'N/A'}</p>
-                <p><strong>Biggest Blocker:</strong> ${data.biggest_blocker || 'N/A'}</p>
-                <p><strong>Training Days/Week:</strong> ${data.training_days_current || 'N/A'}</p>
-                <p><strong>Weekly Available:</strong> ${data.time_commitment_weekly || 'N/A'}</p>
-                <p><strong>Monthly Investment:</strong> ${data.monthly_investment || 'N/A'}</p>
-                <p><strong>Coaching Preference:</strong> ${data.coaching_preference || 'N/A'}</p>
-                <p><strong>Constraints:</strong> ${data.constraints || 'None'}</p>
-                <p><strong>Wants Upload:</strong> ${data.wants_upload || 'No'}</p>
-            `;
+        // Send notification email
+        if (RESEND_API_KEY && EMAIL_FROM && EMAIL_TO) {
+            try {
+                const emailHtml = `
+                    <h2>New Lead: ${data.first_name || 'Unknown'} - ${data.main_goal || 'No Goal'}</h2>
+                    <p><strong>Lead ID:</strong> ${leadId}</p>
+                    <p><strong>Triage:</strong> ${segment} (Score: ${score})</p>
+                    <p><strong>Bottleneck:</strong> ${bottleneck} (${confidence} confidence)</p>
+                    <hr>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Name:</strong> ${data.first_name || 'N/A'}</p>
+                    <p><strong>Location:</strong> ${data.location || 'N/A'}</p>
+                    <hr>
+                    <p><strong>Main Goal:</strong> ${data.main_goal || 'N/A'}</p>
+                    <p><strong>Start Timing:</strong> ${data.start_timing || 'N/A'}</p>
+                    <p><strong>Biggest Blocker:</strong> ${data.biggest_blocker || 'N/A'}</p>
+                    <p><strong>Training Days/Week:</strong> ${data.training_days_current || 'N/A'}</p>
+                    <p><strong>Weekly Available:</strong> ${data.time_commitment_weekly || 'N/A'}</p>
+                    <p><strong>Monthly Investment:</strong> ${data.monthly_investment || 'N/A'}</p>
+                    <p><strong>Coaching Preference:</strong> ${data.coaching_preference || 'N/A'}</p>
+                    <p><strong>Constraints:</strong> ${data.constraints || 'None'}</p>
+                    <p><strong>Wants Upload:</strong> ${data.wants_upload || 'No'}</p>
+                `;
 
-            await fetch('https://api.resend.com/emails', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${context.env.RESEND_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    from: context.env.EMAIL_FROM,
-                    to: context.env.EMAIL_TO,
-                    subject: `New Lead: ${data.first_name || 'Unknown'} - ${data.main_goal || 'No Goal'}`,
-                    html: emailHtml
-                })
-            });
-        } catch (emailError) {
-            console.error('Email notification failed:', emailError);
-            // Don't fail the request if email fails
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: EMAIL_FROM,
+                        to: EMAIL_TO,
+                        subject: `New Lead: ${data.first_name || 'Unknown'} - ${data.main_goal || 'No Goal'}`,
+                        html: emailHtml
+                    })
+                });
+            } catch (emailError) {
+                console.error('Email notification failed:', emailError);
+            }
         }
 
         return new Response(JSON.stringify({
             ok: true,
             leadId: leadId,
-            leadToken: leadToken, // Only returned once
+            leadToken: leadToken,
             triageSegment: segment,
             uploadRequired: wantsUpload
         }), {
