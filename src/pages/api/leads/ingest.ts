@@ -95,13 +95,28 @@ function computeTriageScore(data: LeadPayload): { score: number; segment: string
     return { score, segment, fitRisk };
 }
 
-// Bottleneck Inference
-function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck: string; confidence: string } {
+// Bottleneck Inference with Explainability
+interface BottleneckResult {
+    bottleneck: string;
+    confidence: string;
+    reasons: string[];
+    breakdown: Record<string, number>;
+}
+
+function inferBottleneck(data: LeadPayload, wantsUpload: boolean): BottleneckResult {
+    const reasons: string[] = [];
     const hasInjury = data.constraints &&
         (data.constraints.includes('Past Injury') || data.constraints.includes('Current Issue'));
 
     if (hasInjury) {
-        return { bottleneck: 'INJURY_CONSTRAINTS', confidence: 'HIGH' };
+        reasons.push('Injury or physical constraint reported');
+        reasons.push('Priority: address movement limitations before programming');
+        return {
+            bottleneck: 'INJURY_CONSTRAINTS',
+            confidence: 'HIGH',
+            reasons,
+            breakdown: { INJURY_CONSTRAINTS: 10 }
+        };
     }
 
     const points = {
@@ -111,40 +126,58 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
         RECOVERY: 0
     };
 
+    // Reason mapping for explainability
+    const reasonMap: Record<string, string[]> = {
+        TRAINING: [],
+        CONSISTENCY: [],
+        NUTRITION: [],
+        RECOVERY: []
+    };
+
     switch (data.biggest_blocker) {
         case 'Results Not Happening':
             points.TRAINING += 5;
+            reasonMap.TRAINING.push('Reported results plateau despite training');
             break;
         case 'Conflicting Advice':
             points.TRAINING += 5;
+            reasonMap.TRAINING.push('Confusion from conflicting training advice');
             break;
         case "Can't Stay Consistent":
             points.CONSISTENCY += 5;
+            reasonMap.CONSISTENCY.push('Self-identified consistency as main barrier');
             break;
         case 'Time Constraints':
             points.CONSISTENCY += 3;
             points.TRAINING += 2;
+            reasonMap.CONSISTENCY.push('Time constraints limiting consistency');
+            reasonMap.TRAINING.push('Time constraints requiring efficient programming');
             break;
         case 'Nutrition Consistency':
             points.NUTRITION += 6;
+            reasonMap.NUTRITION.push('Nutrition consistency identified as main blocker');
             break;
         case 'Low Energy/Recovery/Stress':
             points.RECOVERY += 6;
+            reasonMap.RECOVERY.push('Energy, recovery, or stress issues reported');
             break;
     }
 
     if (data.training_days_current === '0-1 days') {
         points.CONSISTENCY += 2;
+        reasonMap.CONSISTENCY.push('Very low training frequency (0-1 days/week)');
     }
 
     if ((data.training_days_current === '4-5 days' || data.training_days_current === '6+ days') &&
         data.biggest_blocker === 'Low Energy/Recovery/Stress') {
         points.RECOVERY += 2;
+        reasonMap.RECOVERY.push('High training volume paired with recovery issues');
     }
 
     if (data.main_goal === 'Lose Fat' &&
         (data.biggest_blocker === 'Results Not Happening' || data.biggest_blocker === 'Nutrition Consistency')) {
         points.NUTRITION += 2;
+        reasonMap.NUTRITION.push('Fat loss goal with nutrition-related challenges');
     }
 
     const sorted = Object.entries(points).sort((a, b) => b[1] - a[1]);
@@ -161,12 +194,32 @@ function inferBottleneck(data: LeadPayload, wantsUpload: boolean): { bottleneck:
 
     if (confidence === 'LOW' && wantsUpload) {
         confidence = 'MEDIUM';
+        reasons.push('Confidence increased: client providing training data for review');
     }
 
-    const bottleneck = best[1] > 0 ? best[0] : 'UNKNOWN';
+    // Determine bottleneck - use ASSESSMENT_NEEDED instead of UNKNOWN
+    const bottleneck = best[1] > 0 ? best[0] : 'ASSESSMENT_NEEDED';
 
-    return { bottleneck, confidence };
+    // Collect top reasons for the identified bottleneck
+    if (bottleneck !== 'ASSESSMENT_NEEDED') {
+        reasons.push(...reasonMap[bottleneck]);
+        // Add runner-up reason if close
+        if (diff <= 2 && secondBest[1] > 0 && reasonMap[secondBest[0]].length > 0) {
+            reasons.push(`Secondary factor: ${reasonMap[secondBest[0]][0]}`);
+        }
+    } else {
+        reasons.push('Insufficient data to determine primary bottleneck');
+        reasons.push('Recommend discovery call or additional assessment');
+    }
+
+    return {
+        bottleneck,
+        confidence,
+        reasons: reasons.slice(0, 3), // Top 3 reasons
+        breakdown: points
+    };
 }
+
 
 export const POST: APIRoute = async (context) => {
     try {
@@ -219,7 +272,7 @@ export const POST: APIRoute = async (context) => {
         // Compute triage
         const wantsUpload = data.wants_upload === 'Yes';
         const { score, segment, fitRisk } = computeTriageScore(data);
-        const { bottleneck, confidence } = inferBottleneck(data, wantsUpload);
+        const { bottleneck, confidence, reasons, breakdown } = inferBottleneck(data, wantsUpload);
 
         // Prepare injury data
         const injuryFlag = data.constraints &&
@@ -239,13 +292,14 @@ export const POST: APIRoute = async (context) => {
         // Insert into database
         await DB.prepare(`
             INSERT INTO leads (
-                id, workspace_id, client_email, client_first_name,client_location,
+                id, workspace_id, client_email, client_first_name, client_location,
                 goal, start_timeline, biggest_blocker, training_days_now, time_commitment_weekly,
                 budget_monthly, coaching_preference, injury_flag, injury_notes, wants_upload_stats,
                 upload_status, triage_score, triage_segment, inferred_bottleneck, inferred_confidence,
+                bottleneck_reasons, bottleneck_breakdown, bottleneck_version,
                 lead_token_hash, answers_raw_json, status, created_at, updated_at
             ) VALUES (
-                ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, datetime('now'), datetime('now')
+                ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, datetime('now'), datetime('now')
             )
         `).bind(
             leadId,
@@ -268,6 +322,9 @@ export const POST: APIRoute = async (context) => {
             segment,
             bottleneck,
             confidence,
+            JSON.stringify(reasons),
+            JSON.stringify(breakdown),
+            1, // bottleneck_version
             leadTokenHash,
             answersRawJson,
             'NEW'
