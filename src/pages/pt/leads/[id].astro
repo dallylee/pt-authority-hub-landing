@@ -343,12 +343,15 @@ const { id } = Astro.params;
         // Render uploads
         if (uploads.length > 0) {
           document.getElementById('uploads-list').innerHTML = uploads.map(u => `
-            <div class="field">
-              <label>${formatDate(u.created_at)}</label>
-              <div class="value">
-                <strong>${esc(u.file_name)}</strong>
-                <span style="color:#666; font-size:12px;"> (${(u.file_size_bytes / 1024).toFixed(1)} KB)</span>
+            <div class="field" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <label>${formatDate(u.created_at)}</label>
+                <div class="value">
+                  <strong>${esc(u.file_name)}</strong>
+                  <span style="color:#666; font-size:12px;"> (${(u.file_size_bytes / 1024).toFixed(1)} KB)</span>
+                </div>
               </div>
+              ${u.download_url ? `<a href="${esc(u.download_url)}" style="padding:6px 12px; background:#00ff88; color:#0a0a0a; text-decoration:none; border-radius:4px; font-size:12px; font-weight:600;">Download</a>` : ''}
             </div>
           `).join('');
         } else {

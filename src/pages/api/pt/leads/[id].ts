@@ -3,7 +3,25 @@ import type { APIRoute } from "astro";
 type Env = {
     DB: D1Database;
     WORKSPACE_ID?: string;
+    DOWNLOAD_TOKEN_SECRET?: string;
 };
+
+// Generate a signed download token
+async function generateDownloadToken(key: string, secret: string): Promise<string> {
+    const exp = Math.floor(Date.now() / 1000) + (24 * 60 * 60); // 24 hour expiry
+    const payload = { key, exp };
+    const payloadB64 = btoa(JSON.stringify(payload))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(secret);
+    const cryptoKey = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(payloadB64));
+    const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    return `${payloadB64}.${sigB64}`;
+}
 
 export const GET: APIRoute = async ({ params, locals }) => {
     try {
@@ -52,6 +70,16 @@ export const GET: APIRoute = async ({ params, locals }) => {
                 .bind(id)
                 .all();
             uploads = uploadsRes.results ?? [];
+
+            // Add download URLs if we have the secret
+            if (env.DOWNLOAD_TOKEN_SECRET && uploads.length > 0) {
+                for (const upload of uploads) {
+                    if (upload.storage_key) {
+                        const token = await generateDownloadToken(upload.storage_key, env.DOWNLOAD_TOKEN_SECRET);
+                        (upload as any).download_url = `/api/download?t=${encodeURIComponent(token)}`;
+                    }
+                }
+            }
         } catch (e) {
             // Table might not exist yet, continue without uploads
         }
