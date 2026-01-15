@@ -206,22 +206,52 @@ import AnalyticsPlausible from '../../components/AnalyticsPlausible.astro';
         return;
       }
 
-      tbody.innerHTML = leads.map((lead) => {
-        const id = pick(lead, ["id", "lead_id"]);
-        const email = pick(lead, ["email", "client_email", "lead_email"]);
-        const name = pick(lead, ["name", "full_name", "client_name"]);
-        const createdAt = pick(lead, ["created_at", "submitted_at", "created"]);
-        const uploadStatus = pick(lead, ["upload_status", "status"]);
+      function formatDate(d) {
+        if (!d) return '-';
+        try {
+          const date = new Date(d);
+          return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+        } catch { return d; }
+      }
 
-        // Fill your existing 10 columns safely. If you have different column layout, adjust here.
+      function getBadge(segment) {
+        const s = (segment || '').toUpperCase();
+        const cls = s === 'HOT' ? 'hot' : s === 'WARM' ? 'warm' : s === 'NURTURE' ? 'nurture' : s === 'DISQUALIFIED' ? 'disqualified' : '';
+        return `<span class="badge ${cls}">${esc(s || '-')}</span>`;
+      }
+
+      function getUploadBadge(status) {
+        const s = (status || '').toUpperCase();
+        if (s === 'RECEIVED') return `<span style="color:#00ff88;">✓</span>`;
+        if (s === 'PENDING') return `<span style="color:#ffb800;">⏳</span>`;
+        return '-';
+      }
+
+      tbody.innerHTML = leads.map((lead) => {
+        const id = lead.id || '';
+        const date = formatDate(lead.created_at);
+        const name = lead.client_first_name || '-';
+        const email = lead.client_email || '';
+        const segment = lead.triage_segment || '';
+        const score = lead.triage_score ?? '-';
+        const goal = lead.goal || '-';
+        const start = lead.start_timeline || '-';
+        const budget = lead.budget_monthly || '-';
+        const bottleneck = lead.inferred_bottleneck || '-';
+        const upload = lead.upload_status || 'NONE';
+
         return `
-          <tr>
-            <td><a href="/pt/leads/${encodeURIComponent(id)}">${esc(id)}</a></td>
-            <td>${esc(name)}</td>
-            <td>${esc(email)}</td>
-            <td>${esc(createdAt)}</td>
-            <td>${esc(uploadStatus)}</td>
-            <td></td><td></td><td></td><td></td><td></td>
+          <tr style="cursor:pointer;" onclick="window.location='/pt/leads/${encodeURIComponent(id)}'">
+            <td>${esc(date)}</td>
+            <td><a href="/pt/leads/${encodeURIComponent(id)}" style="color:#00ff88;">${esc(name)}</a></td>
+            <td style="font-size:12px;">${esc(email)}</td>
+            <td>${getBadge(segment)}</td>
+            <td>${esc(score)}</td>
+            <td>${esc(goal)}</td>
+            <td style="font-size:12px;">${esc(start)}</td>
+            <td style="font-size:12px;">${esc(budget)}</td>
+            <td style="font-size:12px;">${esc(bottleneck)}</td>
+            <td style="text-align:center;">${getUploadBadge(upload)}</td>
           </tr>
         `;
       }).join("");

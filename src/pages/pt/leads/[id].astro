@@ -240,14 +240,54 @@ const { id } = Astro.params;
         // Render triage info
         const segment = lead.triage_segment || 'UNKNOWN';
         const score = lead.triage_score ?? 'N/A';
-        const bottleneck = lead.inferred_bottleneck || 'UNKNOWN';
+        const bottleneck = lead.inferred_bottleneck || 'ASSESSMENT_NEEDED';
         const confidence = lead.inferred_confidence || 'N/A';
+        
+        // Parse reasons and breakdown if available
+        let reasons = [];
+        let breakdown = {};
+        try {
+          if (lead.bottleneck_reasons) reasons = JSON.parse(lead.bottleneck_reasons);
+          if (lead.bottleneck_breakdown) breakdown = JSON.parse(lead.bottleneck_breakdown);
+        } catch (e) {}
+        
+        let reasonsHtml = '';
+        if (reasons.length > 0) {
+          reasonsHtml = `
+            <div class="field" style="margin-top:12px;">
+              <label>Why This Bottleneck</label>
+              <ul style="margin:4px 0 0 16px; padding:0; font-size:13px; color:#aaa;">
+                ${reasons.map(r => `<li style="margin-bottom:4px;">${esc(r)}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+        }
+        
+        let breakdownHtml = '';
+        if (Object.keys(breakdown).length > 0) {
+          const sorted = Object.entries(breakdown).sort((a, b) => Number(b[1]) - Number(a[1]));
+          breakdownHtml = `
+            <details style="margin-top:12px; cursor:pointer;">
+              <summary style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Domain Scores</summary>
+              <div style="margin-top:8px;">
+                ${sorted.map(([k, v]) => `
+                  <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:4px;">
+                    <span>${esc(k)}</span>
+                    <span style="color:${Number(v) > 0 ? '#00ff88' : '#444'}">${v}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </details>
+          `;
+        }
         
         document.getElementById('triage-info').innerHTML = `
           <div class="field"><label>Segment</label><div class="value"><span class="${getBadgeClass(segment)}">${esc(segment)}</span></div></div>
           <div class="field"><label>Score</label><div class="value">${esc(score)}</div></div>
-          <div class="field"><label>Bottleneck</label><div class="value">${esc(bottleneck)} (${esc(confidence)})</div></div>
-          <div class="field"><label>Fit Risk</label><div class="value">${lead.fit_risk ? 'Yes' : 'No'}</div></div>
+          <div class="field"><label>Bottleneck</label><div class="value"><strong>${esc(bottleneck)}</strong> <span style="color:#666;">(${esc(confidence)} confidence)</span></div></div>
+          ${reasonsHtml}
+          ${breakdownHtml}
+          <div class="field" style="margin-top:12px;"><label>Fit Risk</label><div class="value">${lead.fit_risk ? 'Yes' : 'No'}</div></div>
         `;
 
         // Render quiz answers
